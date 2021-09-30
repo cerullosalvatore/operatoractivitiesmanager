@@ -55,6 +55,9 @@
 				<artifactId>pitest-maven</artifactId>
 				<version>${org.pitest.version}</version>
 				<configuration>
+					<excludedClasses>
+						<param>it.unifi.simpletodoapp.TodoApplication</param>
+					</excludedClasses>
 					<targetClasses>
 						<!-- excludes class from test -->
 					</targetClasses>
@@ -74,7 +77,7 @@
 				<configuration>
 					<excludes>
 						<!-- excludes class from codecoverage -->
-						<exclude>**/Main.*</exclude>
+						<exclude>/src/main/java/com/salvatorecerullo/app/operatoractivitiesmanager/main/*.*</exclude>
 					</excludes>
 				</configuration>
 				<executions>
