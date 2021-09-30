@@ -64,7 +64,7 @@
 				<plugin>
 					<groupId>org.pitest</groupId>
 					<artifactId>pitest-maven</artifactId>
-					
+					<version>${org.pitest.version}</version>
 					<configuration>
 						<excludedClasses>
 							<param>it.unifi.simpletodoapp.TodoApplication</param>
@@ -101,7 +101,7 @@
 						</execution>
 						<!-- another execution possible is check with a configuration -->
 					</executions>
-				<version>${org.pitest.version}</version></plugin>
+				</plugin>
 				<plugin>
 					<groupId>org.eluder.coveralls</groupId>
 					<artifactId>coveralls-maven-plugin</artifactId>
@@ -116,6 +116,7 @@
 						</dependency>
 					</dependencies>
 				</plugin>
+
 			</plugins>
 		</pluginManagement>
 
