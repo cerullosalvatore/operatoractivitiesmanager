@@ -1,45 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.salvatorecerullo.app</groupId>
-  <artifactId>operatoractivitiesmanager</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+	<groupId>com.salvatorecerullo.app</groupId>
+	<artifactId>operatoractivitiesmanager</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 
-  <name>operatoractivitiesmanager</name>
-  <url>http://www.example.com</url>
+	<name>operatoractivitiesmanager</name>
+	<url>http://www.example.com</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<junit.version>4.13</junit.version>
+		<org.pitest.version>1.5.2</org.pitest.version>
+		<org.jacoco.version>0.8.5</org.jacoco.version>
+	</properties>
 
-  <dependencies>
-  	<dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-		<version>4.13</version>
-		<scope>test</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.assertj</groupId>
-		<artifactId>assertj-core</artifactId>
-		<version>3.15.0</version>
-		<scope>test</scope>
-	</dependency>
-  </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.15.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M5</version>
-      </plugin>
-    </plugins>
-  </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M5</version>
+			</plugin>
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>${org.pitest.version}</version>
+				<configuration>
+					<targetClasses>
+						<!-- excludes class from test -->
+					</targetClasses>
+					<targetTests>
+						<!-- class to test -->
+					</targetTests>
+					<mutators>
+						<mutator>DEFAULTS</mutator>
+					</mutators>
+					<mutationThreshold>80</mutationThreshold>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${org.jacoco.version}</version>
+				<configuration>
+					<excludes>
+						<!-- excludes class from codecoverage -->
+						<exclude>**/Main.*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<!-- binds by default to the phase "initialize" -->
+							<goal>prepare-agent</goal>
+							<!-- binds by default to the phase "verify" -->
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<!-- another execution possible is check with a configuration -->
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Maven profiles are a mechanism that allows you to activate a subset 
+		of configurations. Now in a standard Maven build, neither JaCoCo nor PIT 
+		will be used; they can be enabled on the command line with -P and their ids. 
+		For example, in this build they will both be enabled: mvn clean verify -Pjacoco,mutation-testing -->
+	<profiles>
+		<profile>
+			<id>jacoco</id>
+			<build>
+				<plugins>
+					<plugin>
+						<!-- configured in pluginManagement -->
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>mutation-testing</id>
+			<build>
+				<plugins>
+					<plugin>
+						<!-- configured also in pluginManagement -->
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-maven</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>mutationCoverage</goal>
+								</goals>
+								<phase>verify</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
