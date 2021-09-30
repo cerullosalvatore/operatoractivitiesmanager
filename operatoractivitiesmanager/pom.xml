@@ -19,7 +19,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<junit.version>4.13</junit.version>
 		<org.pitest.version>1.5.2</org.pitest.version>
-		<org.jacoco.version>0.8.5</org.jacoco.version>
+		<org.jacoco.version>0.8.6</org.jacoco.version>
 	</properties>
 
 	<dependencies>
@@ -29,6 +29,7 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
@@ -41,58 +42,69 @@
 			<version>3.2.4</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.13.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.13.1</version>
+		</dependency>		
 	</dependencies>
-
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M5</version>
-			</plugin>
-			<plugin>
-				<groupId>org.pitest</groupId>
-				<artifactId>pitest-maven</artifactId>
-				<version>${org.pitest.version}</version>
-				<configuration>
-					<excludedClasses>
-						<param>it.unifi.simpletodoapp.TodoApplication</param>
-					</excludedClasses>
-					<targetClasses>
-						<!-- excludes class from test -->
-					</targetClasses>
-					<targetTests>
-						<!-- class to test -->
-					</targetTests>
-					<mutators>
-						<mutator>DEFAULTS</mutator>
-					</mutators>
-					<mutationThreshold>80</mutationThreshold>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${org.jacoco.version}</version>
-				<configuration>
-					<excludes>
-						<!-- excludes class from codecoverage -->
-						<exclude>/src/main/java/com/salvatorecerullo/app/operatoractivitiesmanager/main/*.*</exclude>
-					</excludes>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<!-- binds by default to the phase "initialize" -->
-							<goal>prepare-agent</goal>
-							<!-- binds by default to the phase "verify" -->
-							<goal>report</goal>
-						</goals>
-					</execution>
-					<!-- another execution possible is check with a configuration -->
-				</executions>
-			</plugin>
-		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.pitest</groupId>
+					<artifactId>pitest-maven</artifactId>
+					<version>${org.pitest.version}</version>
+					<configuration>
+						<excludedClasses>
+							<param>it.unifi.simpletodoapp.TodoApplication</param>
+						</excludedClasses>
+						<targetClasses>
+							<!-- excludes class from test -->
+						</targetClasses>
+						<targetTests>
+							<!-- class to test -->
+						</targetTests>
+						<mutators>
+							<mutator>DEFAULTS</mutator>
+						</mutators>
+						<mutationThreshold>80</mutationThreshold>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>${org.jacoco.version}</version>
+					<configuration>
+						<excludes>
+							<!-- excludes class from codecoverage -->
+						</excludes>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<!-- binds by default to the phase "initialize" -->
+								<goal>prepare-agent</goal>
+								<!-- binds by default to the phase "verify" -->
+								<goal>report</goal>
+							</goals>
+						</execution>
+						<!-- another execution possible is check with a configuration -->
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 	</build>
 
 	<!-- Maven profiles are a mechanism that allows you to activate a subset 
