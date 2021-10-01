@@ -1,4 +1,4 @@
-package com.salvatorecerullo.app.operatoractivitiesmanager.main;
+package com.salvatorecerullo.app.operatoractivitiesmanager;
 
 public class Main {
 	public static void main(String[] args) {
