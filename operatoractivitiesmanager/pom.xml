@@ -20,6 +20,9 @@
 		<junit.version>4.13</junit.version>
 		<org.pitest.version>1.5.2</org.pitest.version>
 		<org.jacoco.version>0.8.6</org.jacoco.version>
+		<sonar.organization>cerullosalvatore</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>cerullosalvatore_operatoractivitiesmanager</sonar.projectKey>
 	</properties>
 
 	<dependencies>
