@@ -11,4 +11,3 @@
 #### Coveralls
 
 [![Coverage Status](https://coveralls.io/repos/github/cerullosalvatore/operatoractivitiesmanager/badge.svg?branch=configuration&service=github)](https://coveralls.io/github/cerullosalvatore/operatoractivitiesmanager?branch=configuration)
-
