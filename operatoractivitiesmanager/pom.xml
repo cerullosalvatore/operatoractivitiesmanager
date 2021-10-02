@@ -18,12 +18,21 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<junit.version>4.13</junit.version>
+		<org.assertj.version>3.15.0</org.assertj.version>
+		<org.mockito.version>3.2.4</org.mockito.version>
+		<org.apache.logging.log4j.version>2.13.1</org.apache.logging.log4j.version>
+		<org.apache.maven.plugins.version>3.0.0-M5</org.apache.maven.plugins.version>
 		<org.pitest.version>1.5.2</org.pitest.version>
 		<org.jacoco.version>0.8.6</org.jacoco.version>
+		<org.eluder.coveralls.version>4.3.0</org.eluder.coveralls.version>
+		<javax.xml.bind.version>2.3.1</javax.xml.bind.version>
+		<org.sonarsource.scanner.maven.version>3.8.0.2131</org.sonarsource.scanner.maven.version>
+
 		<sonar.organization>cerullosalvatore</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.projectKey>cerullosalvatore_operatoractivitiesmanager</sonar.projectKey>
 		<sonar.coverage.exclusions>
+			**/Main.*
 		</sonar.coverage.exclusions>
 	</properties>
 
@@ -34,37 +43,37 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.15.0</version>
+			<version>${org.assertj.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>3.2.4</version>
+			<version>${org.mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
-			<version>2.13.1</version>
+			<version>${org.apache.logging.log4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-			<version>2.13.1</version>
+			<version>${org.apache.logging.log4j.version}</version>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.0.0-M5</version>
+					<version>${org.apache.maven.plugins.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.pitest</groupId>
@@ -110,21 +119,19 @@
 				<plugin>
 					<groupId>org.eluder.coveralls</groupId>
 					<artifactId>coveralls-maven-plugin</artifactId>
-					<version>4.3.0</version>
+					<version>${org.eluder.coveralls.version}</version>
 					<dependencies>
-						<!-- This is required when using JDK 9 or higher since javax.xml.bind 
-							has been removed from the JDK -->
 						<dependency>
 							<groupId>javax.xml.bind</groupId>
 							<artifactId>jaxb-api</artifactId>
-							<version>2.3.1</version>
+							<version>${javax.xml.bind.version}</version>
 						</dependency>
 					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.sonarsource.scanner.maven</groupId>
 					<artifactId>sonar-maven-plugin</artifactId>
-					<version>3.8.0.2131</version>
+					<version>${sonar-maven-plugin.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
