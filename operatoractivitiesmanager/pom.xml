@@ -24,12 +24,7 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.projectKey>cerullosalvatore_operatoractivitiesmanager</sonar.projectKey>
 		<sonar.coverage.exclusions>
-			**/Main.*
 		</sonar.coverage.exclusions>
-		<sonar.junit.reportPaths>
-			${project.build.directory}/surefire-reports,
-			${project.build.directory}/failsafe-reports
-		</sonar.junit.reportPaths>
 	</properties>
 
 	<dependencies>
