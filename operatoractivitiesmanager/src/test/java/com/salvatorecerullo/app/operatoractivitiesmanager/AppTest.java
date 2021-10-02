@@ -1,13 +1,20 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.assertEquals;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Before;
+import org.junit.Test;
 
 public class AppTest {
-    
-  @Test
-  public void shouldAnswerWithTrue() {
-    assertTrue(true);
-  }
+	private App app;
+
+	@Before
+	public void setup() {
+		app = new App();
+	}
+
+	@Test
+	public void testSayHello() {
+		assertEquals("Hello", app.sayHello());
+	}
 }
