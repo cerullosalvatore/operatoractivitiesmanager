@@ -6,7 +6,7 @@
 
 [![Java CI with Maven in Linux](https://github.com/cerullosalvatore/operatoractivitiesmanager/actions/workflows/jacoco.yml/badge.svg?branch=configuration&service=github)](https://github.com/cerullosalvatore/operatoractivitiesmanager/actions/workflows/jacoco.yml)
 
-[![Java CI with Maven, and SonarCloud in Linux](https://github.com/cerullosalvatore/operatoractivitiesmanager/actions/workflows/sonarcloud.yml/badge.svg&service=github)](https://github.com/cerullosalvatore/operatoractivitiesmanager/actions/workflows/sonarcloud.yml)
+[![Java CI with Maven, and SonarCloud in Linux](https://github.com/cerullosalvatore/operatoractivitiesmanager/actions/workflows/sonarcloud.yml/badge.svg?branch=configuration&service=github)](https://github.com/cerullosalvatore/operatoractivitiesmanager/actions/workflows/sonarcloud.yml)
 
 #### Coveralls
 
