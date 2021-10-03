@@ -24,7 +24,8 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.projectKey>cerullosalvatore_operatoractivitiesmanager</sonar.projectKey>
 		<sonar.coverage.exclusions>
-			**/Main.*
+			**/Main.*,
+			**/model/*.*
 		</sonar.coverage.exclusions>
 	</properties>
 
@@ -94,6 +95,7 @@
 					<configuration>
 						<excludes>
 							<exclude>**/Main.*</exclude>
+							<exclude>**/model/*.*</exclude>
 						</excludes>
 					</configuration>
 					<executions>
