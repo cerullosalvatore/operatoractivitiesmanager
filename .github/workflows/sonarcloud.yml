@@ -1,7 +1,5 @@
 name: Java CI with Maven, and SonarCloud in Linux
-on:
-  push:
-  pull_request:
+on: [push, pull_request]
 jobs:
   build:
     name: Build
