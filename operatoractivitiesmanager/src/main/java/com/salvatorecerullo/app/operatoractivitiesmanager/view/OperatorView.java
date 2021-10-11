@@ -8,4 +8,6 @@ public interface OperatorView {
 
 	public void showAllOperators(List<Operator> operators);
 
+	public void operatorAdded();
+
 }

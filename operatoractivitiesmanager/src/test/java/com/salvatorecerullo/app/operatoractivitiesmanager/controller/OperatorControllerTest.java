@@ -8,8 +8,10 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
@@ -39,5 +41,14 @@ public class OperatorControllerTest {
 		when(operatorRepository.findAll()).thenReturn(operators);
 		operatorController.allOperators();
 		verify(operatorView).showAllOperators(operators);
+	}
+	
+	@Test 
+	public void testAddOperator() {
+		Operator newOperator = new Operator("matricola0000", "testName", "testSurname");
+		operatorController.addOperator(newOperator);
+		InOrder inOrder = Mockito.inOrder(operatorRepository, operatorView);
+		inOrder.verify(operatorRepository).save(newOperator);
+		inOrder.verify(operatorView).operatorAdded();
 	}
 }

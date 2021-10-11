@@ -8,4 +8,6 @@ public interface OperatorRepository {
 
 	public List<Operator> findAll();
 
+	public void save(Operator newOperator);
+
 }
