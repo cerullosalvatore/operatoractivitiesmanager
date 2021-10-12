@@ -5,8 +5,8 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.OperatorRep
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.OperatorView;
 
 public class OperatorController {
-	private OperatorView operatorView;
 	private OperatorRepository operatorRepository;
+	private OperatorView operatorView;
 
 	public void allOperators() {
 		operatorView.showAllOperators(operatorRepository.findAll());
