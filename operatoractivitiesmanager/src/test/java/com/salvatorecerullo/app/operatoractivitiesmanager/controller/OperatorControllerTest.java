@@ -50,7 +50,7 @@ public class OperatorControllerTest {
 	public void testAddOperatorSuccessfull() {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
-		when(operatorRepository.findByMatricola("testMatricola")).thenReturn(null);
+		when(operatorRepository.findByMatricola(newOperator.getMatricola())).thenReturn(null);
 		// Exercise
 		operatorController.addOperator(newOperator);
 		// Verify
@@ -65,23 +65,23 @@ public class OperatorControllerTest {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
 		Operator oldOperator = new Operator("testMatricola", "testNameOld", "testSurnameOld");
-		when(operatorRepository.findByMatricola("testMatricola")).thenReturn(oldOperator);
+		when(operatorRepository.findByMatricola(newOperator.getMatricola())).thenReturn(oldOperator);
 		// Exercise
 		operatorController.addOperator(newOperator);
 		// Verify
-		verify(operatorView).showError("The Operator Matricola: testMatricola already exist.");
+		verify(operatorView).showError("The Operator Matricola: " + newOperator.getMatricola() + " already exist.");
 	}
 
 	@Test
 	public void testRemoveOperatorSuccessfull() {
 		// Setup
 		Operator oldOperator = new Operator("testMatricola", "testName", "testSurname");
-		when(operatorRepository.findByMatricola("testMatricola")).thenReturn(oldOperator);
+		when(operatorRepository.findByMatricola(oldOperator.getMatricola())).thenReturn(oldOperator);
 		// Exercise
 		operatorController.removeOperator(oldOperator);
 		// Verify
 		InOrder inOrder = Mockito.inOrder(operatorRepository, operatorView);
-		inOrder.verify(operatorRepository).delete("testMatricola");
+		inOrder.verify(operatorRepository).delete(oldOperator.getMatricola());
 		inOrder.verify(operatorView).operatorRemoved();
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -90,11 +90,11 @@ public class OperatorControllerTest {
 	public void testRemoveOperatorException() {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
-		when(operatorRepository.findByMatricola("testMatricola")).thenReturn(null);
+		when(operatorRepository.findByMatricola(newOperator.getMatricola())).thenReturn(null);
 		// Exercise
 		operatorController.removeOperator(newOperator);
 		// Verify
-		verify(operatorView).showError("The Operator Matricola: testMatricola does not exist.");
+		verify(operatorView).showError("The Operator Matricola: " + newOperator.getMatricola() + " does not exist.");
 	}
 
 	@Test
@@ -102,7 +102,7 @@ public class OperatorControllerTest {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
 		Operator oldOperator = new Operator("testMatricola", "testNameOld", "testSurnameOld");
-		when(operatorRepository.findByMatricola("testMatricola")).thenReturn(oldOperator);
+		when(operatorRepository.findByMatricola(newOperator.getMatricola())).thenReturn(oldOperator);
 		// Exercise
 		operatorController.updateOperator(newOperator);
 		// verify
@@ -116,11 +116,11 @@ public class OperatorControllerTest {
 	public void testModifyOperatorException() {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
-		when(operatorRepository.findByMatricola("testMatricola")).thenReturn(null);
+		when(operatorRepository.findByMatricola(newOperator.getMatricola())).thenReturn(null);
 		// Exercise
 		operatorController.updateOperator(newOperator);
 		// verify
-		verify(operatorView).showError("The Operator Matricola: testMatricola does not exist.");
+		verify(operatorView).showError("The Operator Matricola: " + newOperator.getMatricola() + " does not exist.");
 	}
 
 }

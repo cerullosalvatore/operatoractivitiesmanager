@@ -39,7 +39,7 @@ public class BasicOperationControllerTest {
 		List<BasicOperation> basicOperations = new ArrayList<BasicOperation>();
 		basicOperations.add(new BasicOperation(0, "NameOperationTest", "DescriptionTest"));
 		when(basicOperationRepository.findAll()).thenReturn(basicOperations);
-		// Excercise
+		// Exercise
 		basicOperationController.allBasicOperations();
 		// Verify
 		verify(basicOperationView).showAllBasicOperations(basicOperations);
@@ -49,7 +49,7 @@ public class BasicOperationControllerTest {
 	public void testAddBasicOperationSuccessfull() {
 		// Setup
 		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
-		when(basicOperationRepository.findById(0)).thenReturn(null);
+		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(null);
 		// Exercise
 		basicOperationController.addBasicOperation(newBasicOperation);
 		// Verify
@@ -64,18 +64,18 @@ public class BasicOperationControllerTest {
 		// Setup
 		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
 		BasicOperation oldBasicOperation = new BasicOperation(0, "NameOperationTestOld", "DescriptionTestOld");
-		when(basicOperationRepository.findById(0)).thenReturn(oldBasicOperation);
+		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(oldBasicOperation);
 		// Exercise
 		basicOperationController.addBasicOperation(newBasicOperation);
 		// Verify
-		verify(basicOperationView).showError("The BasicOperation with ID: 0 already exist.");
+		verify(basicOperationView).showError("The BasicOperation with ID: " + newBasicOperation.getId() + " already exist.");
 	}
 
 	@Test
 	public void testRemoveBasicOperationSuccessfull() {
 		// Setup
 		BasicOperation oldBasicOperation = new BasicOperation(0, "testNameOperation", "testDescription");
-		when(basicOperationRepository.findById(0)).thenReturn(oldBasicOperation);
+		when(basicOperationRepository.findById(oldBasicOperation.getId())).thenReturn(oldBasicOperation);
 		// Exercise
 		basicOperationController.removeBasicOperation(oldBasicOperation);
 		// Verify
@@ -89,11 +89,11 @@ public class BasicOperationControllerTest {
 	public void testRemoveBasicOperationException() {
 		// Setup
 		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
-		when(basicOperationRepository.findById(0)).thenReturn(null);
+		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(null);
 		// Exercise
 		basicOperationController.removeBasicOperation(newBasicOperation);
 		// Verify
-		verify(basicOperationView).showError("The BasicOperation with ID: 0 does not exist.");
+		verify(basicOperationView).showError("The BasicOperation with ID: " + newBasicOperation.getId() + " does not exist.");
 	}
 
 	@Test
@@ -101,7 +101,7 @@ public class BasicOperationControllerTest {
 		// Setup
 		BasicOperation oldBasicOperation = new BasicOperation(0, "OldNameOperationTest", "OldDescriptionTest");
 		BasicOperation newBasicOperation = new BasicOperation(0, "NewNameOperationTest", "NewDescriptionTest");
-		when(basicOperationRepository.findById(0)).thenReturn(oldBasicOperation);
+		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(oldBasicOperation);
 		// Exercise
 		basicOperationController.updateBasicOperation(newBasicOperation);
 		// Verify
@@ -115,11 +115,11 @@ public class BasicOperationControllerTest {
 	public void testModifyBasicOperationException() {
 		// Setup
 		BasicOperation newBasicOperation = new BasicOperation(0, "NewNameOperationTest", "NewDescriptionTest");
-		when(basicOperationRepository.findById(0)).thenReturn(null);
+		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(null);
 		//Exercise
 		basicOperationController.updateBasicOperation(newBasicOperation);
 		//Verify
-		verify(basicOperationView).showError("The BasicOperation with ID: 0 does not exist.");
+		verify(basicOperationView).showError("The BasicOperation with ID: " + newBasicOperation.getId() + " does not exist.");
 	}
 
 }
