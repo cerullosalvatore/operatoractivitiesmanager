@@ -8,8 +8,10 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
@@ -42,5 +44,33 @@ public class BasicOperationControllerTest {
 		// Verify
 		verify(basicOperationView).showAllBasicOperations(basicOperations);
 	}
+
+	@Test
+	public void addBasicOperationSuccessfull() {
+		// Setup
+		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
+		when(basicOperationRepository.findById(0)).thenReturn(null);
+		//Exercise
+		basicOperationController.addBasicOperation(newBasicOperation);
+		//Verify
+		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
+		inOrder.verify(basicOperationRepository).save(newBasicOperation);
+		inOrder.verify(basicOperationView).basicOperationAdded();
+		inOrder.verifyNoMoreInteractions();		
+	}
+	
+	@Test
+	public void addBasicOperationException() {
+		//Setup
+		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
+		BasicOperation oldBasicOperation = new BasicOperation(0, "NameOperationTestOld", "DescriptionTestOld");
+		when(basicOperationRepository.findById(0)).thenReturn(oldBasicOperation);
+		//Exercise
+		basicOperationController.addBasicOperation(newBasicOperation);
+		//Verify
+		verify(basicOperationView).showError("The BasicOperation with ID: 0 already exist.");
+	}
+	
+	
 
 }

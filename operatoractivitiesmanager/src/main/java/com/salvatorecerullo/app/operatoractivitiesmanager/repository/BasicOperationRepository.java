@@ -8,4 +8,9 @@ public interface BasicOperationRepository {
 
 	public List<BasicOperation> findAll();
 
+	public BasicOperation findById(long id);
+
+	public void save(BasicOperation newBasicOperation);
+
+
 }
