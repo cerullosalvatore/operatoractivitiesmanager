@@ -10,4 +10,10 @@ public interface OperatorView {
 
 	public void operatorAdded();
 
+	public void showError(String string);
+
+	public void operatorRemoved();
+
+	public void operatorUpdated();
+
 }

@@ -6,15 +6,38 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.view.OperatorView;
 
 public class OperatorController {
 	private OperatorView operatorView;
-	private OperatorRepository operatorReopository;
-	
+	private OperatorRepository operatorRepository;
+
 	public void allOperators() {
-		operatorView.showAllOperators(operatorReopository.findAll());
+		operatorView.showAllOperators(operatorRepository.findAll());
 	}
 
 	public void addOperator(Operator newOperator) {
-		operatorReopository.save(newOperator);
-		operatorView.operatorAdded();
+		if (operatorRepository.findByMatricola(newOperator.getMatricola()) == null) {
+			operatorRepository.save(newOperator);
+			operatorView.operatorAdded();
+		} else {
+			operatorView.showError("The Operator Matricola: " + newOperator.getMatricola() + " already exist.");
+		}
+
+	}
+
+	public void removeOperator(Operator operator) {
+		if (operatorRepository.findByMatricola(operator.getMatricola()) != null) {
+			operatorRepository.delete(operator.getMatricola());
+			operatorView.operatorRemoved();
+		} else {
+			operatorView.showError("The Operator Matricola: " + operator.getMatricola() + " does not exist.");
+		}
+	}
+
+	public void updateOperator(Operator newOperator) {
+		if (operatorRepository.findByMatricola(newOperator.getMatricola()) != null) {
+			operatorRepository.updateOperator(newOperator);
+			operatorView.operatorUpdated();
+		} else {
+			operatorView.showError("The Operator Matricola: " + newOperator.getMatricola() + " does not exist.");
+		}
 	}
 
 }

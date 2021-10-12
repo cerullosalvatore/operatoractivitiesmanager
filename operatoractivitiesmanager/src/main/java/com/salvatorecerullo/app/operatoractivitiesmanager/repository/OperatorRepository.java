@@ -10,4 +10,10 @@ public interface OperatorRepository {
 
 	public void save(Operator newOperator);
 
+	public Operator findByMatricola(String string);
+
+	public void delete(String string);
+
+	public void updateOperator(Operator newOperator);
+
 }
