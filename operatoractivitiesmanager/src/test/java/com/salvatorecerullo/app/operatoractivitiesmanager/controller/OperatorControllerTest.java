@@ -73,7 +73,7 @@ public class OperatorControllerTest {
 	}
 
 	@Test
-	public void removeOperatorSuccessfull() {
+	public void testRemoveOperatorSuccessfull() {
 		// Setup
 		Operator oldOperator = new Operator("testMatricola", "testName", "testSurname");
 		when(operatorRepository.findByMatricola("testMatricola")).thenReturn(oldOperator);
@@ -87,7 +87,7 @@ public class OperatorControllerTest {
 	}
 
 	@Test
-	public void removeOperatorException() {
+	public void testRemoveOperatorException() {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
 		when(operatorRepository.findByMatricola("testMatricola")).thenReturn(null);
@@ -98,7 +98,7 @@ public class OperatorControllerTest {
 	}
 
 	@Test
-	public void modifyOperatorSuccessfull() {
+	public void testModifyOperatorSuccessfull() {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
 		Operator oldOperator = new Operator("testMatricola", "testNameOld", "testSurnameOld");
@@ -113,7 +113,7 @@ public class OperatorControllerTest {
 	}
 
 	@Test
-	public void modifyOperatorException() {
+	public void testModifyOperatorException() {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
 		when(operatorRepository.findByMatricola("testMatricola")).thenReturn(null);

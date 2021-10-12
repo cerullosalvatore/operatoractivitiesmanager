@@ -12,5 +12,9 @@ public interface BasicOperationRepository {
 
 	public void save(BasicOperation newBasicOperation);
 
+	public void delete(long id);
+
+	public void update(BasicOperation newBasicOperation);
+
 
 }

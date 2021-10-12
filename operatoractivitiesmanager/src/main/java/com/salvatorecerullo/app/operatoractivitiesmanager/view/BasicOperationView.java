@@ -12,4 +12,8 @@ public interface BasicOperationView {
 
 	public void showError(String string);
 
+	public void basicOperationRemoved();
+
+	public void basicOperationUpdated();
+
 }

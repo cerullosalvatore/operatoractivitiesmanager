@@ -46,31 +46,80 @@ public class BasicOperationControllerTest {
 	}
 
 	@Test
-	public void addBasicOperationSuccessfull() {
+	public void testAddBasicOperationSuccessfull() {
 		// Setup
 		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
 		when(basicOperationRepository.findById(0)).thenReturn(null);
-		//Exercise
+		// Exercise
 		basicOperationController.addBasicOperation(newBasicOperation);
-		//Verify
+		// Verify
 		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
 		inOrder.verify(basicOperationRepository).save(newBasicOperation);
 		inOrder.verify(basicOperationView).basicOperationAdded();
-		inOrder.verifyNoMoreInteractions();		
+		inOrder.verifyNoMoreInteractions();
 	}
-	
+
 	@Test
-	public void addBasicOperationException() {
-		//Setup
+	public void testAddBasicOperationException() {
+		// Setup
 		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
 		BasicOperation oldBasicOperation = new BasicOperation(0, "NameOperationTestOld", "DescriptionTestOld");
 		when(basicOperationRepository.findById(0)).thenReturn(oldBasicOperation);
-		//Exercise
+		// Exercise
 		basicOperationController.addBasicOperation(newBasicOperation);
-		//Verify
+		// Verify
 		verify(basicOperationView).showError("The BasicOperation with ID: 0 already exist.");
 	}
-	
-	
+
+	@Test
+	public void testRemoveBasicOperationSuccessfull() {
+		// Setup
+		BasicOperation oldBasicOperation = new BasicOperation(0, "testNameOperation", "testDescription");
+		when(basicOperationRepository.findById(0)).thenReturn(oldBasicOperation);
+		// Exercise
+		basicOperationController.removeBasicOperation(oldBasicOperation);
+		// Verify
+		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
+		inOrder.verify(basicOperationRepository).delete(0);
+		inOrder.verify(basicOperationView).basicOperationRemoved();
+		inOrder.verifyNoMoreInteractions();
+	}
+
+	@Test
+	public void testRemoveBasicOperationException() {
+		// Setup
+		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
+		when(basicOperationRepository.findById(0)).thenReturn(null);
+		// Exercise
+		basicOperationController.removeBasicOperation(newBasicOperation);
+		// Verify
+		verify(basicOperationView).showError("The BasicOperation with ID: 0 does not exist.");
+	}
+
+	@Test
+	public void testModifyBasicOperationSuccesfull() {
+		// Setup
+		BasicOperation oldBasicOperation = new BasicOperation(0, "OldNameOperationTest", "OldDescriptionTest");
+		BasicOperation newBasicOperation = new BasicOperation(0, "NewNameOperationTest", "NewDescriptionTest");
+		when(basicOperationRepository.findById(0)).thenReturn(oldBasicOperation);
+		// Exercise
+		basicOperationController.updateBasicOperation(newBasicOperation);
+		// Verify
+		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
+		inOrder.verify(basicOperationRepository).update(newBasicOperation);
+		inOrder.verify(basicOperationView).basicOperationUpdated();
+		inOrder.verifyNoMoreInteractions();
+	}
+
+	@Test
+	public void testModifyBasicOperationException() {
+		// Setup
+		BasicOperation newBasicOperation = new BasicOperation(0, "NewNameOperationTest", "NewDescriptionTest");
+		when(basicOperationRepository.findById(0)).thenReturn(null);
+		//Exercise
+		basicOperationController.updateBasicOperation(newBasicOperation);
+		//Verify
+		verify(basicOperationView).showError("The BasicOperation with ID: 0 does not exist.");
+	}
 
 }
