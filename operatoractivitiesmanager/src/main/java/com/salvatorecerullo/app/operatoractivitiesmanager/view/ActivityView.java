@@ -6,10 +6,12 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
 
 public interface ActivityView {
 
-	public void showAllActivities(List<Activity> activities);
+	public void showActivities(List<Activity> activities);
 
 	public void activityAdded();
 
 	public void showError(String string);
+
+	public void showActivityRemoved(String string);
 
 }
