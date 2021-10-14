@@ -8,12 +8,8 @@ public interface BasicOperationView {
 
 	public void showAllBasicOperations(List<BasicOperation> basicOperations);
 
-	public void basicOperationAdded();
+	public void showSuccessfull(String string);
 
 	public void showError(String string);
-
-	public void basicOperationRemoved();
-
-	public void basicOperationUpdated();
 
 }

@@ -8,12 +8,7 @@ public interface OperatorView {
 
 	public void showAllOperators(List<Operator> operators);
 
-	public void operatorAdded();
+	public void showSuccessfull(String string);
 
 	public void showError(String string);
-
-	public void operatorRemoved();
-
-	public void operatorUpdated();
-
 }

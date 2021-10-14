@@ -8,10 +8,8 @@ public interface ActivityView {
 
 	public void showActivities(List<Activity> activities);
 
-	public void activityAdded();
+	public void showSuccessfull(String string);
 
 	public void showError(String string);
-
-	public void showActivityRemoved(String string);
-
+	
 }

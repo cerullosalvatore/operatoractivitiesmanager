@@ -25,6 +25,10 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.OperatorRep
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.ActivityView;
 
 public class ActivityTest {
+
+	private Date startTime;
+	private Date endTime;
+
 	@Mock
 	private ActivityRepository activityRepository;
 
@@ -43,28 +47,22 @@ public class ActivityTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 1, 8, 0, 00);
+		startTime = cal.getTime();
+		cal.set(2021, 1, 1, 16, 00, 00);
+		endTime = cal.getTime();
 	}
 
 	@Test
 	public void testAllActivities() {
 		// Setup
 		List<Activity> activities = new ArrayList<Activity>();
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2021);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 8);
-		cal.set(Calendar.MINUTE, 00);
-		Date startTime = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 10);
-		cal.set(Calendar.MINUTE, 00);
-		Date endTime = cal.getTime();
-		activities.add(new Activity(0, "matricolaTest", 0, startTime, endTime));
+		activities.add(new Activity(0, "matricolaTest1", 0, startTime, endTime));
+		activities.add(new Activity(1, "matricolaTest2", 1, startTime, endTime));
 		when(activityRepository.findAll()).thenReturn(activities);
-
 		// Exercise
 		activityController.allActivities();
-
 		// Verify
 		verify(activityView).showActivities(activities);
 	}
@@ -73,122 +71,78 @@ public class ActivityTest {
 	public void testAddActivitySuccessfull() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation operation = new BasicOperation(0, "testName", "testDescription");
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2021);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 8);
-		cal.set(Calendar.MINUTE, 00);
-		Date startTime = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 10);
-		cal.set(Calendar.MINUTE, 00);
-		Date endTime = cal.getTime();
-		Activity newActivity = new Activity(0, operator.getMatricola(), operation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(null);
 		when(operatorRepository.findByMatricola(operator.getMatricola())).thenReturn(operator);
-		when(basicOperationRepository.findById(operation.getId())).thenReturn(operation);
+		when(basicOperationRepository.findById(basicOperation.getId())).thenReturn(basicOperation);
 		// Exercise
 		activityController.addActivity(newActivity);
 		// verify
 		InOrder inOrder = Mockito.inOrder(activityRepository, activityView);
 		inOrder.verify(activityRepository).save(newActivity);
-		inOrder.verify(activityView).activityAdded();
+		inOrder.verify(activityView)
+				.showSuccessfull("The Operator: " + newActivity.getOperatorMatricola() + " has been added.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
 	@Test
-	public void testAddActivityExceptionId() {
+	public void testAddActivityErrorId() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation operation = new BasicOperation(0, "testName", "testDescription");
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2021);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 8);
-		cal.set(Calendar.MINUTE, 00);
-		Date startTime = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 10);
-		cal.set(Calendar.MINUTE, 00);
-		Date endTime = cal.getTime();
-		Activity newActivity = new Activity(0, operator.getMatricola(), operation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		Activity oldActivity = new Activity(0, "OldOperatorTestMatricola", 2, startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(oldActivity);
 		// Exercise
 		activityController.addActivity(newActivity);
 		// Verify
-		verify(activityView).showError("The Activity Id: " + newActivity.getId() + " already exist.");
+		verify(activityView).showError("The Activity ID: " + newActivity.getId() + " already exist.");
 	}
 
 	@Test
-	public void testAddActivityExceptionOperator() {
+	public void testAddActivityErrorOperator() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation operation = new BasicOperation(0, "testName", "testDescription");
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2021);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 8);
-		cal.set(Calendar.MINUTE, 00);
-		Date startTime = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 10);
-		cal.set(Calendar.MINUTE, 00);
-		Date endTime = cal.getTime();
-		Activity newActivity = new Activity(0, operator.getMatricola(), operation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(null);
 		when(operatorRepository.findByMatricola(operator.getMatricola())).thenReturn(null);
 		// Exercise
 		activityController.addActivity(newActivity);
 		// Verify
-		verify(activityView).showError("The Operator Matricola: " + operator.getMatricola() + " does not exist.");
+		verify(activityView).showError("The Operator: " + operator.getMatricola() + " does not exist.");
 	}
 
 	@Test
-	public void testAddActivityExceptionOperation() {
+	public void testAddActivityErrorBasicOperation() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation operation = new BasicOperation(0, "testName", "testDescription");
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2021);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 8);
-		cal.set(Calendar.MINUTE, 00);
-		Date startTime = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 10);
-		cal.set(Calendar.MINUTE, 00);
-		Date endTime = cal.getTime();
-		Activity newActivity = new Activity(0, operator.getMatricola(), operation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(null);
 		when(operatorRepository.findByMatricola(operator.getMatricola())).thenReturn(operator);
-		when(basicOperationRepository.findById(operation.getId())).thenReturn(null);
+		when(basicOperationRepository.findById(basicOperation.getId())).thenReturn(null);
 		// Exercise
 		activityController.addActivity(newActivity);
 		// Verify
-		verify(activityView).showError("The BasicOperation Id: " + operation.getId() + " does not exist.");
+		verify(activityView).showError("The BasicOperation: " + basicOperation.getId() + " does not exist.");
 	}
 
 	@Test
-	public void testAddActivityExceptionStartTimeAfterStopTime() {
+	public void testAddActivityErrorStartTimeAfterStopTime() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation operation = new BasicOperation(0, "testName", "testDescription");
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2021);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 16);
-		cal.set(Calendar.MINUTE, 00);
-		Date startTime = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 10);
-		cal.set(Calendar.MINUTE, 00);
-		Date endTime = cal.getTime();
-		Activity newActivity = new Activity(0, operator.getMatricola(), operation.getId(), startTime, endTime);
+		cal.set(2021, 1, 1, 16, 0, 00);
+		startTime = cal.getTime();
+		cal.set(2021, 1, 1, 8, 00, 00);
+		endTime = cal.getTime();
+		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(null);
 		when(operatorRepository.findByMatricola(operator.getMatricola())).thenReturn(operator);
-		when(basicOperationRepository.findById(operation.getId())).thenReturn(operation);
+		when(basicOperationRepository.findById(basicOperation.getId())).thenReturn(basicOperation);
 		// Exercise
 		activityController.addActivity(newActivity);
 		// Verify
@@ -200,18 +154,8 @@ public class ActivityTest {
 	public void testRemoveActivitySuccessfull() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation operation = new BasicOperation(0, "testName", "testDescription");
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2021);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 10);
-		cal.set(Calendar.MINUTE, 00);
-		Date startTime = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 16);
-		cal.set(Calendar.MINUTE, 00);
-		Date endTime = cal.getTime();
-		Activity oldActivity = new Activity(0, operator.getMatricola(), operation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		Activity oldActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(oldActivity.getId())).thenReturn(oldActivity);
 		// Exercise
 		activityController.removeActivity(oldActivity);
@@ -219,53 +163,33 @@ public class ActivityTest {
 		InOrder inOrder = Mockito.inOrder(activityRepository, activityView);
 		inOrder.verify(activityRepository).delete(oldActivity.getId());
 		inOrder.verify(activityView)
-				.showActivityRemoved("The activity with Id: " + oldActivity.getId() + " has been removed");
+				.showSuccessfull("The Operator: " + oldActivity.getOperatorMatricola() + " has been removed.");
 	}
 
 	@Test
 	public void testRemoveActivityException() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation operation = new BasicOperation(0, "testName", "testDescription");
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2021);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 10);
-		cal.set(Calendar.MINUTE, 00);
-		Date startTime = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 16);
-		cal.set(Calendar.MINUTE, 00);
-		Date endTime = cal.getTime();
-		Activity newActivity = new Activity(0, operator.getMatricola(), operation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(null);
 		// Exercise
 		activityController.removeActivity(newActivity);
 		// verify
-		verify(activityView).showError("The activity with Id: " + newActivity.getId() + " not exist.");
+		verify(activityView).showError("The Activity: " + newActivity.getId() + " does not exist.");
 	}
 
 	@Test
 	public void testSearchActivityByOperator() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation operation = new BasicOperation(0, "testName", "testDescription");
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2021);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 10);
-		cal.set(Calendar.MINUTE, 00);
-		Date startTime = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 16);
-		cal.set(Calendar.MINUTE, 00);
-		Date endTime = cal.getTime();
-		Activity activity1 = new Activity(0, operator.getMatricola(), operation.getId(), startTime, endTime);
-		Activity activity2 = new Activity(1, operator.getMatricola(), operation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		Activity activity1 = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity activity2 = new Activity(1, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		List<Activity> activities = new ArrayList<Activity>();
 		activities.add(activity1);
 		activities.add(activity2);
-		when(activityRepository.findByOperator(operator.getMatricola())).thenReturn(activities);
+		when(activityRepository.findByOperatorMatricola(operator.getMatricola())).thenReturn(activities);
 		// Exercise
 		activityController.findByOperator(operator.getMatricola());
 		// verify
@@ -273,49 +197,59 @@ public class ActivityTest {
 	}
 
 	@Test
+	public void testSearchActivityByOperatorError() {
+		// Setup
+		Operator operator = new Operator("testMatricola", "testName", "testSurname");
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		Activity activity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		List<Activity> activities = new ArrayList<Activity>();
+		activities.add(activity);
+		when(activityRepository.findByOperatorMatricola(operator.getMatricola())).thenReturn(null);
+		// Exercise
+		activityController.findByOperator(operator.getMatricola());
+		// verify
+		verify(activityView).showError("The Operator: " + operator.getMatricola() + " does not exist.");
+	}
+
+	@Test
 	public void testSearchActivityByBasicOperation() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation operation = new BasicOperation(0, "testName", "testDescription");
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2021);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 10);
-		cal.set(Calendar.MINUTE, 00);
-		Date startTime = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 16);
-		cal.set(Calendar.MINUTE, 00);
-		Date endTime = cal.getTime();
-		Activity activity1 = new Activity(0, operator.getMatricola(), operation.getId(), startTime, endTime);
-		Activity activity2 = new Activity(1, operator.getMatricola(), operation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		Activity activity1 = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity activity2 = new Activity(1, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		List<Activity> activities = new ArrayList<Activity>();
 		activities.add(activity1);
 		activities.add(activity2);
-		when(activityRepository.findByBasicOperation(operation.getId())).thenReturn(activities);
+		when(activityRepository.findByBasicOperationId(basicOperation.getId())).thenReturn(activities);
 		// Exercise
-		activityController.findByBasicOperation(operation.getId());
+		activityController.findByBasicOperation(basicOperation.getId());
 		// verify
 		verify(activityView).showActivities(activities);
+	}
+
+	@Test
+	public void testSearchActivityByBasicOperationError() {
+		// Setup
+		Operator operator = new Operator("testMatricola", "testName", "testSurname");
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		Activity activity1 = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		List<Activity> activities = new ArrayList<Activity>();
+		activities.add(activity1);
+		when(activityRepository.findByBasicOperationId(basicOperation.getId())).thenReturn(null);
+		// Exercise
+		activityController.findByBasicOperation(basicOperation.getId());
+		// verify
+		verify(activityView).showError("The BasicOperation: " + basicOperation.getId() + " does not exist.");
 	}
 
 	@Test
 	public void testSearchActivityByStartDaySuccesfull() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation operation = new BasicOperation(0, "testName", "testDescription");
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2021);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 10);
-		cal.set(Calendar.MINUTE, 00);
-		Date startTime = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 16);
-		cal.set(Calendar.MINUTE, 00);
-		Date endTime = cal.getTime();
-		Activity activity1 = new Activity(0, operator.getMatricola(), operation.getId(), startTime, endTime);
-		Activity activity2 = new Activity(1, operator.getMatricola(), operation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		Activity activity1 = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity activity2 = new Activity(1, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		List<Activity> activities = new ArrayList<Activity>();
 		activities.add(activity1);
 		activities.add(activity2);
@@ -326,4 +260,106 @@ public class ActivityTest {
 		verify(activityView).showActivities(activities);
 	}
 
+	@Test
+	public void testUpdateActivitySuccessfull() {
+		// Setup
+		Operator operatorOld = new Operator("testMatricolaOld", "testNameOld", "testSurnameOld");
+		BasicOperation basicOperationOld = new BasicOperation(0, "testNameOld", "testDescriptionOld");
+		Activity activityOld = new Activity(0, operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
+				endTime);
+		Operator operatorUpdated = new Operator("testMatricola", "testName", "testSurname");
+		BasicOperation basicOperationUpdated = new BasicOperation(0, "testName", "testDescription");
+		Activity activityUpdated = new Activity(0, operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
+				startTime, endTime);
+		when(activityRepository.findById(activityUpdated.getId())).thenReturn(activityOld);
+		when(operatorRepository.findByMatricola(operatorUpdated.getMatricola())).thenReturn(operatorOld);
+		when(basicOperationRepository.findById(basicOperationUpdated.getId())).thenReturn(basicOperationOld);
+		// Exercise
+		activityController.updadeActivity(activityUpdated);
+		// verify
+		InOrder inOrder = Mockito.inOrder(activityRepository, activityView);
+		inOrder.verify(activityRepository).update(activityUpdated);
+		inOrder.verify(activityView).showSuccessfull("The Activity: " + activityUpdated.getId() + " has been updated.");
+		inOrder.verifyNoMoreInteractions();
+	}
+
+	@Test
+	public void testUpdateActivityErrorId() {
+		// Setup
+		Operator operatorUpdated = new Operator("testMatricola", "testName", "testSurname");
+		BasicOperation basicOperationUpdated = new BasicOperation(0, "testName", "testDescription");
+		Activity activityUpdated = new Activity(0, operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
+				startTime, endTime);
+		when(activityRepository.findById(activityUpdated.getId())).thenReturn(null);
+		// Exercise
+		activityController.updadeActivity(activityUpdated);
+		// verify
+		verify(activityView).showError("The Activity: " + activityUpdated.getId() + " does not exist.");
+	}
+
+	@Test
+	public void testUpdateActivityErrorOperator() {
+		// Setup
+		Operator operatorOld = new Operator("testMatricolaOld", "testNameOld", "testSurnameOld");
+		BasicOperation basicOperationOld = new BasicOperation(0, "testNameOld", "testDescriptionOld");
+		Activity activityOld = new Activity(0, operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
+				endTime);
+		Operator operatorUpdated = new Operator("testMatricola", "testName", "testSurname");
+		BasicOperation basicOperationUpdated = new BasicOperation(0, "testName", "testDescription");
+		Activity activityUpdated = new Activity(0, operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
+				startTime, endTime);
+		when(activityRepository.findById(activityUpdated.getId())).thenReturn(activityOld);
+		when(operatorRepository.findByMatricola(operatorUpdated.getMatricola())).thenReturn(null);
+		// Exercise
+		activityController.updadeActivity(activityUpdated);
+		// verify
+		verify(activityView).showError("The Operator: " + activityUpdated.getOperatorMatricola() + " does not exist.");
+	}
+
+	@Test
+	public void testUpdateActivityErrorBasicOperation() {
+		// Setup
+		Operator operatorOld = new Operator("testMatricolaOld", "testNameOld", "testSurnameOld");
+		BasicOperation basicOperationOld = new BasicOperation(0, "testNameOld", "testDescriptionOld");
+		Activity activityOld = new Activity(0, operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
+				endTime);
+		Operator operatorUpdated = new Operator("testMatricola", "testName", "testSurname");
+		BasicOperation basicOperationUpdated = new BasicOperation(0, "testName", "testDescription");
+		Activity activityUpdated = new Activity(0, operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
+				startTime, endTime);
+		when(activityRepository.findById(activityUpdated.getId())).thenReturn(activityOld);
+		when(operatorRepository.findByMatricola(operatorUpdated.getMatricola())).thenReturn(operatorOld);
+		when(basicOperationRepository.findById(basicOperationUpdated.getId())).thenReturn(null);
+		// Exercise
+		activityController.updadeActivity(activityUpdated);
+		// verify
+		verify(activityView)
+				.showError("The Basic Operation: " + activityUpdated.getOperationId() + " does not exist.");
+	}
+
+	@Test
+	public void testUpdateActivityErrorStartTimeAfterStopTime() {
+		// Setup
+		Operator operatorOld = new Operator("testMatricolaOld", "testNameOld", "testSurnameOld");
+		BasicOperation basicOperationOld = new BasicOperation(0, "testNameOld", "testDescriptionOld");
+		Activity activityOld = new Activity(0, operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
+				endTime);
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 1, 16, 0, 00);
+		Date startTimeUpdated = cal.getTime();
+		cal.set(2021, 1, 1, 8, 00, 00);
+		Date endTimeUpdated = cal.getTime();
+		Operator operatorUpdated = new Operator("testMatricola", "testName", "testSurname");
+		BasicOperation basicOperationUpdated = new BasicOperation(0, "testName", "testDescription");
+		Activity activityUpdated = new Activity(0, operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
+				startTimeUpdated, endTimeUpdated);
+		when(activityRepository.findById(activityUpdated.getId())).thenReturn(activityOld);
+		when(operatorRepository.findByMatricola(operatorUpdated.getMatricola())).thenReturn(operatorOld);
+		when(basicOperationRepository.findById(basicOperationUpdated.getId())).thenReturn(basicOperationOld);
+		// Exercise
+		activityController.updadeActivity(activityUpdated);
+		// verify
+		verify(activityView).showError("The Start Date: " + activityUpdated.getStartTime() + "follow the End Date: "
+				+ activityUpdated.getEndTime());
+	}
 }

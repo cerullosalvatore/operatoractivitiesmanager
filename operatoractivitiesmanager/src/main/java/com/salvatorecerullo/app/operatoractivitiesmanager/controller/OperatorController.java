@@ -15,7 +15,7 @@ public class OperatorController {
 	public void addOperator(Operator newOperator) {
 		if (operatorRepository.findByMatricola(newOperator.getMatricola()) == null) {
 			operatorRepository.save(newOperator);
-			operatorView.operatorAdded();
+			operatorView.showSuccessfull("The Operator: " + newOperator.getMatricola() + " has been added.");
 		} else {
 			operatorView.showError("The Operator Matricola: " + newOperator.getMatricola() + " already exist.");
 		}
@@ -25,7 +25,7 @@ public class OperatorController {
 	public void removeOperator(Operator operator) {
 		if (operatorRepository.findByMatricola(operator.getMatricola()) != null) {
 			operatorRepository.delete(operator.getMatricola());
-			operatorView.operatorRemoved();
+			operatorView.showSuccessfull("The Operator: " + operator.getMatricola() + " has been removed.");
 		} else {
 			operatorView.showError("The Operator Matricola: " + operator.getMatricola() + " does not exist.");
 		}
@@ -33,8 +33,8 @@ public class OperatorController {
 
 	public void updateOperator(Operator newOperator) {
 		if (operatorRepository.findByMatricola(newOperator.getMatricola()) != null) {
-			operatorRepository.updateOperator(newOperator);
-			operatorView.operatorUpdated();
+			operatorRepository.update(newOperator);
+			operatorView.showSuccessfull("The Operator: " + newOperator.getMatricola() + " has been updated.");
 		} else {
 			operatorView.showError("The Operator Matricola: " + newOperator.getMatricola() + " does not exist.");
 		}

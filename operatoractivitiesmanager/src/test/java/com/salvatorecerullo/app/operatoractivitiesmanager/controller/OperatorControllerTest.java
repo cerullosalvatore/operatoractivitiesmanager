@@ -38,7 +38,7 @@ public class OperatorControllerTest {
 	public void testAllOperators() {
 		// Setup
 		List<Operator> operators = new ArrayList<Operator>();
-		operators.add(new Operator());
+		operators.add(new Operator("testMatricola", "testName", "testSurname"));
 		when(operatorRepository.findAll()).thenReturn(operators);
 		// Exercise
 		operatorController.allOperators();
@@ -56,12 +56,13 @@ public class OperatorControllerTest {
 		// Verify
 		InOrder inOrder = Mockito.inOrder(operatorRepository, operatorView);
 		inOrder.verify(operatorRepository).save(newOperator);
-		inOrder.verify(operatorView).operatorAdded();
+		inOrder.verify(operatorView)
+				.showSuccessfull("The Operator: " + newOperator.getMatricola() + " has been added.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
 	@Test
-	public void testAddOperatorException() {
+	public void testAddOperatorError() {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
 		Operator oldOperator = new Operator("testMatricola", "testNameOld", "testSurnameOld");
@@ -82,12 +83,13 @@ public class OperatorControllerTest {
 		// Verify
 		InOrder inOrder = Mockito.inOrder(operatorRepository, operatorView);
 		inOrder.verify(operatorRepository).delete(oldOperator.getMatricola());
-		inOrder.verify(operatorView).operatorRemoved();
+		inOrder.verify(operatorView)
+				.showSuccessfull("The Operator: " + oldOperator.getMatricola() + " has been removed.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
 	@Test
-	public void testRemoveOperatorException() {
+	public void testRemoveOperatorError() {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
 		when(operatorRepository.findByMatricola(newOperator.getMatricola())).thenReturn(null);
@@ -98,7 +100,7 @@ public class OperatorControllerTest {
 	}
 
 	@Test
-	public void testModifyOperatorSuccessfull() {
+	public void testUpdateOperatorSuccessfull() {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
 		Operator oldOperator = new Operator("testMatricola", "testNameOld", "testSurnameOld");
@@ -107,13 +109,14 @@ public class OperatorControllerTest {
 		operatorController.updateOperator(newOperator);
 		// verify
 		InOrder inOrder = Mockito.inOrder(operatorRepository, operatorView);
-		inOrder.verify(operatorRepository).updateOperator(newOperator);
-		inOrder.verify(operatorView).operatorUpdated();
+		inOrder.verify(operatorRepository).update(newOperator);
+		inOrder.verify(operatorView)
+				.showSuccessfull("The Operator: " + newOperator.getMatricola() + " has been updated.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
 	@Test
-	public void testModifyOperatorException() {
+	public void testUpdateOperatorError() {
 		// Setup
 		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
 		when(operatorRepository.findByMatricola(newOperator.getMatricola())).thenReturn(null);

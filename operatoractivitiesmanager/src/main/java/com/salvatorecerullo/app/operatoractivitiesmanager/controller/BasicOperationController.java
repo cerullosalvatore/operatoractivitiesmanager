@@ -15,7 +15,7 @@ public class BasicOperationController {
 	public void addBasicOperation(BasicOperation basicOperation) {
 		if (basicOperationRepository.findById(basicOperation.getId()) == null) {
 			basicOperationRepository.save(basicOperation);
-			basicOperationView.basicOperationAdded();
+			basicOperationView.showSuccessfull("The BasicOperation with ID: " + basicOperation.getId() + " has been added.");
 		} else {
 			basicOperationView.showError("The BasicOperation with ID: " + basicOperation.getId() + " already exist.");
 		}
@@ -24,7 +24,7 @@ public class BasicOperationController {
 	public void removeBasicOperation(BasicOperation basicOperation) {
 		if (basicOperationRepository.findById(basicOperation.getId()) != null) {
 			basicOperationRepository.delete(basicOperation.getId());
-			basicOperationView.basicOperationRemoved();
+			basicOperationView.showSuccessfull("The BasicOperation with ID: " + basicOperation.getId() + " has been removed.");
 		} else {
 			basicOperationView.showError("The BasicOperation with ID: " + basicOperation.getId() + " does not exist.");
 		}
@@ -33,7 +33,7 @@ public class BasicOperationController {
 	public void updateBasicOperation(BasicOperation newBasicOperation) {
 		if (basicOperationRepository.findById(newBasicOperation.getId()) != null) {
 			basicOperationRepository.update(newBasicOperation);
-			basicOperationView.basicOperationUpdated();
+			basicOperationView.showSuccessfull("The BasicOperation with ID: " + newBasicOperation.getId() + " has been added.");
 		}else {
 			basicOperationView.showError("The BasicOperation with ID: " + newBasicOperation.getId() + " does not exist.");
 		}

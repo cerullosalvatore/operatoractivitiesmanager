@@ -55,12 +55,12 @@ public class BasicOperationControllerTest {
 		// Verify
 		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
 		inOrder.verify(basicOperationRepository).save(newBasicOperation);
-		inOrder.verify(basicOperationView).basicOperationAdded();
+		inOrder.verify(basicOperationView).showSuccessfull("The BasicOperation with ID: " + newBasicOperation.getId() + " has been added.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
 	@Test
-	public void testAddBasicOperationException() {
+	public void testAddBasicOperationError() {
 		// Setup
 		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
 		BasicOperation oldBasicOperation = new BasicOperation(0, "NameOperationTestOld", "DescriptionTestOld");
@@ -81,12 +81,12 @@ public class BasicOperationControllerTest {
 		// Verify
 		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
 		inOrder.verify(basicOperationRepository).delete(0);
-		inOrder.verify(basicOperationView).basicOperationRemoved();
+		inOrder.verify(basicOperationView).showSuccessfull("The BasicOperation with ID: " + oldBasicOperation.getId() + " has been removed.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
 	@Test
-	public void testRemoveBasicOperationException() {
+	public void testRemoveBasicOperationError() {
 		// Setup
 		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
 		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(null);
@@ -107,12 +107,12 @@ public class BasicOperationControllerTest {
 		// Verify
 		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
 		inOrder.verify(basicOperationRepository).update(newBasicOperation);
-		inOrder.verify(basicOperationView).basicOperationUpdated();
+		inOrder.verify(basicOperationView).showSuccessfull("The BasicOperation with ID: " + newBasicOperation.getId() + " has been added.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
 	@Test
-	public void testModifyBasicOperationException() {
+	public void testModifyBasicOperationError() {
 		// Setup
 		BasicOperation newBasicOperation = new BasicOperation(0, "NewNameOperationTest", "NewDescriptionTest");
 		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(null);
