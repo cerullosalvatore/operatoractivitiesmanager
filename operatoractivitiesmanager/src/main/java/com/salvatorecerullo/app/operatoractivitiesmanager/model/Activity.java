@@ -9,9 +9,6 @@ public class Activity {
 	private Date startTime;
 	private Date endTime;
 
-	public Activity() {
-	}
-
 	public Activity(long id, String operatorMatricola, long operationId, Date startTime, Date endTime) {
 		super();
 		this.id = id;

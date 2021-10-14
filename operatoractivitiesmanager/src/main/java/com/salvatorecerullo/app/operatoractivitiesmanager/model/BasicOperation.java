@@ -5,9 +5,6 @@ public class BasicOperation {
 	private String name;
 	private String description;
 
-	public BasicOperation() {
-	}
-
 	public BasicOperation(long id, String name, String description) {
 		this.id = id;
 		this.name = name;

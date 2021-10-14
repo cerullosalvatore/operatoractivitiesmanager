@@ -5,9 +5,6 @@ public class Operator {
 	private String name;
 	private String surname;
 
-	public Operator() {
-	}
-
 	public Operator(String matricola, String name, String surname) {
 		this.matricola = matricola;
 		this.name = name;
