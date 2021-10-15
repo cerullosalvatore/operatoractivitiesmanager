@@ -13,7 +13,6 @@ public class Activity {
 	}
 
 	public Activity(long id, String operatorMatricola, long operationId, Date startTime, Date endTime) {
-		super();
 		this.id = id;
 		this.operatorMatricola = operatorMatricola;
 		this.operationId = operationId;

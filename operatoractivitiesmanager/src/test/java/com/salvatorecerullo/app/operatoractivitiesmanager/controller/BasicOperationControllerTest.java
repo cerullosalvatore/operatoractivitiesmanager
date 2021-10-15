@@ -19,6 +19,9 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.BasicOperat
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.BasicOperationView;
 
 public class BasicOperationControllerTest {
+	private static final String BASICOPERATION = "The BasicOperation with ID: ";
+	private static final String NOTEXIST = " does not exist.";
+
 	@Mock
 	private BasicOperationRepository basicOperationRepository;
 
@@ -55,7 +58,8 @@ public class BasicOperationControllerTest {
 		// Verify
 		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
 		inOrder.verify(basicOperationRepository).save(newBasicOperation);
-		inOrder.verify(basicOperationView).showSuccessfull("The BasicOperation with ID: " + newBasicOperation.getId() + " has been added.");
+		inOrder.verify(basicOperationView)
+				.showSuccessfull(BASICOPERATION + newBasicOperation.getId() + " has been added.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -68,7 +72,8 @@ public class BasicOperationControllerTest {
 		// Exercise
 		basicOperationController.addBasicOperation(newBasicOperation);
 		// Verify
-		verify(basicOperationView).showError("The BasicOperation with ID: " + newBasicOperation.getId() + " already exist.");
+		verify(basicOperationView)
+				.showError(BASICOPERATION + newBasicOperation.getId() + " already exist.");
 	}
 
 	@Test
@@ -81,7 +86,8 @@ public class BasicOperationControllerTest {
 		// Verify
 		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
 		inOrder.verify(basicOperationRepository).delete(0);
-		inOrder.verify(basicOperationView).showSuccessfull("The BasicOperation with ID: " + oldBasicOperation.getId() + " has been removed.");
+		inOrder.verify(basicOperationView)
+				.showSuccessfull(BASICOPERATION + oldBasicOperation.getId() + " has been removed.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -93,7 +99,8 @@ public class BasicOperationControllerTest {
 		// Exercise
 		basicOperationController.removeBasicOperation(newBasicOperation);
 		// Verify
-		verify(basicOperationView).showError("The BasicOperation with ID: " + newBasicOperation.getId() + " does not exist.");
+		verify(basicOperationView)
+				.showError(BASICOPERATION + newBasicOperation.getId() + NOTEXIST);
 	}
 
 	@Test
@@ -107,7 +114,8 @@ public class BasicOperationControllerTest {
 		// Verify
 		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
 		inOrder.verify(basicOperationRepository).update(newBasicOperation);
-		inOrder.verify(basicOperationView).showSuccessfull("The BasicOperation with ID: " + newBasicOperation.getId() + " has been added.");
+		inOrder.verify(basicOperationView)
+				.showSuccessfull(BASICOPERATION + newBasicOperation.getId() + " has been added.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -116,10 +124,11 @@ public class BasicOperationControllerTest {
 		// Setup
 		BasicOperation newBasicOperation = new BasicOperation(0, "NewNameOperationTest", "NewDescriptionTest");
 		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(null);
-		//Exercise
+		// Exercise
 		basicOperationController.updateBasicOperation(newBasicOperation);
-		//Verify
-		verify(basicOperationView).showError("The BasicOperation with ID: " + newBasicOperation.getId() + " does not exist.");
+		// Verify
+		verify(basicOperationView)
+				.showError(BASICOPERATION + newBasicOperation.getId() + NOTEXIST);
 	}
 
 }

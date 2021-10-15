@@ -20,6 +20,9 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.view.OperatorView;
 
 public class OperatorControllerTest {
 
+	private static final String THEOPERATOR = "The Operator: ";
+	private static final String NOTEXIST = " does not exist.";
+
 	@Mock
 	private OperatorRepository operatorRepository;
 
@@ -57,7 +60,7 @@ public class OperatorControllerTest {
 		InOrder inOrder = Mockito.inOrder(operatorRepository, operatorView);
 		inOrder.verify(operatorRepository).save(newOperator);
 		inOrder.verify(operatorView)
-				.showSuccessfull("The Operator: " + newOperator.getMatricola() + " has been added.");
+				.showSuccessfull(THEOPERATOR + newOperator.getMatricola() + " has been added.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -70,7 +73,7 @@ public class OperatorControllerTest {
 		// Exercise
 		operatorController.addOperator(newOperator);
 		// Verify
-		verify(operatorView).showError("The Operator Matricola: " + newOperator.getMatricola() + " already exist.");
+		verify(operatorView).showError(THEOPERATOR + newOperator.getMatricola() + " already exist.");
 	}
 
 	@Test
@@ -84,7 +87,7 @@ public class OperatorControllerTest {
 		InOrder inOrder = Mockito.inOrder(operatorRepository, operatorView);
 		inOrder.verify(operatorRepository).delete(oldOperator.getMatricola());
 		inOrder.verify(operatorView)
-				.showSuccessfull("The Operator: " + oldOperator.getMatricola() + " has been removed.");
+				.showSuccessfull(THEOPERATOR + oldOperator.getMatricola() + " has been removed.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -96,7 +99,7 @@ public class OperatorControllerTest {
 		// Exercise
 		operatorController.removeOperator(newOperator);
 		// Verify
-		verify(operatorView).showError("The Operator Matricola: " + newOperator.getMatricola() + " does not exist.");
+		verify(operatorView).showError(THEOPERATOR + newOperator.getMatricola() + NOTEXIST);
 	}
 
 	@Test
@@ -111,7 +114,7 @@ public class OperatorControllerTest {
 		InOrder inOrder = Mockito.inOrder(operatorRepository, operatorView);
 		inOrder.verify(operatorRepository).update(newOperator);
 		inOrder.verify(operatorView)
-				.showSuccessfull("The Operator: " + newOperator.getMatricola() + " has been updated.");
+				.showSuccessfull(THEOPERATOR + newOperator.getMatricola() + " has been updated.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -123,7 +126,7 @@ public class OperatorControllerTest {
 		// Exercise
 		operatorController.updateOperator(newOperator);
 		// verify
-		verify(operatorView).showError("The Operator Matricola: " + newOperator.getMatricola() + " does not exist.");
+		verify(operatorView).showError(THEOPERATOR + newOperator.getMatricola() + NOTEXIST);
 	}
 
 }

@@ -5,6 +5,9 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.OperatorRep
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.OperatorView;
 
 public class OperatorController {
+	private static final String THEOPERATOR = "The Operator: ";
+	private static final String NOTEXIST = " does not exist.";
+	
 	private OperatorRepository operatorRepository;
 	private OperatorView operatorView;
 
@@ -15,9 +18,9 @@ public class OperatorController {
 	public void addOperator(Operator newOperator) {
 		if (operatorRepository.findByMatricola(newOperator.getMatricola()) == null) {
 			operatorRepository.save(newOperator);
-			operatorView.showSuccessfull("The Operator: " + newOperator.getMatricola() + " has been added.");
+			operatorView.showSuccessfull(THEOPERATOR + newOperator.getMatricola() + " has been added.");
 		} else {
-			operatorView.showError("The Operator Matricola: " + newOperator.getMatricola() + " already exist.");
+			operatorView.showError(THEOPERATOR + newOperator.getMatricola() + " already exist.");
 		}
 
 	}
@@ -25,9 +28,9 @@ public class OperatorController {
 	public void removeOperator(Operator operator) {
 		if (operatorRepository.findByMatricola(operator.getMatricola()) != null) {
 			operatorRepository.delete(operator.getMatricola());
-			operatorView.showSuccessfull("The Operator: " + operator.getMatricola() + " has been removed.");
+			operatorView.showSuccessfull(THEOPERATOR + operator.getMatricola() + " has been removed.");
 		} else {
-			operatorView.showError("The Operator Matricola: " + operator.getMatricola() + " does not exist.");
+			operatorView.showError(THEOPERATOR + operator.getMatricola() + NOTEXIST);
 		}
 	}
 
@@ -36,7 +39,7 @@ public class OperatorController {
 			operatorRepository.update(newOperator);
 			operatorView.showSuccessfull("The Operator: " + newOperator.getMatricola() + " has been updated.");
 		} else {
-			operatorView.showError("The Operator Matricola: " + newOperator.getMatricola() + " does not exist.");
+			operatorView.showError("The Operator: " + newOperator.getMatricola() + NOTEXIST);
 		}
 	}
 

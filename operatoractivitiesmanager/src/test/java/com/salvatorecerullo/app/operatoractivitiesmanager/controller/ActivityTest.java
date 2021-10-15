@@ -25,7 +25,11 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.OperatorRep
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.ActivityView;
 
 public class ActivityTest {
-
+	private static final String THEOPERATOR = "The Operator: ";
+	private static final String BASICOPERATION = "The BasicOperation with ID: ";
+	private static final String THEACTIVITY = "The Activity: ";
+	private static final String NOTEXIST = " does not exist.";
+	
 	private Date startTime;
 	private Date endTime;
 
@@ -82,7 +86,7 @@ public class ActivityTest {
 		InOrder inOrder = Mockito.inOrder(activityRepository, activityView);
 		inOrder.verify(activityRepository).save(newActivity);
 		inOrder.verify(activityView)
-				.showSuccessfull("The Operator: " + newActivity.getOperatorMatricola() + " has been added.");
+				.showSuccessfull(THEOPERATOR + newActivity.getOperatorMatricola() + " has been added.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -97,7 +101,7 @@ public class ActivityTest {
 		// Exercise
 		activityController.addActivity(newActivity);
 		// Verify
-		verify(activityView).showError("The Activity ID: " + newActivity.getId() + " already exist.");
+		verify(activityView).showError(THEACTIVITY + newActivity.getId() + " already exist.");
 	}
 
 	@Test
@@ -111,7 +115,7 @@ public class ActivityTest {
 		// Exercise
 		activityController.addActivity(newActivity);
 		// Verify
-		verify(activityView).showError("The Operator: " + operator.getMatricola() + " does not exist.");
+		verify(activityView).showError(THEOPERATOR + operator.getMatricola() + NOTEXIST);
 	}
 
 	@Test
@@ -126,7 +130,7 @@ public class ActivityTest {
 		// Exercise
 		activityController.addActivity(newActivity);
 		// Verify
-		verify(activityView).showError("The BasicOperation: " + basicOperation.getId() + " does not exist.");
+		verify(activityView).showError(BASICOPERATION + basicOperation.getId() + NOTEXIST);
 	}
 
 	@Test
@@ -163,7 +167,7 @@ public class ActivityTest {
 		InOrder inOrder = Mockito.inOrder(activityRepository, activityView);
 		inOrder.verify(activityRepository).delete(oldActivity.getId());
 		inOrder.verify(activityView)
-				.showSuccessfull("The Operator: " + oldActivity.getOperatorMatricola() + " has been removed.");
+				.showSuccessfull(THEOPERATOR + oldActivity.getOperatorMatricola() + " has been removed.");
 	}
 
 	@Test
@@ -176,7 +180,7 @@ public class ActivityTest {
 		// Exercise
 		activityController.removeActivity(newActivity);
 		// verify
-		verify(activityView).showError("The Activity: " + newActivity.getId() + " does not exist.");
+		verify(activityView).showError(THEACTIVITY + newActivity.getId() + NOTEXIST);
 	}
 
 	@Test
@@ -208,7 +212,7 @@ public class ActivityTest {
 		// Exercise
 		activityController.findByOperator(operator.getMatricola());
 		// verify
-		verify(activityView).showError("The Operator: " + operator.getMatricola() + " does not exist.");
+		verify(activityView).showError(THEOPERATOR + operator.getMatricola() + NOTEXIST);
 	}
 
 	@Test
@@ -240,7 +244,7 @@ public class ActivityTest {
 		// Exercise
 		activityController.findByBasicOperation(basicOperation.getId());
 		// verify
-		verify(activityView).showError("The BasicOperation: " + basicOperation.getId() + " does not exist.");
+		verify(activityView).showError(BASICOPERATION + basicOperation.getId() + NOTEXIST);
 	}
 
 	@Test
@@ -279,7 +283,7 @@ public class ActivityTest {
 		// verify
 		InOrder inOrder = Mockito.inOrder(activityRepository, activityView);
 		inOrder.verify(activityRepository).update(activityUpdated);
-		inOrder.verify(activityView).showSuccessfull("The Activity: " + activityUpdated.getId() + " has been updated.");
+		inOrder.verify(activityView).showSuccessfull(THEACTIVITY + activityUpdated.getId() + " has been updated.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -294,7 +298,7 @@ public class ActivityTest {
 		// Exercise
 		activityController.updadeActivity(activityUpdated);
 		// verify
-		verify(activityView).showError("The Activity: " + activityUpdated.getId() + " does not exist.");
+		verify(activityView).showError(THEACTIVITY + activityUpdated.getId() + NOTEXIST);
 	}
 
 	@Test
@@ -313,7 +317,7 @@ public class ActivityTest {
 		// Exercise
 		activityController.updadeActivity(activityUpdated);
 		// verify
-		verify(activityView).showError("The Operator: " + activityUpdated.getOperatorMatricola() + " does not exist.");
+		verify(activityView).showError(THEOPERATOR + activityUpdated.getOperatorMatricola() + NOTEXIST);
 	}
 
 	@Test
@@ -334,7 +338,7 @@ public class ActivityTest {
 		activityController.updadeActivity(activityUpdated);
 		// verify
 		verify(activityView)
-				.showError("The Basic Operation: " + activityUpdated.getOperationId() + " does not exist.");
+				.showError(BASICOPERATION + activityUpdated.getOperationId() + NOTEXIST);
 	}
 
 	@Test

@@ -5,6 +5,10 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.BasicOperat
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.BasicOperationView;
 
 public class BasicOperationController {
+
+	private static final String BASICOPERATION = "The BasicOperation with ID: ";
+	private static final String NOTEXIST = " does not exist.";
+	
 	private BasicOperationRepository basicOperationRepository;
 	private BasicOperationView basicOperationView;
 
@@ -15,27 +19,27 @@ public class BasicOperationController {
 	public void addBasicOperation(BasicOperation basicOperation) {
 		if (basicOperationRepository.findById(basicOperation.getId()) == null) {
 			basicOperationRepository.save(basicOperation);
-			basicOperationView.showSuccessfull("The BasicOperation with ID: " + basicOperation.getId() + " has been added.");
+			basicOperationView.showSuccessfull(BASICOPERATION + basicOperation.getId() + " has been added.");
 		} else {
-			basicOperationView.showError("The BasicOperation with ID: " + basicOperation.getId() + " already exist.");
+			basicOperationView.showError(BASICOPERATION + basicOperation.getId() + " already exist.");
 		}
 	}
 
 	public void removeBasicOperation(BasicOperation basicOperation) {
 		if (basicOperationRepository.findById(basicOperation.getId()) != null) {
 			basicOperationRepository.delete(basicOperation.getId());
-			basicOperationView.showSuccessfull("The BasicOperation with ID: " + basicOperation.getId() + " has been removed.");
+			basicOperationView.showSuccessfull(BASICOPERATION + basicOperation.getId() + " has been removed.");
 		} else {
-			basicOperationView.showError("The BasicOperation with ID: " + basicOperation.getId() + " does not exist.");
+			basicOperationView.showError(BASICOPERATION + basicOperation.getId() + NOTEXIST);
 		}
 	}
 
 	public void updateBasicOperation(BasicOperation newBasicOperation) {
 		if (basicOperationRepository.findById(newBasicOperation.getId()) != null) {
 			basicOperationRepository.update(newBasicOperation);
-			basicOperationView.showSuccessfull("The BasicOperation with ID: " + newBasicOperation.getId() + " has been added.");
+			basicOperationView.showSuccessfull(BASICOPERATION + newBasicOperation.getId() + " has been added.");
 		}else {
-			basicOperationView.showError("The BasicOperation with ID: " + newBasicOperation.getId() + " does not exist.");
+			basicOperationView.showError(BASICOPERATION + newBasicOperation.getId() + NOTEXIST);
 		}
 	}
 
