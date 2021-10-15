@@ -37,9 +37,9 @@ public class OperatorController {
 	public void updateOperator(Operator newOperator) {
 		if (operatorRepository.findByMatricola(newOperator.getMatricola()) != null) {
 			operatorRepository.update(newOperator);
-			operatorView.showSuccessfull("The Operator: " + newOperator.getMatricola() + " has been updated.");
+			operatorView.showSuccessfull(THEOPERATOR + newOperator.getMatricola() + " has been updated.");
 		} else {
-			operatorView.showError("The Operator: " + newOperator.getMatricola() + NOTEXIST);
+			operatorView.showError(THEOPERATOR + newOperator.getMatricola() + NOTEXIST);
 		}
 	}
 
