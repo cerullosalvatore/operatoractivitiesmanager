@@ -112,6 +112,20 @@ public class BasicOperationMongoRepositoryTest {
 		// Verify
 		assertThat(basicOperationRetrieved).isEqualTo(basicOperation2);
 	}
+	
+	@Test
+	public void testFindByIdError() {
+		// Setup
+		BasicOperation basicOperation1 = new BasicOperation(new ObjectId().toString(), "name1", "description1");
+		BasicOperation basicOperation2 = new BasicOperation(new ObjectId().toString(), "name2", "description2");
+		addBasicOperationToDB(basicOperation1);
+
+		// Exercise
+		BasicOperation basicOperationRetrieved = basicOperationMongoRepository.findById(basicOperation2.getId());
+
+		// Verify
+		assertThat(basicOperationRetrieved).isNull();
+	}
 
 	private void addBasicOperationToDB(BasicOperation basicOperation) {
 		basicOperationCollection.insertOne(new Document().append("_id", basicOperation.getId())

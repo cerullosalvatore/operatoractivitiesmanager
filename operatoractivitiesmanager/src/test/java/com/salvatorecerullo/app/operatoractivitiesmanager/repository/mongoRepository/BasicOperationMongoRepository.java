@@ -27,7 +27,12 @@ public class BasicOperationMongoRepository implements BasicOperationRepository {
 
 	@Override
 	public BasicOperation findById(String id) {
-		return fromDocumentToBasicOperation(basicOperationCollection.find(Filters.eq("_id", id)).first());
+		Document documentRetrieved = basicOperationCollection.find(Filters.eq("_id", id)).first();
+		if (documentRetrieved != null) {
+			return fromDocumentToBasicOperation(documentRetrieved);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
