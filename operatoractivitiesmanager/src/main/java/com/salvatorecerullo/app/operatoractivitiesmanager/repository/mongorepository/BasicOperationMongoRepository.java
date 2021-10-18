@@ -1,14 +1,16 @@
-package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongoRepository;
+package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongorepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.BasicOperationRepository;
 
@@ -46,14 +48,15 @@ public class BasicOperationMongoRepository implements BasicOperationRepository {
 
 	@Override
 	public void delete(String id) {
-		// TODO Auto-generated method stub
-
+		basicOperationCollection.deleteOne(Filters.eq("_id", id));
 	}
 
 	@Override
 	public void update(BasicOperation newBasicOperation) {
-		// TODO Auto-generated method stub
-
+		Bson update1 = Updates.set("name", newBasicOperation.getName());
+		Bson update2 = Updates.set("description", newBasicOperation.getDescription());
+		Bson updates = Updates.combine(update1, update2);
+		basicOperationCollection.updateOne(Filters.eq("_id", newBasicOperation.getId()), updates);
 	}
 
 	private BasicOperation fromDocumentToBasicOperation(Document document) {

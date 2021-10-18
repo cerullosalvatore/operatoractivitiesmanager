@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.bson.Document;
 import org.junit.AfterClass;
@@ -16,6 +18,7 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
+import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongorepository.BasicOperationMongoRepository;
 
 import de.bwaldvogel.mongo.MongoServer;
 import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
@@ -81,7 +84,7 @@ public class BasicOperationMongoRepositoryTest {
 		basicOperationMongoRepository.save(newBasicOperation2);
 
 		// Verify
-		assertThat(basicOperationMongoRepository.findAll()).containsExactly(newBasicOperation1, newBasicOperation2);
+		assertThat(readAllBasicOperatoinFromDB()).containsExactly(newBasicOperation1, newBasicOperation2);
 	}
 
 	@Test
@@ -112,7 +115,7 @@ public class BasicOperationMongoRepositoryTest {
 		// Verify
 		assertThat(basicOperationRetrieved).isEqualTo(basicOperation2);
 	}
-	
+
 	@Test
 	public void testFindByIdError() {
 		// Setup
@@ -127,8 +130,72 @@ public class BasicOperationMongoRepositoryTest {
 		assertThat(basicOperationRetrieved).isNull();
 	}
 
+	@Test
+	public void testDeleteSuccessfull() {
+		// Setup
+		BasicOperation basicOperation1 = new BasicOperation(new ObjectId().toString(), "name1", "description1");
+		addBasicOperationToDB(basicOperation1);
+
+		// Exercise
+		basicOperationMongoRepository.delete(basicOperation1.getId());
+
+		// Verify
+		assertThat(readAllBasicOperatoinFromDB()).isEmpty();
+	}
+
+	@Test
+	public void testDeleteError() {
+		// Setup
+		BasicOperation basicOperation1 = new BasicOperation(new ObjectId().toString(), "name1", "description1");
+		addBasicOperationToDB(basicOperation1);
+
+		// Exercise
+		basicOperationMongoRepository.delete(new ObjectId().toString());
+
+		// Verify
+		assertThat(readAllBasicOperatoinFromDB()).containsExactly(basicOperation1);
+	}
+
+	@Test
+	public void testUpdateSuccessfull() {
+		// Setup
+		BasicOperation basicOperationOld = new BasicOperation(new ObjectId().toString(), "nameOld", "descriptionOld");
+		BasicOperation basicOperationNew = new BasicOperation(basicOperationOld.getId(), "nameNew", "descriptionNew");
+		addBasicOperationToDB(basicOperationOld);
+
+		// Exercise
+		basicOperationMongoRepository.update(basicOperationNew);
+
+		// Verify
+		assertThat(readAllBasicOperatoinFromDB().get(0)).isEqualTo(basicOperationNew);
+	}
+
+	@Test
+	public void testUpdateError() {
+		// Setup
+		BasicOperation basicOperationOld = new BasicOperation(new ObjectId().toString(), "nameOld", "descriptionOld");
+		BasicOperation basicOperationNew = new BasicOperation(new ObjectId().toString(), "nameNew", "descriptionNew");
+		addBasicOperationToDB(basicOperationOld);
+
+		// Exercise
+		basicOperationMongoRepository.update(basicOperationNew);
+
+		// Verify
+		assertThat(readAllBasicOperatoinFromDB().get(0)).isNotEqualTo(basicOperationNew);
+	}
+	
 	private void addBasicOperationToDB(BasicOperation basicOperation) {
 		basicOperationCollection.insertOne(new Document().append("_id", basicOperation.getId())
 				.append("name", basicOperation.getName()).append("description", basicOperation.getDescription()));
+	}
+
+	private List<BasicOperation> readAllBasicOperatoinFromDB() {
+		return StreamSupport.stream(basicOperationCollection.find().spliterator(), false)
+				.map(this::fromDocumentToBasicOperation).collect(Collectors.toList());
+	}
+
+	private BasicOperation fromDocumentToBasicOperation(Document document) {
+		return new BasicOperation(document.getString("_id"), document.getString("name"),
+				document.getString("description"));
 	}
 }
