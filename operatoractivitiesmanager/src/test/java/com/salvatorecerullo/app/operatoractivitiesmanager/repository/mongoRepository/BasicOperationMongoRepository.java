@@ -8,8 +8,8 @@ import org.bson.Document;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
-import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.BasicOperationRepository;
 
 public class BasicOperationMongoRepository implements BasicOperationRepository {
@@ -27,14 +27,16 @@ public class BasicOperationMongoRepository implements BasicOperationRepository {
 
 	@Override
 	public BasicOperation findById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return fromDocumentToBasicOperation(basicOperationCollection.find(Filters.eq("_id", id)).first());
 	}
 
 	@Override
 	public void save(BasicOperation newBasicOperation) {
-		// TODO Auto-generated method stub
-
+		if (basicOperationCollection.find(Filters.eq("_id", newBasicOperation.getId())).first() == null) {
+			basicOperationCollection.insertOne(
+					new Document().append("_id", newBasicOperation.getId()).append("name", newBasicOperation.getName())
+							.append("description", newBasicOperation.getDescription()));
+		}
 	}
 
 	@Override

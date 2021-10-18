@@ -3,6 +3,7 @@ package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongoRepos
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 import org.bson.Document;
 import org.junit.AfterClass;
@@ -14,9 +15,11 @@ import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 
 import de.bwaldvogel.mongo.MongoServer;
 import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
+import de.bwaldvogel.mongo.bson.ObjectId;
 
 public class BasicOperationMongoRepositoryTest {
 	private static final String DB_NAME = "operatoractivities";
@@ -26,7 +29,7 @@ public class BasicOperationMongoRepositoryTest {
 	private MongoClient mongoClient;
 	private BasicOperationMongoRepository basicOperationMongoRepository;
 	private MongoCollection<Document> basicOperationCollection;
-	
+
 	@BeforeClass
 	public static void setupServer() {
 		mongoServer = new MongoServer(new MemoryBackend());
@@ -50,5 +53,68 @@ public class BasicOperationMongoRepositoryTest {
 	@Test
 	public void testFindAllDBEmpty() {
 		assertThat(basicOperationMongoRepository.findAll()).isEmpty();
+	}
+
+	@Test
+	public void testFindAllDBNotEmpty() {
+		// Setup
+		BasicOperation basicOperation1 = new BasicOperation(new ObjectId().toString(), "name1", "description1");
+		BasicOperation basicOperation2 = new BasicOperation(new ObjectId().toString(), "name2", "description2");
+		addBasicOperationToDB(basicOperation1);
+		addBasicOperationToDB(basicOperation2);
+
+		// Exercise
+		List<BasicOperation> basicOperations = basicOperationMongoRepository.findAll();
+
+		// Verify
+		assertThat(basicOperations).containsExactly(basicOperation1, basicOperation2);
+	}
+
+	@Test
+	public void testSaveBasicOperationSuccessfull() {
+		// Setup
+		BasicOperation newBasicOperation1 = new BasicOperation(new ObjectId().toString(), "name", "description");
+		BasicOperation newBasicOperation2 = new BasicOperation(new ObjectId().toString(), "name", "description");
+
+		// Exercise
+		basicOperationMongoRepository.save(newBasicOperation1);
+		basicOperationMongoRepository.save(newBasicOperation2);
+
+		// Verify
+		assertThat(basicOperationMongoRepository.findAll()).containsExactly(newBasicOperation1, newBasicOperation2);
+	}
+
+	@Test
+	public void testSaveBasicOperationError() {
+		// Setup
+		BasicOperation basicOperationOld = new BasicOperation(new ObjectId().toString(), "nameOld", "descriptionOld");
+		BasicOperation basicOperationNew = new BasicOperation(basicOperationOld.getId(), "nameNew", "descriptionNew");
+		addBasicOperationToDB(basicOperationOld);
+
+		// Exercise
+		basicOperationMongoRepository.save(basicOperationNew);
+
+		// Verify
+		assertThat(basicOperationMongoRepository.findAll()).containsExactly(basicOperationOld);
+	}
+
+	@Test
+	public void testFindByIdSuccess() {
+		// Setup
+		BasicOperation basicOperation1 = new BasicOperation(new ObjectId().toString(), "name1", "description1");
+		BasicOperation basicOperation2 = new BasicOperation(new ObjectId().toString(), "name2", "description2");
+		addBasicOperationToDB(basicOperation1);
+		addBasicOperationToDB(basicOperation2);
+
+		// Exercise
+		BasicOperation basicOperationRetrieved = basicOperationMongoRepository.findById(basicOperation2.getId());
+
+		// Verify
+		assertThat(basicOperationRetrieved).isEqualTo(basicOperation2);
+	}
+
+	private void addBasicOperationToDB(BasicOperation basicOperation) {
+		basicOperationCollection.insertOne(new Document().append("_id", basicOperation.getId())
+				.append("name", basicOperation.getName()).append("description", basicOperation.getDescription()));
 	}
 }
