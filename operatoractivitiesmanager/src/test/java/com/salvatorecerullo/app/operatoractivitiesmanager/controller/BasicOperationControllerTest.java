@@ -40,7 +40,7 @@ public class BasicOperationControllerTest {
 	public void testAllBasicOperations() {
 		// Setup
 		List<BasicOperation> basicOperations = new ArrayList<BasicOperation>();
-		basicOperations.add(new BasicOperation(0, "NameOperationTest", "DescriptionTest"));
+		basicOperations.add(new BasicOperation("0", "NameOperationTest", "DescriptionTest"));
 		when(basicOperationRepository.findAll()).thenReturn(basicOperations);
 		// Exercise
 		basicOperationController.allBasicOperations();
@@ -51,7 +51,7 @@ public class BasicOperationControllerTest {
 	@Test
 	public void testAddBasicOperationSuccessfull() {
 		// Setup
-		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
+		BasicOperation newBasicOperation = new BasicOperation("0", "NameOperationTest", "DescriptionTest");
 		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(null);
 		// Exercise
 		basicOperationController.addBasicOperation(newBasicOperation);
@@ -66,8 +66,8 @@ public class BasicOperationControllerTest {
 	@Test
 	public void testAddBasicOperationError() {
 		// Setup
-		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
-		BasicOperation oldBasicOperation = new BasicOperation(0, "NameOperationTestOld", "DescriptionTestOld");
+		BasicOperation newBasicOperation = new BasicOperation("0", "NameOperationTest", "DescriptionTest");
+		BasicOperation oldBasicOperation = new BasicOperation("0", "NameOperationTestOld", "DescriptionTestOld");
 		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(oldBasicOperation);
 		// Exercise
 		basicOperationController.addBasicOperation(newBasicOperation);
@@ -79,13 +79,13 @@ public class BasicOperationControllerTest {
 	@Test
 	public void testRemoveBasicOperationSuccessfull() {
 		// Setup
-		BasicOperation oldBasicOperation = new BasicOperation(0, "testNameOperation", "testDescription");
+		BasicOperation oldBasicOperation = new BasicOperation("0", "testNameOperation", "testDescription");
 		when(basicOperationRepository.findById(oldBasicOperation.getId())).thenReturn(oldBasicOperation);
 		// Exercise
 		basicOperationController.removeBasicOperation(oldBasicOperation);
 		// Verify
 		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
-		inOrder.verify(basicOperationRepository).delete(0);
+		inOrder.verify(basicOperationRepository).delete("0");
 		inOrder.verify(basicOperationView)
 				.showSuccessfull(BASICOPERATION + oldBasicOperation.getId() + " has been removed.");
 		inOrder.verifyNoMoreInteractions();
@@ -94,7 +94,7 @@ public class BasicOperationControllerTest {
 	@Test
 	public void testRemoveBasicOperationError() {
 		// Setup
-		BasicOperation newBasicOperation = new BasicOperation(0, "NameOperationTest", "DescriptionTest");
+		BasicOperation newBasicOperation = new BasicOperation("0", "NameOperationTest", "DescriptionTest");
 		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(null);
 		// Exercise
 		basicOperationController.removeBasicOperation(newBasicOperation);
@@ -106,8 +106,8 @@ public class BasicOperationControllerTest {
 	@Test
 	public void testModifyBasicOperationSuccesfull() {
 		// Setup
-		BasicOperation oldBasicOperation = new BasicOperation(0, "OldNameOperationTest", "OldDescriptionTest");
-		BasicOperation newBasicOperation = new BasicOperation(0, "NewNameOperationTest", "NewDescriptionTest");
+		BasicOperation oldBasicOperation = new BasicOperation("0", "OldNameOperationTest", "OldDescriptionTest");
+		BasicOperation newBasicOperation = new BasicOperation("0", "NewNameOperationTest", "NewDescriptionTest");
 		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(oldBasicOperation);
 		// Exercise
 		basicOperationController.updateBasicOperation(newBasicOperation);
@@ -122,7 +122,7 @@ public class BasicOperationControllerTest {
 	@Test
 	public void testModifyBasicOperationError() {
 		// Setup
-		BasicOperation newBasicOperation = new BasicOperation(0, "NewNameOperationTest", "NewDescriptionTest");
+		BasicOperation newBasicOperation = new BasicOperation("0", "NewNameOperationTest", "NewDescriptionTest");
 		when(basicOperationRepository.findById(newBasicOperation.getId())).thenReturn(null);
 		// Exercise
 		basicOperationController.updateBasicOperation(newBasicOperation);

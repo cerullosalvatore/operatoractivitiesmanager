@@ -62,8 +62,8 @@ public class ActivityTest {
 	public void testAllActivities() {
 		// Setup
 		List<Activity> activities = new ArrayList<Activity>();
-		activities.add(new Activity(0, "matricolaTest1", 0, startTime, endTime));
-		activities.add(new Activity(1, "matricolaTest2", 1, startTime, endTime));
+		activities.add(new Activity("0", "matricolaTest1", "0", startTime, endTime));
+		activities.add(new Activity("1", "matricolaTest2", "1", startTime, endTime));
 		when(activityRepository.findAll()).thenReturn(activities);
 		// Exercise
 		activityController.allActivities();
@@ -75,8 +75,8 @@ public class ActivityTest {
 	public void testAddActivitySuccessfull() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
-		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
+		Activity newActivity = new Activity("0", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(null);
 		when(operatorRepository.findByMatricola(operator.getMatricola())).thenReturn(operator);
 		when(basicOperationRepository.findById(basicOperation.getId())).thenReturn(basicOperation);
@@ -94,9 +94,9 @@ public class ActivityTest {
 	public void testAddActivityErrorId() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
-		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
-		Activity oldActivity = new Activity(0, "OldOperatorTestMatricola", 2, startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
+		Activity newActivity = new Activity("0", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity oldActivity = new Activity("0", "OldOperatorTestMatricola", "2", startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(oldActivity);
 		// Exercise
 		activityController.addActivity(newActivity);
@@ -108,8 +108,8 @@ public class ActivityTest {
 	public void testAddActivityErrorOperator() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
-		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
+		Activity newActivity = new Activity("0", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(null);
 		when(operatorRepository.findByMatricola(operator.getMatricola())).thenReturn(null);
 		// Exercise
@@ -122,8 +122,8 @@ public class ActivityTest {
 	public void testAddActivityErrorBasicOperation() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
-		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
+		Activity newActivity = new Activity("0", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(null);
 		when(operatorRepository.findByMatricola(operator.getMatricola())).thenReturn(operator);
 		when(basicOperationRepository.findById(basicOperation.getId())).thenReturn(null);
@@ -137,13 +137,13 @@ public class ActivityTest {
 	public void testAddActivityErrorStartTimeAfterStopTime() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
 		Calendar cal = Calendar.getInstance();
 		cal.set(2021, 1, 1, 16, 0, 00);
 		startTime = cal.getTime();
 		cal.set(2021, 1, 1, 8, 00, 00);
 		endTime = cal.getTime();
-		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity newActivity = new Activity("0", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(null);
 		when(operatorRepository.findByMatricola(operator.getMatricola())).thenReturn(operator);
 		when(basicOperationRepository.findById(basicOperation.getId())).thenReturn(basicOperation);
@@ -158,8 +158,8 @@ public class ActivityTest {
 	public void testRemoveActivitySuccessfull() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
-		Activity oldActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
+		Activity oldActivity = new Activity("=", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(oldActivity.getId())).thenReturn(oldActivity);
 		// Exercise
 		activityController.removeActivity(oldActivity);
@@ -174,8 +174,8 @@ public class ActivityTest {
 	public void testRemoveActivityException() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
-		Activity newActivity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
+		Activity newActivity = new Activity("0", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		when(activityRepository.findById(newActivity.getId())).thenReturn(null);
 		// Exercise
 		activityController.removeActivity(newActivity);
@@ -187,9 +187,9 @@ public class ActivityTest {
 	public void testSearchActivityByOperator() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
-		Activity activity1 = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
-		Activity activity2 = new Activity(1, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
+		Activity activity1 = new Activity("0", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity activity2 = new Activity("1", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		List<Activity> activities = new ArrayList<Activity>();
 		activities.add(activity1);
 		activities.add(activity2);
@@ -204,8 +204,8 @@ public class ActivityTest {
 	public void testSearchActivityByOperatorError() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
-		Activity activity = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
+		Activity activity = new Activity("0", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		List<Activity> activities = new ArrayList<Activity>();
 		activities.add(activity);
 		when(activityRepository.findByOperatorMatricola(operator.getMatricola())).thenReturn(null);
@@ -219,9 +219,9 @@ public class ActivityTest {
 	public void testSearchActivityByBasicOperation() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
-		Activity activity1 = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
-		Activity activity2 = new Activity(1, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
+		Activity activity1 = new Activity("0", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity activity2 = new Activity("1", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		List<Activity> activities = new ArrayList<Activity>();
 		activities.add(activity1);
 		activities.add(activity2);
@@ -236,8 +236,8 @@ public class ActivityTest {
 	public void testSearchActivityByBasicOperationError() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
-		Activity activity1 = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
+		Activity activity1 = new Activity("1", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		List<Activity> activities = new ArrayList<Activity>();
 		activities.add(activity1);
 		when(activityRepository.findByBasicOperationId(basicOperation.getId())).thenReturn(null);
@@ -251,9 +251,9 @@ public class ActivityTest {
 	public void testSearchActivityByStartDaySuccesfull() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperation = new BasicOperation(0, "testName", "testDescription");
-		Activity activity1 = new Activity(0, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
-		Activity activity2 = new Activity(1, operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		BasicOperation basicOperation = new BasicOperation("0", "testName", "testDescription");
+		Activity activity1 = new Activity("1", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity activity2 = new Activity("0", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		List<Activity> activities = new ArrayList<Activity>();
 		activities.add(activity1);
 		activities.add(activity2);
@@ -268,12 +268,12 @@ public class ActivityTest {
 	public void testUpdateActivitySuccessfull() {
 		// Setup
 		Operator operatorOld = new Operator("testMatricolaOld", "testNameOld", "testSurnameOld");
-		BasicOperation basicOperationOld = new BasicOperation(0, "testNameOld", "testDescriptionOld");
-		Activity activityOld = new Activity(0, operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
+		BasicOperation basicOperationOld = new BasicOperation("0", "testNameOld", "testDescriptionOld");
+		Activity activityOld = new Activity("0", operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
 				endTime);
 		Operator operatorUpdated = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperationUpdated = new BasicOperation(0, "testName", "testDescription");
-		Activity activityUpdated = new Activity(0, operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
+		BasicOperation basicOperationUpdated = new BasicOperation("0", "testName", "testDescription");
+		Activity activityUpdated = new Activity("0", operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
 				startTime, endTime);
 		when(activityRepository.findById(activityUpdated.getId())).thenReturn(activityOld);
 		when(operatorRepository.findByMatricola(operatorUpdated.getMatricola())).thenReturn(operatorOld);
@@ -291,8 +291,8 @@ public class ActivityTest {
 	public void testUpdateActivityErrorId() {
 		// Setup
 		Operator operatorUpdated = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperationUpdated = new BasicOperation(0, "testName", "testDescription");
-		Activity activityUpdated = new Activity(0, operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
+		BasicOperation basicOperationUpdated = new BasicOperation("0", "testName", "testDescription");
+		Activity activityUpdated = new Activity("0", operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
 				startTime, endTime);
 		when(activityRepository.findById(activityUpdated.getId())).thenReturn(null);
 		// Exercise
@@ -305,12 +305,12 @@ public class ActivityTest {
 	public void testUpdateActivityErrorOperator() {
 		// Setup
 		Operator operatorOld = new Operator("testMatricolaOld", "testNameOld", "testSurnameOld");
-		BasicOperation basicOperationOld = new BasicOperation(0, "testNameOld", "testDescriptionOld");
-		Activity activityOld = new Activity(0, operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
+		BasicOperation basicOperationOld = new BasicOperation("0", "testNameOld", "testDescriptionOld");
+		Activity activityOld = new Activity("0", operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
 				endTime);
 		Operator operatorUpdated = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperationUpdated = new BasicOperation(0, "testName", "testDescription");
-		Activity activityUpdated = new Activity(0, operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
+		BasicOperation basicOperationUpdated = new BasicOperation("0", "testName", "testDescription");
+		Activity activityUpdated = new Activity("0", operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
 				startTime, endTime);
 		when(activityRepository.findById(activityUpdated.getId())).thenReturn(activityOld);
 		when(operatorRepository.findByMatricola(operatorUpdated.getMatricola())).thenReturn(null);
@@ -324,12 +324,12 @@ public class ActivityTest {
 	public void testUpdateActivityErrorBasicOperation() {
 		// Setup
 		Operator operatorOld = new Operator("testMatricolaOld", "testNameOld", "testSurnameOld");
-		BasicOperation basicOperationOld = new BasicOperation(0, "testNameOld", "testDescriptionOld");
-		Activity activityOld = new Activity(0, operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
+		BasicOperation basicOperationOld = new BasicOperation("0", "testNameOld", "testDescriptionOld");
+		Activity activityOld = new Activity("0", operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
 				endTime);
 		Operator operatorUpdated = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperationUpdated = new BasicOperation(0, "testName", "testDescription");
-		Activity activityUpdated = new Activity(0, operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
+		BasicOperation basicOperationUpdated = new BasicOperation("0", "testName", "testDescription");
+		Activity activityUpdated = new Activity("0", operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
 				startTime, endTime);
 		when(activityRepository.findById(activityUpdated.getId())).thenReturn(activityOld);
 		when(operatorRepository.findByMatricola(operatorUpdated.getMatricola())).thenReturn(operatorOld);
@@ -345,8 +345,8 @@ public class ActivityTest {
 	public void testUpdateActivityErrorStartTimeAfterStopTime() {
 		// Setup
 		Operator operatorOld = new Operator("testMatricolaOld", "testNameOld", "testSurnameOld");
-		BasicOperation basicOperationOld = new BasicOperation(0, "testNameOld", "testDescriptionOld");
-		Activity activityOld = new Activity(0, operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
+		BasicOperation basicOperationOld = new BasicOperation("0", "testNameOld", "testDescriptionOld");
+		Activity activityOld = new Activity("0", operatorOld.getMatricola(), basicOperationOld.getId(), startTime,
 				endTime);
 		Calendar cal = Calendar.getInstance();
 		cal.set(2021, 1, 1, 16, 0, 00);
@@ -354,8 +354,8 @@ public class ActivityTest {
 		cal.set(2021, 1, 1, 8, 00, 00);
 		Date endTimeUpdated = cal.getTime();
 		Operator operatorUpdated = new Operator("testMatricola", "testName", "testSurname");
-		BasicOperation basicOperationUpdated = new BasicOperation(0, "testName", "testDescription");
-		Activity activityUpdated = new Activity(0, operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
+		BasicOperation basicOperationUpdated = new BasicOperation("0", "testName", "testDescription");
+		Activity activityUpdated = new Activity("0", operatorUpdated.getMatricola(), basicOperationUpdated.getId(),
 				startTimeUpdated, endTimeUpdated);
 		when(activityRepository.findById(activityUpdated.getId())).thenReturn(activityOld);
 		when(operatorRepository.findByMatricola(operatorUpdated.getMatricola())).thenReturn(operatorOld);

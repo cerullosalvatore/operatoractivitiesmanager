@@ -65,7 +65,7 @@ public class ActivityController {
 		}
 	}
 
-	public void findByBasicOperation(long id) {
+	public void findByBasicOperation(String id) {
 		if (activityRepository.findByBasicOperationId(id) != null) {
 			activityView.showActivities(activityRepository.findByBasicOperationId(id));
 		} else {
