@@ -1,4 +1,4 @@
-package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongoRepository;
+package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongorepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
