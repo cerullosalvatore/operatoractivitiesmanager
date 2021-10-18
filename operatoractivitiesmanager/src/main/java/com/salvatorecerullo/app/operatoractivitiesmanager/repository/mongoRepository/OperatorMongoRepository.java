@@ -1,21 +1,27 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongoRepository;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import org.bson.Document;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.OperatorRepository;
 
 public class OperatorMongoRepository implements OperatorRepository {
+	private MongoCollection<Document> operatorCollection;
 
 	public OperatorMongoRepository(MongoClient mongoClient, String dbName, String collectionName) {
-		// TODO Auto-generated constructor stub
+		operatorCollection = mongoClient.getDatabase(dbName).getCollection(collectionName);
 	}
 
 	@Override
 	public List<Operator> findAll() {
-		return Collections.emptyList();
+		return StreamSupport.stream(operatorCollection.find().spliterator(), false).map(this::fromDocumentToOperator)
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -40,6 +46,10 @@ public class OperatorMongoRepository implements OperatorRepository {
 	public void update(Operator newOperator) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private Operator fromDocumentToOperator(Document document) {
+		return new Operator(document.getString("matricola"), document.getString("name"), document.getString("surname"));
 	}
 
 }
