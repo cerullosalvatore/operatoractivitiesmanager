@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -64,11 +66,119 @@ public class OperatorMongoRepositoryTest {
 
 		// Exercise
 		List<Operator> operators = operatorMongoRepository.findAll();
+
+		// Verify
 		assertThat(operators).containsExactly(operator1, operator2);
 	}
 
+	@Test
+	public void testSaveOperatorSuccessfull() {
+		// Setup
+		Operator newOperator = new Operator("newMatricola", "newName", "newSurname");
+
+		// Exercise
+		operatorMongoRepository.save(newOperator);
+
+		// Verify
+		assertThat(operatorMongoRepository.findAll()).containsExactly(newOperator);
+	}
+
+	@Test
+	public void testSaveOperatorErrorDuplicateMatricola() {
+		// Setup
+		Operator oldOperator = new Operator("oldMatricola", "oldName", "oldSurname");
+		Operator newOperator = new Operator("oldMatricola", "newName", "newSurname");
+		addOperatorToDB(oldOperator);
+
+		// Exercise
+		operatorMongoRepository.save(newOperator);
+
+		// Verify
+		assertThat(operatorMongoRepository.findAll()).containsExactly(oldOperator);
+	}
+
+	@Test
+	public void testFindByMatricolaSuccess() {
+		// Setup
+		Operator operator1 = new Operator("matricola1", "name1", "surname1");
+		Operator operator2 = new Operator("matricola2", "name2", "surname2");
+		addOperatorToDB(operator1);
+		addOperatorToDB(operator2);
+
+		// Exercise
+		Operator operatorRetrivied = operatorMongoRepository.findByMatricola(operator1.getMatricola());
+
+		// Verify
+		assertThat(operatorRetrivied).isEqualTo(operator1);
+	}
+
+	@Test
+	public void testFindByMatricolaErrorNotFound() {
+		// Setup
+		Operator operator1 = new Operator("matricola1", "name1", "surname1");
+		Operator operator2 = new Operator("matricola2", "name2", "surname2");
+		addOperatorToDB(operator1);
+
+		// Exercise
+		Operator operatorRetrivied = operatorMongoRepository.findByMatricola(operator2.getMatricola());
+
+		// Verify
+		assertThat(operatorRetrivied).isNull();
+	}
+
+	@Test
+	public void testDeleteOperatorSuccessfull() {
+		// Setup
+		Operator operator1 = new Operator("matricola1", "name1", "surname1");
+		addOperatorToDB(operator1);
+
+		// Exercise
+		operatorMongoRepository.delete(operator1.getMatricola());
+
+		// Verify
+		assertThat(readAllOperatorsFromDB()).isEmpty();
+	}
+
+	@Test
+	public void testUpdateOperatorSuccessfull() {
+		// Setup
+		Operator operatorOld = new Operator("oldMatricola", "oldNmae", "oldSurname");
+		Operator operatorNew = new Operator("oldMatricola", "newName", "newSurname");
+		addOperatorToDB(operatorOld);
+
+		// Exercise
+		operatorMongoRepository.update(operatorNew);
+
+		// Verify
+		assertThat(readAllOperatorsFromDB().get(0)).isEqualTo(operatorNew);
+	}
+	
+	@Test
+	public void testUpdateOperatorError() {
+		// Setup
+		Operator operatorOld = new Operator("oldMatricola", "oldNmae", "oldSurname");
+		Operator operatorNew = new Operator("newMatricola", "newName", "newSurname");
+		addOperatorToDB(operatorOld);
+
+		// Exercise
+		operatorMongoRepository.update(operatorNew);
+
+		// Verify
+		assertThat(readAllOperatorsFromDB().get(0)).isNotEqualTo(operatorNew);
+	}
+
 	private void addOperatorToDB(Operator operator) {
-		operatorCollection.insertOne(new Document().append("matricola", operator.getMatricola())
+		operatorCollection.insertOne(new Document().append("_id", operator.getMatricola())
 				.append("name", operator.getName()).append("surname", operator.getSurname()));
 	}
+
+	private List<Operator> readAllOperatorsFromDB() {
+		return StreamSupport.stream(operatorCollection.find().spliterator(), false).map(this::fromDocumentToOperator)
+				.collect(Collectors.toList());
+	}
+
+	private Operator fromDocumentToOperator(Document document) {
+		return new Operator(document.getString("_id"), document.getString("name"), document.getString("surname"));
+	}
+
 }
