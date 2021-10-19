@@ -9,6 +9,7 @@ import org.bson.Document;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.ActivityRepository;
 
@@ -27,32 +28,43 @@ public class ActivityMongoRepository implements ActivityRepository {
 
 	@Override
 	public void save(Activity activity) {
-		// TODO Auto-generated method stub
-
+		if (activityCollection.find(Filters.eq("_id", activity.getId())).first() == null) {
+			activityCollection.insertOne(new Document().append("_id", activity.getId())
+					.append("operatorMatricola", activity.getOperatorMatricola())
+					.append("operationID", activity.getOperationId()).append("startTime", activity.getStartTime())
+					.append("endTime", activity.getEndTime()));
+		}
 	}
 
 	@Override
 	public Activity findById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		Document documentRetrieved = activityCollection.find(Filters.eq("_id", id)).first();
+		if (documentRetrieved != null) {
+			return fromDocumentToActivity(documentRetrieved);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public void delete(String id) {
-		// TODO Auto-generated method stub
-
+		activityCollection.deleteOne(Filters.eq("_id", id));
 	}
 
 	@Override
 	public List<Activity> findByOperatorMatricola(String matricolaOperator) {
-		// TODO Auto-generated method stub
-		return null;
+		return StreamSupport
+				.stream(activityCollection.find(Filters.eq("operatorMatricola", matricolaOperator)).spliterator(),
+						false)
+				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<Activity> findByBasicOperationId(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Activity> findByBasicOperationId(String operationId) {
+		return StreamSupport
+				.stream(activityCollection.find(Filters.eq("operationID", operationId)).spliterator(),
+						false)
+				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
 
 	@Override

@@ -6,6 +6,8 @@ import java.net.InetSocketAddress;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.bson.Document;
 import org.junit.AfterClass;
@@ -87,11 +89,188 @@ public class ActivityMongoRepositoryTest {
 		assertThat(activities).containsExactly(activity1, activity2);
 	}
 
+	@Test
+	public void testSaveActivitySuccessfull() {
+		// Setup
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime, endTime);
+		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
+				startTime, endTime);
+
+		// Exercise
+		activityMongoRepository.save(activity1);
+		activityMongoRepository.save(activity2);
+
+		// Verify
+		assertThat(readAllActivityFromDB()).containsExactly(activity1, activity2);
+	}
+
+	@Test
+	public void testSaveActivityError() {
+		// Setup
+		Activity activityOld = new Activity(new ObjectId().toString(), "operatorMatricolaOld", "basicOperationIDOld",
+				startTime, endTime);
+		Activity activityNew = new Activity(activityOld.getId(), "operatorMatricolaNew", "basicOperationIDNew",
+				startTime, endTime);
+		addActivityToDB(activityOld);
+
+		// Exercise
+		activityMongoRepository.save(activityNew);
+
+		// Verify
+		assertThat(readAllActivityFromDB()).containsExactly(activityOld);
+	}
+
+	@Test
+	public void testFindByIdSuccessfull() {
+		// Setup
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime, endTime);
+		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
+				startTime, endTime);
+		addActivityToDB(activity1);
+		addActivityToDB(activity2);
+
+		// Exercise
+		Activity activityRetrieved = activityMongoRepository.findById(activity2.getId());
+
+		// Verify
+		assertThat(activityRetrieved).isEqualTo(activity2);
+	}
+
+	@Test
+	public void testFindByIdError() {
+		// Setup
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime, endTime);
+		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
+				startTime, endTime);
+		addActivityToDB(activity1);
+
+		// Exercise
+		Activity activityRetrieved = activityMongoRepository.findById(activity2.getId());
+
+		// Verify
+		assertThat(activityRetrieved).isNull();
+	}
+
+	@Test
+	public void testDeleteSuccessfull() {
+		// Setup
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime, endTime);
+		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
+				startTime, endTime);
+		addActivityToDB(activity1);
+
+		// Exercise
+		activityMongoRepository.delete(activity2.getId());
+
+		// Verify
+		assertThat(readAllActivityFromDB()).containsExactly(activity1);
+	}
+
+	@Test
+	public void testDeleteError() {
+		// Setup
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime, endTime);
+		addActivityToDB(activity1);
+
+		// Exercise
+		activityMongoRepository.delete(activity1.getId());
+
+		// Verify
+		assertThat(readAllActivityFromDB()).isEmpty();
+	}
+
+	@Test
+	public void testFindActivityByOperatorMatricolaSuccessfull() {
+		// Setup
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime, endTime);
+		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
+				startTime, endTime);
+		addActivityToDB(activity1);
+		addActivityToDB(activity2);
+
+		// Exercise
+		List<Activity> activitiesRetrieved = activityMongoRepository
+				.findByOperatorMatricola(activity2.getOperatorMatricola());
+
+		// Verify
+		assertThat(activitiesRetrieved).containsExactly(activity2);
+	}
+
+	@Test
+	public void testFindActivityByOperatorMatricolaError() {
+		// Setup
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime, endTime);
+		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
+				startTime, endTime);
+		addActivityToDB(activity1);
+		addActivityToDB(activity2);
+
+		// Exercise
+		List<Activity> activitiesRetrieved = activityMongoRepository
+				.findByOperatorMatricola("operatorMatricolaNotInDb");
+
+		// Verify
+		assertThat(activitiesRetrieved).containsExactly();
+	}
+
+	@Test
+	public void testFindActivityByBasicOperationSuccessfull() {
+		// Setup
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime, endTime);
+		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
+				startTime, endTime);
+		addActivityToDB(activity1);
+		addActivityToDB(activity2);
+
+		// Exercise
+		List<Activity> activitiesRetrieved = activityMongoRepository
+				.findByBasicOperationId(activity2.getOperationId());
+
+		// Verify
+		assertThat(activitiesRetrieved).containsExactly(activity2);
+	}
+	
+	@Test
+	public void testFindActivityByBasicOperationError() {
+		// Setup
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime, endTime);
+		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
+				startTime, endTime);
+		addActivityToDB(activity1);
+		addActivityToDB(activity2);
+
+		// Exercise
+		List<Activity> activitiesRetrieved = activityMongoRepository
+				.findByBasicOperationId("operationIdNotInDb");
+
+		// Verify
+		assertThat(activitiesRetrieved).containsExactly();
+	}
+	
+
 	private void addActivityToDB(Activity activity) {
 		activityCollection.insertOne(new Document().append("_id", activity.getId())
 				.append("operatorMatricola", activity.getOperatorMatricola())
 				.append("operationID", activity.getOperationId()).append("startTime", activity.getStartTime())
 				.append("endTime", activity.getEndTime()));
+	}
 
+	private List<Activity> readAllActivityFromDB() {
+		return StreamSupport.stream(activityCollection.find().spliterator(), false).map(this::fromDocumentToActivity)
+				.collect(Collectors.toList());
+	}
+
+	private Activity fromDocumentToActivity(Document document) {
+		return new Activity(document.getString("_id"), document.getString("operatorMatricola"),
+				document.getString("operationID"), document.getDate("startTime"), document.getDate("endTime"));
 	}
 }
