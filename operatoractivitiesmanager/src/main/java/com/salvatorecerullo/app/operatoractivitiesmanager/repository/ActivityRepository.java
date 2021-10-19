@@ -11,13 +11,13 @@ public interface ActivityRepository {
 
 	public void save(Activity activity);
 
-	public Activity findById(long id);
+	public Activity findById(String id);
 
-	public void delete(long id);
+	public void delete(String id);
 
 	public List<Activity> findByOperatorMatricola(String matricolaOperator);
 
-	public List<Activity> findByBasicOperationId(long id);
+	public List<Activity> findByBasicOperationId(String id);
 
 	//in the implementation of activity repository i need to take only year-month-day
 	public List<Activity> findByDay(Date startTime);

@@ -8,11 +8,11 @@ public interface BasicOperationRepository {
 
 	public List<BasicOperation> findAll();
 
-	public BasicOperation findById(long id);
+	public BasicOperation findById(String id);
 
 	public void save(BasicOperation newBasicOperation);
 
-	public void delete(long id);
+	public void delete(String id);
 
 	public void update(BasicOperation newBasicOperation);
 

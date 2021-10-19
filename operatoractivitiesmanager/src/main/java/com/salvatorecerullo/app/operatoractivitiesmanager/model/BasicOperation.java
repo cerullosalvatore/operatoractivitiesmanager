@@ -1,24 +1,24 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.model;
 
 public class BasicOperation {
-	private long id;
+	private String id;
 	private String name;
 	private String description;
 
 	public BasicOperation() {
 	}
 
-	public BasicOperation(long id, String name, String description) {
+	public BasicOperation(String id, String name, String description) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

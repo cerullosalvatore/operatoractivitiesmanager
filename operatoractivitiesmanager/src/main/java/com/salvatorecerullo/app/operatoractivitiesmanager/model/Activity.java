@@ -3,16 +3,16 @@ package com.salvatorecerullo.app.operatoractivitiesmanager.model;
 import java.util.Date;
 
 public class Activity {
-	private long id;
+	private String id;
 	private String operatorMatricola;
-	private long operationId;
+	private String operationId;
 	private Date startTime;
 	private Date endTime;
 
 	public Activity() {
 	}
 
-	public Activity(long id, String operatorMatricola, long operationId, Date startTime, Date endTime) {
+	public Activity(String id, String operatorMatricola, String operationId, Date startTime, Date endTime) {
 		this.id = id;
 		this.operatorMatricola = operatorMatricola;
 		this.operationId = operationId;
@@ -20,11 +20,11 @@ public class Activity {
 		this.endTime = endTime;
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -36,11 +36,11 @@ public class Activity {
 		this.operatorMatricola = operatorMatricola;
 	}
 
-	public long getOperationId() {
+	public String getOperationId() {
 		return operationId;
 	}
 
-	public void setOperationId(long operationId) {
+	public void setOperationId(String operationId) {
 		this.operationId = operationId;
 	}
 
