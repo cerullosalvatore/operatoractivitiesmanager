@@ -10,7 +10,6 @@ import org.bson.Document;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
-import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.ActivityRepository;
 
 public class ActivityMongoRepository implements ActivityRepository {
@@ -69,6 +68,7 @@ public class ActivityMongoRepository implements ActivityRepository {
 	}
 
 	private Activity fromDocumentToActivity(Document document) {
-		return new Activity(document.getString("_id"), document.getString("operatorMatricola"), document.getString("operationId"), document.getDate("startTime"), document.getDate("endTime"));
+		return new Activity(document.getString("_id"), document.getString("operatorMatricola"),
+				document.getString("operationID"), document.getDate("startTime"), document.getDate("endTime"));
 	}
 }

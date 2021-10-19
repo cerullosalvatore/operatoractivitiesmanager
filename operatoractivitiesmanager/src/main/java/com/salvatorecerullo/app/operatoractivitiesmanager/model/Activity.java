@@ -60,4 +60,55 @@ public class Activity {
 		this.endTime = endTime;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((operationId == null) ? 0 : operationId.hashCode());
+		result = prime * result + ((operatorMatricola == null) ? 0 : operatorMatricola.hashCode());
+		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Activity other = (Activity) obj;
+		if (endTime == null) {
+			if (other.endTime != null)
+				return false;
+		} else if (!endTime.equals(other.endTime))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (operationId == null) {
+			if (other.operationId != null)
+				return false;
+		} else if (!operationId.equals(other.operationId))
+			return false;
+		if (operatorMatricola == null) {
+			if (other.operatorMatricola != null)
+				return false;
+		} else if (!operatorMatricola.equals(other.operatorMatricola))
+			return false;
+		if (startTime == null) {
+			if (other.startTime != null)
+				return false;
+		} else if (!startTime.equals(other.startTime))
+			return false;
+		return true;
+	}
+	
+	
+
 }
