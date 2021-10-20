@@ -76,18 +76,13 @@ public class Activity {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+		if (obj == null || getClass() != obj.getClass())
 			return false;
 		Activity other = (Activity) obj;
-		if (endTime == null) {
-			if (other.endTime != null)
-				return false;
-		} else if (!endTime.equals(other.endTime))
+		if ((endTime == null && other.endTime != null) || !endTime.equals(other.endTime)) {
 			return false;
-		if (id == null) {
-			if (other.id != null)
+		} 
+		if (id == null && other.id != null) {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
@@ -108,7 +103,5 @@ public class Activity {
 			return false;
 		return true;
 	}
-	
-	
 
 }
