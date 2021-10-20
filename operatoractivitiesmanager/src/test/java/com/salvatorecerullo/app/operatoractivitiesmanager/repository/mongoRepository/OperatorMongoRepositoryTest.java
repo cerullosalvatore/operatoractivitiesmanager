@@ -153,7 +153,7 @@ public class OperatorMongoRepositoryTest {
 		// Verify
 		assertThat(readAllOperatorsFromDB().get(0)).isEqualTo(operatorNew);
 	}
-	
+
 	@Test
 	public void testUpdateOperatorError() {
 		// Setup

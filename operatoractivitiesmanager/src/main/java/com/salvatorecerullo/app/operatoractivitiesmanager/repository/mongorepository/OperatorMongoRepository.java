@@ -19,7 +19,6 @@ public class OperatorMongoRepository implements OperatorRepository {
 	private static final String NAME = "name";
 	private static final String SURNAME = "surname";
 
-	
 	private MongoCollection<Document> operatorCollection;
 
 	public OperatorMongoRepository(MongoClient mongoClient, String dbName, String collectionName) {

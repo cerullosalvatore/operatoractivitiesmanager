@@ -9,12 +9,11 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.OperatorRep
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.ActivityView;
 
 public class ActivityController {
-
 	private static final String THEOPERATOR = "The Operator: ";
 	private static final String BASICOPERATION = "The BasicOperation with ID: ";
 	private static final String THEACTIVITY = "The Activity: ";
 	private static final String NOTEXIST = " does not exist.";
-	
+
 	private ActivityRepository activityRepository;
 	private OperatorRepository operatorRepository;
 	private BasicOperationRepository basicOperationRepository;
@@ -40,8 +39,8 @@ public class ActivityController {
 								+ activity.getEndTime());
 					} else {
 						activityRepository.save(activity);
-						activityView.showSuccessfull(
-								THEOPERATOR + activity.getOperatorMatricola() + " has been added.");
+						activityView
+								.showSuccessfull(THEOPERATOR + activity.getOperatorMatricola() + " has been added.");
 					}
 				}
 			}
@@ -74,8 +73,6 @@ public class ActivityController {
 	}
 
 	public void findByDay(Date startTime) {
-		// in the implementation of activity repository i need to take only
-		// year-month-day
 		activityView.showActivities(activityRepository.findByDay(startTime));
 	}
 
@@ -87,8 +84,7 @@ public class ActivityController {
 				activityView.showError(THEOPERATOR + activityUpdated.getOperatorMatricola() + NOTEXIST);
 			} else {
 				if (basicOperationRepository.findById(activityUpdated.getOperationId()) == null) {
-					activityView
-							.showError(BASICOPERATION + activityUpdated.getOperationId() + NOTEXIST);
+					activityView.showError(BASICOPERATION + activityUpdated.getOperationId() + NOTEXIST);
 				} else {
 					if (activityUpdated.getStartTime().after(activityUpdated.getEndTime())) {
 						activityView.showError("The Start Date: " + activityUpdated.getStartTime()

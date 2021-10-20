@@ -19,7 +19,6 @@ public interface ActivityRepository {
 
 	public List<Activity> findByBasicOperationId(String id);
 
-	//in the implementation of activity repository i need to take only year-month-day
 	public List<Activity> findByDay(Date startTime);
 
 	public void update(Activity activity);

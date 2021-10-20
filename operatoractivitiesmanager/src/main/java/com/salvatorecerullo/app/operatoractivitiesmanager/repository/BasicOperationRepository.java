@@ -16,5 +16,4 @@ public interface BasicOperationRepository {
 
 	public void update(BasicOperation newBasicOperation);
 
-
 }

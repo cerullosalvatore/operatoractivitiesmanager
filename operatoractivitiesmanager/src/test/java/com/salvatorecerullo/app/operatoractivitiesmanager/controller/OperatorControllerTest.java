@@ -59,8 +59,7 @@ public class OperatorControllerTest {
 		// Verify
 		InOrder inOrder = Mockito.inOrder(operatorRepository, operatorView);
 		inOrder.verify(operatorRepository).save(newOperator);
-		inOrder.verify(operatorView)
-				.showSuccessfull(THEOPERATOR + newOperator.getMatricola() + " has been added.");
+		inOrder.verify(operatorView).showSuccessfull(THEOPERATOR + newOperator.getMatricola() + " has been added.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -86,8 +85,7 @@ public class OperatorControllerTest {
 		// Verify
 		InOrder inOrder = Mockito.inOrder(operatorRepository, operatorView);
 		inOrder.verify(operatorRepository).delete(oldOperator.getMatricola());
-		inOrder.verify(operatorView)
-				.showSuccessfull(THEOPERATOR + oldOperator.getMatricola() + " has been removed.");
+		inOrder.verify(operatorView).showSuccessfull(THEOPERATOR + oldOperator.getMatricola() + " has been removed.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -113,8 +111,7 @@ public class OperatorControllerTest {
 		// verify
 		InOrder inOrder = Mockito.inOrder(operatorRepository, operatorView);
 		inOrder.verify(operatorRepository).update(newOperator);
-		inOrder.verify(operatorView)
-				.showSuccessfull(THEOPERATOR + newOperator.getMatricola() + " has been updated.");
+		inOrder.verify(operatorView).showSuccessfull(THEOPERATOR + newOperator.getMatricola() + " has been updated.");
 		inOrder.verifyNoMoreInteractions();
 	}
 

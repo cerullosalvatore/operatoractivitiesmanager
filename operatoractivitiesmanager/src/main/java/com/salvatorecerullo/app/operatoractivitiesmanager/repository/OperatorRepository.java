@@ -15,4 +15,5 @@ public interface OperatorRepository {
 	public void delete(String string);
 
 	public void update(Operator newOperator);
+	
 }

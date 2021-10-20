@@ -1,6 +1,7 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Activity {
 	private String id;
@@ -60,4 +61,31 @@ public class Activity {
 		this.endTime = endTime;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((operationId == null) ? 0 : operationId.hashCode());
+		result = prime * result + ((operatorMatricola == null) ? 0 : operatorMatricola.hashCode());
+		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Activity other = (Activity) obj;
+
+		return Objects.equals(id, other.id) && Objects.equals(endTime, other.endTime)
+				&& Objects.equals(startTime, other.startTime)
+				&& Objects.equals(operatorMatricola, other.operatorMatricola)
+				&& Objects.equals(operationId, other.operationId);
+	}
 }

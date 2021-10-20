@@ -183,7 +183,7 @@ public class BasicOperationMongoRepositoryTest {
 		// Verify
 		assertThat(readAllBasicOperatoinFromDB().get(0)).isNotEqualTo(basicOperationNew);
 	}
-	
+
 	private void addBasicOperationToDB(BasicOperation basicOperation) {
 		basicOperationCollection.insertOne(new Document().append("_id", basicOperation.getId())
 				.append("name", basicOperation.getName()).append("description", basicOperation.getDescription()));
