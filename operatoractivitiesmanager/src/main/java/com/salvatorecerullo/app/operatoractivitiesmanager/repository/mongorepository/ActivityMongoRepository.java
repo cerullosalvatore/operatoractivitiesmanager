@@ -1,5 +1,6 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongorepository;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,15 +63,24 @@ public class ActivityMongoRepository implements ActivityRepository {
 	@Override
 	public List<Activity> findByBasicOperationId(String operationId) {
 		return StreamSupport
-				.stream(activityCollection.find(Filters.eq("operationID", operationId)).spliterator(),
-						false)
+				.stream(activityCollection.find(Filters.eq("operationID", operationId)).spliterator(), false)
 				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<Activity> findByDay(Date startTime) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Activity> findByDay(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, 00);
+		cal.set(Calendar.MINUTE, 00);
+		cal.set(Calendar.SECOND, 00);
+		Date startTimeToFind = cal.getTime();
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		Date endTimeToFind = cal.getTime();
+		return StreamSupport.stream(activityCollection.find(Filters.and(Filters.lte("startTime", endTimeToFind), Filters.gte("startTime", startTimeToFind))).spliterator(), false)
+				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
 
 	@Override

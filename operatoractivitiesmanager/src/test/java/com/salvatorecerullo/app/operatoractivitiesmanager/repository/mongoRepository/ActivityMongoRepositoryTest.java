@@ -207,6 +207,7 @@ public class ActivityMongoRepositoryTest {
 		// Setup
 		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
 				startTime, endTime);
+		
 		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
 				startTime, endTime);
 		addActivityToDB(activity1);
@@ -231,13 +232,12 @@ public class ActivityMongoRepositoryTest {
 		addActivityToDB(activity2);
 
 		// Exercise
-		List<Activity> activitiesRetrieved = activityMongoRepository
-				.findByBasicOperationId(activity2.getOperationId());
+		List<Activity> activitiesRetrieved = activityMongoRepository.findByBasicOperationId(activity2.getOperationId());
 
 		// Verify
 		assertThat(activitiesRetrieved).containsExactly(activity2);
 	}
-	
+
 	@Test
 	public void testFindActivityByBasicOperationError() {
 		// Setup
@@ -249,14 +249,58 @@ public class ActivityMongoRepositoryTest {
 		addActivityToDB(activity2);
 
 		// Exercise
-		List<Activity> activitiesRetrieved = activityMongoRepository
-				.findByBasicOperationId("operationIdNotInDb");
+		List<Activity> activitiesRetrieved = activityMongoRepository.findByBasicOperationId("operationIdNotInDb");
+
+		// Verify
+		assertThat(activitiesRetrieved).containsExactly();
+	}
+
+	@Test
+	public void testFindActivityByDateSuccessfull() {
+		// Setup
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime, endTime);
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 21);
+		Date startTime2 = cal.getTime();
+		cal.set(2021, 1, 21);
+		Date endTime2 = cal.getTime();
+		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
+				startTime2, endTime2);
+		addActivityToDB(activity1);
+		addActivityToDB(activity2);
+
+		// Exercise
+		List<Activity> activitiesRetrieved = activityMongoRepository.findByDay(startTime2);
+
+		// Verify
+		assertThat(activitiesRetrieved).containsExactly(activity2);
+	}
+	
+	@Test
+	public void testFindActivityByDateOutOfRange() {
+		// Setup
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime, endTime);
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 21);
+		Date startTime2 = cal.getTime();
+		cal.set(2021, 1, 21);
+		Date endTime2 = cal.getTime();
+		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
+				startTime2, endTime2);
+		addActivityToDB(activity1);
+		addActivityToDB(activity2);
+		cal.set(2021, 7, 210);
+		Date dateToFind = cal.getTime();
+
+		// Exercise
+		List<Activity> activitiesRetrieved = activityMongoRepository.findByDay(dateToFind);
 
 		// Verify
 		assertThat(activitiesRetrieved).containsExactly();
 	}
 	
-
 	private void addActivityToDB(Activity activity) {
 		activityCollection.insertOne(new Document().append("_id", activity.getId())
 				.append("operatorMatricola", activity.getOperatorMatricola())
