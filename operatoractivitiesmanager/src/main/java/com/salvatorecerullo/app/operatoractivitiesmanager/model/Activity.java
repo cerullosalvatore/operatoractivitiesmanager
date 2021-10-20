@@ -76,13 +76,10 @@ public class Activity {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+		if (obj == null || getClass() != obj.getClass())
 			return false;
 		Activity other = (Activity) obj;
-		if (endTime == null) {
-			if (other.endTime != null)
+		if (endTime == null && other.endTime != null) {
 				return false;
 		} else if (!endTime.equals(other.endTime))
 			return false;
