@@ -1,6 +1,7 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Activity {
 	private String id;
@@ -81,34 +82,10 @@ public class Activity {
 		if (getClass() != obj.getClass())
 			return false;
 		Activity other = (Activity) obj;
-		if (endTime == null) {
-			if (other.endTime != null)
-				return false;
-		} else if (!endTime.equals(other.endTime))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (operationId == null) {
-			if (other.operationId != null)
-				return false;
-		} else if (!operationId.equals(other.operationId))
-			return false;
-		if (operatorMatricola == null) {
-			if (other.operatorMatricola != null)
-				return false;
-		} else if (!operatorMatricola.equals(other.operatorMatricola))
-			return false;
-		if (startTime == null) {
-			if (other.startTime != null)
-				return false;
-		} else if (!startTime.equals(other.startTime))
-			return false;
-		return true;
-	}
-	
-	
 
+		return Objects.equals(id, other.id) && Objects.equals(endTime, other.endTime)
+				&& Objects.equals(startTime, other.startTime)
+				&& Objects.equals(operatorMatricola, other.operatorMatricola)
+				&& Objects.equals(operationId, other.operationId);
+	}
 }
