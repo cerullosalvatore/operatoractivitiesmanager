@@ -310,6 +310,50 @@ public class ActivityMongoRepositoryTest {
 		// Verify
 		assertThat(activitiesRetrieved).containsExactly();
 	}
+	
+	@Test
+	public void testUpdateSuccessfull() {
+		//Setup
+		Activity activityOld = new Activity(new ObjectId().toString(), "operatorMatricolaOld", "basicOperationIDOld",
+				startTime, endTime);
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 21);
+		Date startTime2 = cal.getTime();
+		cal.set(2021, 1, 21);
+		Date endTime2 = cal.getTime();
+		Activity activityNew = new Activity(activityOld.getId(), "operatorMatricolaNew", "basicOperationIDNew",
+				startTime2, endTime2);
+		addActivityToDB(activityOld);
+
+		// Exercise
+		activityMongoRepository.update(activityNew);
+
+		// Verify
+		assertThat(readAllActivityFromDB()).containsExactly(activityNew);
+	
+	}
+	
+	@Test
+	public void testUpdateError() {
+		//Setup
+		Activity activityOld = new Activity(new ObjectId().toString(), "operatorMatricolaOld", "basicOperationIDOld",
+				startTime, endTime);
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 21);
+		Date startTime2 = cal.getTime();
+		cal.set(2021, 1, 21);
+		Date endTime2 = cal.getTime();
+		Activity activityNew = new Activity(new ObjectId().toString(), "operatorMatricolaNew", "basicOperationIDNew",
+				startTime2, endTime2);
+		addActivityToDB(activityOld);
+
+		// Exercise
+		activityMongoRepository.update(activityNew);
+
+		// Verify
+		assertThat(readAllActivityFromDB()).containsExactly(activityOld);
+	
+	}
 
 	private void addActivityToDB(Activity activity) {
 		activityCollection.insertOne(new Document().append("_id", activity.getId())

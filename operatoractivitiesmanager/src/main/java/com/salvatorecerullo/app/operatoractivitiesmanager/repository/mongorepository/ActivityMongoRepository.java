@@ -7,10 +7,12 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.ActivityRepository;
 
@@ -78,8 +80,12 @@ public class ActivityMongoRepository implements ActivityRepository {
 
 	@Override
 	public void update(Activity activity) {
-		// TODO Auto-generated method stub
-
+		Bson update1 = Updates.set("operatorMatricola", activity.getOperatorMatricola());
+		Bson update2 = Updates.set("operationID", activity.getOperationId());
+		Bson update3 = Updates.set("startTime", activity.getStartTime());
+		Bson update4 = Updates.set("endTime", activity.getEndTime());
+		Bson updates = Updates.combine(update1, update2, update3, update4);
+		activityCollection.updateOne(Filters.eq("_id", activity.getId()), updates);
 	}
 
 	private Activity fromDocumentToActivity(Document document) {
