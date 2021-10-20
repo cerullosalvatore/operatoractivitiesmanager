@@ -69,16 +69,9 @@ public class ActivityMongoRepository implements ActivityRepository {
 
 	@Override
 	public List<Activity> findByDay(Date date) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.set(Calendar.HOUR_OF_DAY, 00);
-		cal.set(Calendar.MINUTE, 00);
-		cal.set(Calendar.SECOND, 00);
-		Date startTimeToFind = cal.getTime();
-		cal.set(Calendar.HOUR_OF_DAY, 23);
-		cal.set(Calendar.MINUTE, 59);
-		cal.set(Calendar.SECOND, 59);
-		Date endTimeToFind = cal.getTime();
+		Date startTimeToFind = settingDate(date, 0, 0, 0);
+		Date endTimeToFind = settingDate(date, 23, 59, 59);
+
 		return StreamSupport.stream(activityCollection.find(Filters.and(Filters.lte("startTime", endTimeToFind), Filters.gte("startTime", startTimeToFind))).spliterator(), false)
 				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
@@ -92,5 +85,14 @@ public class ActivityMongoRepository implements ActivityRepository {
 	private Activity fromDocumentToActivity(Document document) {
 		return new Activity(document.getString("_id"), document.getString("operatorMatricola"),
 				document.getString("operationID"), document.getDate("startTime"), document.getDate("endTime"));
+	}
+	
+	private Date settingDate(Date date, int hour, int minute, int second) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, hour);
+		cal.set(Calendar.MINUTE, minute);
+		cal.set(Calendar.SECOND, second);
+		return cal.getTime();
 	}
 }

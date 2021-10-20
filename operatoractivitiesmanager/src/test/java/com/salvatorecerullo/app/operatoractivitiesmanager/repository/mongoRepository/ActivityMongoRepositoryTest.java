@@ -207,7 +207,7 @@ public class ActivityMongoRepositoryTest {
 		// Setup
 		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
 				startTime, endTime);
-		
+
 		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
 				startTime, endTime);
 		addActivityToDB(activity1);
@@ -258,25 +258,35 @@ public class ActivityMongoRepositoryTest {
 	@Test
 	public void testFindActivityByDateSuccessfull() {
 		// Setup
-		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
-				startTime, endTime);
 		Calendar cal = Calendar.getInstance();
-		cal.set(2021, 1, 21);
+		cal.set(2021, 1, 1, 00, 00, 00);
+		Date startTime1 = cal.getTime();
+		cal.set(2021, 1, 1, 23, 59, 59);
+		Date endTime1 = cal.getTime();
+
+		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
+				startTime1, endTime1);
+		
+		cal.set(2021, 1, 2, 00, 00, 00);
 		Date startTime2 = cal.getTime();
-		cal.set(2021, 1, 21);
+		cal.set(2021, 1, 2, 23, 59, 59);
 		Date endTime2 = cal.getTime();
+		
 		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
 				startTime2, endTime2);
+		
 		addActivityToDB(activity1);
 		addActivityToDB(activity2);
-
+		
+		cal.set(2021, 1, 1, 12, 30, 30);
+		Date dateToFind = cal.getTime();
 		// Exercise
-		List<Activity> activitiesRetrieved = activityMongoRepository.findByDay(startTime2);
+		List<Activity> activitiesRetrieved = activityMongoRepository.findByDay(dateToFind);
 
 		// Verify
-		assertThat(activitiesRetrieved).containsExactly(activity2);
+		assertThat(activitiesRetrieved).containsExactly(activity1);
 	}
-	
+
 	@Test
 	public void testFindActivityByDateOutOfRange() {
 		// Setup
@@ -291,7 +301,7 @@ public class ActivityMongoRepositoryTest {
 				startTime2, endTime2);
 		addActivityToDB(activity1);
 		addActivityToDB(activity2);
-		cal.set(2021, 7, 210);
+		cal.set(2021, 7, 1);
 		Date dateToFind = cal.getTime();
 
 		// Exercise
@@ -300,7 +310,7 @@ public class ActivityMongoRepositoryTest {
 		// Verify
 		assertThat(activitiesRetrieved).containsExactly();
 	}
-	
+
 	private void addActivityToDB(Activity activity) {
 		activityCollection.insertOne(new Document().append("_id", activity.getId())
 				.append("operatorMatricola", activity.getOperatorMatricola())
