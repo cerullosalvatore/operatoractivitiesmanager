@@ -82,25 +82,18 @@ public class Activity {
 		if ((endTime == null && other.endTime != null) || !endTime.equals(other.endTime)) {
 			return false;
 		} 
-		if (id == null && other.id != null) {
+		if ((id == null && other.id != null) || !id.equals(other.id)) {
 				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (operationId == null) {
-			if (other.operationId != null)
+		} 
+		if ((operationId == null && other.operationId != null) || !operationId.equals(other.operationId)) {
 				return false;
-		} else if (!operationId.equals(other.operationId))
-			return false;
-		if (operatorMatricola == null) {
-			if (other.operatorMatricola != null)
+		} 
+		if ((operatorMatricola == null && other.operatorMatricola != null) || !operatorMatricola.equals(other.operatorMatricola)) {
 				return false;
-		} else if (!operatorMatricola.equals(other.operatorMatricola))
-			return false;
-		if (startTime == null) {
-			if (other.startTime != null)
+		}
+		if (startTime == null && other.startTime != null || !startTime.equals(other.startTime)) {
 				return false;
-		} else if (!startTime.equals(other.startTime))
-			return false;
+		}
 		return true;
 	}
 
