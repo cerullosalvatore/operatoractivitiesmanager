@@ -5,10 +5,9 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.BasicOperat
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.BasicOperationView;
 
 public class BasicOperationController {
-
 	private static final String BASICOPERATION = "The BasicOperation with ID: ";
 	private static final String NOTEXIST = " does not exist.";
-	
+
 	private BasicOperationRepository basicOperationRepository;
 	private BasicOperationView basicOperationView;
 
@@ -38,7 +37,7 @@ public class BasicOperationController {
 		if (basicOperationRepository.findById(newBasicOperation.getId()) != null) {
 			basicOperationRepository.update(newBasicOperation);
 			basicOperationView.showSuccessfull(BASICOPERATION + newBasicOperation.getId() + " has been added.");
-		}else {
+		} else {
 			basicOperationView.showError(BASICOPERATION + newBasicOperation.getId() + NOTEXIST);
 		}
 	}

@@ -11,5 +11,5 @@ public interface ActivityView {
 	public void showSuccessfull(String string);
 
 	public void showError(String string);
-	
+
 }

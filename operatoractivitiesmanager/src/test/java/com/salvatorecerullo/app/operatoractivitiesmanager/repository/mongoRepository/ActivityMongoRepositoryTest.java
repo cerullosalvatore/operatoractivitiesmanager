@@ -266,18 +266,18 @@ public class ActivityMongoRepositoryTest {
 
 		Activity activity1 = new Activity(new ObjectId().toString(), "operatorMatricola1", "basicOperationID1",
 				startTime1, endTime1);
-		
+
 		cal.set(2021, 1, 2, 00, 00, 00);
 		Date startTime2 = cal.getTime();
 		cal.set(2021, 1, 2, 23, 59, 59);
 		Date endTime2 = cal.getTime();
-		
+
 		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
 				startTime2, endTime2);
-		
+
 		addActivityToDB(activity1);
 		addActivityToDB(activity2);
-		
+
 		cal.set(2021, 1, 1, 12, 30, 30);
 		Date dateToFind = cal.getTime();
 		// Exercise
@@ -310,10 +310,10 @@ public class ActivityMongoRepositoryTest {
 		// Verify
 		assertThat(activitiesRetrieved).containsExactly();
 	}
-	
+
 	@Test
 	public void testUpdateSuccessfull() {
-		//Setup
+		// Setup
 		Activity activityOld = new Activity(new ObjectId().toString(), "operatorMatricolaOld", "basicOperationIDOld",
 				startTime, endTime);
 		Calendar cal = Calendar.getInstance();
@@ -330,12 +330,12 @@ public class ActivityMongoRepositoryTest {
 
 		// Verify
 		assertThat(readAllActivityFromDB()).containsExactly(activityNew);
-	
+
 	}
-	
+
 	@Test
 	public void testUpdateError() {
-		//Setup
+		// Setup
 		Activity activityOld = new Activity(new ObjectId().toString(), "operatorMatricolaOld", "basicOperationIDOld",
 				startTime, endTime);
 		Calendar cal = Calendar.getInstance();
@@ -352,7 +352,7 @@ public class ActivityMongoRepositoryTest {
 
 		// Verify
 		assertThat(readAllActivityFromDB()).containsExactly(activityOld);
-	
+
 	}
 
 	private void addActivityToDB(Activity activity) {

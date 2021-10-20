@@ -62,15 +62,13 @@ public class ActivityMongoRepository implements ActivityRepository {
 	@Override
 	public List<Activity> findByOperatorMatricola(String matricolaOperator) {
 		return StreamSupport
-				.stream(activityCollection.find(Filters.eq(OPERATORMATRICOLA, matricolaOperator)).spliterator(),
-						false)
+				.stream(activityCollection.find(Filters.eq(OPERATORMATRICOLA, matricolaOperator)).spliterator(), false)
 				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<Activity> findByBasicOperationId(String operationId) {
-		return StreamSupport
-				.stream(activityCollection.find(Filters.eq(OPERATIONID, operationId)).spliterator(), false)
+		return StreamSupport.stream(activityCollection.find(Filters.eq(OPERATIONID, operationId)).spliterator(), false)
 				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
 
@@ -79,8 +77,9 @@ public class ActivityMongoRepository implements ActivityRepository {
 		Date startTimeToFind = settingDate(date, 0, 0, 0);
 		Date endTimeToFind = settingDate(date, 23, 59, 59);
 
-		return StreamSupport.stream(activityCollection.find(Filters.and(Filters.lte(STARTTIME, endTimeToFind), Filters.gte(STARTTIME, startTimeToFind))).spliterator(), false)
-				.map(this::fromDocumentToActivity).collect(Collectors.toList());
+		return StreamSupport.stream(activityCollection
+				.find(Filters.and(Filters.lte(STARTTIME, endTimeToFind), Filters.gte(STARTTIME, startTimeToFind)))
+				.spliterator(), false).map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
 
 	@Override
@@ -97,7 +96,7 @@ public class ActivityMongoRepository implements ActivityRepository {
 		return new Activity(document.getString("_id"), document.getString(OPERATORMATRICOLA),
 				document.getString(OPERATIONID), document.getDate(STARTTIME), document.getDate(ENDTIME));
 	}
-	
+
 	private Date settingDate(Date date, int hour, int minute, int second) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);

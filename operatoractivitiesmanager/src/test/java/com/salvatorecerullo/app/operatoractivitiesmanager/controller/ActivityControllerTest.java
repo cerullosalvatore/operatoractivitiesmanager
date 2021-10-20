@@ -29,7 +29,7 @@ public class ActivityControllerTest {
 	private static final String BASICOPERATION = "The BasicOperation with ID: ";
 	private static final String THEACTIVITY = "The Activity: ";
 	private static final String NOTEXIST = " does not exist.";
-	
+
 	private Date startTime;
 	private Date endTime;
 
@@ -337,8 +337,7 @@ public class ActivityControllerTest {
 		// Exercise
 		activityController.updadeActivity(activityUpdated);
 		// verify
-		verify(activityView)
-				.showError(BASICOPERATION + activityUpdated.getOperationId() + NOTEXIST);
+		verify(activityView).showError(BASICOPERATION + activityUpdated.getOperationId() + NOTEXIST);
 	}
 
 	@Test

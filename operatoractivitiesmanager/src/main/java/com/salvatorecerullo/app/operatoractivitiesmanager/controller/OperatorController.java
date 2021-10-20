@@ -7,7 +7,7 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.view.OperatorView;
 public class OperatorController {
 	private static final String THEOPERATOR = "The Operator: ";
 	private static final String NOTEXIST = " does not exist.";
-	
+
 	private OperatorRepository operatorRepository;
 	private OperatorView operatorView;
 

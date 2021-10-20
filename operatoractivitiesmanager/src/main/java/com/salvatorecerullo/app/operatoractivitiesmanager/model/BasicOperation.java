@@ -73,5 +73,4 @@ public class BasicOperation {
 			return false;
 		return true;
 	}
-
 }
