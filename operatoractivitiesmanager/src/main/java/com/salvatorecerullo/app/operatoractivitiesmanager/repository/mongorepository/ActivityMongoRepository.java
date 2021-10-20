@@ -17,6 +17,11 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.ActivityRepository;
 
 public class ActivityMongoRepository implements ActivityRepository {
+	private static final String OPERATORMATRICOLA = "operatorMatricola";
+	private static final String OPERATIONID = "operationID";
+	private static final String STARTTIME = "startTime";
+	private static final String ENDTIME = "endTime";
+
 	private MongoCollection<Document> activityCollection;
 
 	public ActivityMongoRepository(MongoClient mongoClient, String dbName, String collectionName) {
@@ -33,9 +38,9 @@ public class ActivityMongoRepository implements ActivityRepository {
 	public void save(Activity activity) {
 		if (activityCollection.find(Filters.eq("_id", activity.getId())).first() == null) {
 			activityCollection.insertOne(new Document().append("_id", activity.getId())
-					.append("operatorMatricola", activity.getOperatorMatricola())
-					.append("operationID", activity.getOperationId()).append("startTime", activity.getStartTime())
-					.append("endTime", activity.getEndTime()));
+					.append(OPERATORMATRICOLA, activity.getOperatorMatricola())
+					.append(OPERATIONID, activity.getOperationId()).append(STARTTIME, activity.getStartTime())
+					.append(ENDTIME, activity.getEndTime()));
 		}
 	}
 
@@ -57,7 +62,7 @@ public class ActivityMongoRepository implements ActivityRepository {
 	@Override
 	public List<Activity> findByOperatorMatricola(String matricolaOperator) {
 		return StreamSupport
-				.stream(activityCollection.find(Filters.eq("operatorMatricola", matricolaOperator)).spliterator(),
+				.stream(activityCollection.find(Filters.eq(OPERATORMATRICOLA, matricolaOperator)).spliterator(),
 						false)
 				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
@@ -65,7 +70,7 @@ public class ActivityMongoRepository implements ActivityRepository {
 	@Override
 	public List<Activity> findByBasicOperationId(String operationId) {
 		return StreamSupport
-				.stream(activityCollection.find(Filters.eq("operationID", operationId)).spliterator(), false)
+				.stream(activityCollection.find(Filters.eq(OPERATIONID, operationId)).spliterator(), false)
 				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
 
@@ -74,23 +79,23 @@ public class ActivityMongoRepository implements ActivityRepository {
 		Date startTimeToFind = settingDate(date, 0, 0, 0);
 		Date endTimeToFind = settingDate(date, 23, 59, 59);
 
-		return StreamSupport.stream(activityCollection.find(Filters.and(Filters.lte("startTime", endTimeToFind), Filters.gte("startTime", startTimeToFind))).spliterator(), false)
+		return StreamSupport.stream(activityCollection.find(Filters.and(Filters.lte(STARTTIME, endTimeToFind), Filters.gte(STARTTIME, startTimeToFind))).spliterator(), false)
 				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
 
 	@Override
 	public void update(Activity activity) {
-		Bson update1 = Updates.set("operatorMatricola", activity.getOperatorMatricola());
-		Bson update2 = Updates.set("operationID", activity.getOperationId());
-		Bson update3 = Updates.set("startTime", activity.getStartTime());
-		Bson update4 = Updates.set("endTime", activity.getEndTime());
+		Bson update1 = Updates.set(OPERATORMATRICOLA, activity.getOperatorMatricola());
+		Bson update2 = Updates.set(OPERATIONID, activity.getOperationId());
+		Bson update3 = Updates.set(STARTTIME, activity.getStartTime());
+		Bson update4 = Updates.set(ENDTIME, activity.getEndTime());
 		Bson updates = Updates.combine(update1, update2, update3, update4);
 		activityCollection.updateOne(Filters.eq("_id", activity.getId()), updates);
 	}
 
 	private Activity fromDocumentToActivity(Document document) {
-		return new Activity(document.getString("_id"), document.getString("operatorMatricola"),
-				document.getString("operationID"), document.getDate("startTime"), document.getDate("endTime"));
+		return new Activity(document.getString("_id"), document.getString(OPERATORMATRICOLA),
+				document.getString(OPERATIONID), document.getDate(STARTTIME), document.getDate(ENDTIME));
 	}
 	
 	private Date settingDate(Date date, int hour, int minute, int second) {
