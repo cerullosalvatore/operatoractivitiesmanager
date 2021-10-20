@@ -79,7 +79,7 @@ public class Activity {
 		if (obj == null || getClass() != obj.getClass())
 			return false;
 		Activity other = (Activity) obj;
-		if (endTime == null && other.endTime != null) {
+		if (endTime == null || (endTime == null && other.endTime != null)) {
 				return false;
 		} else if (!endTime.equals(other.endTime))
 			return false;
