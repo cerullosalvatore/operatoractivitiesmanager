@@ -76,25 +76,39 @@ public class Activity {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null || getClass() != obj.getClass())
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
 			return false;
 		Activity other = (Activity) obj;
-		if ((endTime == null && other.endTime != null) || !endTime.equals(other.endTime)) {
+		if (endTime == null) {
+			if (other.endTime != null)
+				return false;
+		} else if (!endTime.equals(other.endTime))
 			return false;
-		} 
-		if ((id == null && other.id != null) || !id.equals(other.id)) {
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} 
-		if ((operationId == null && other.operationId != null) || !operationId.equals(other.operationId)) {
+		} else if (!id.equals(other.id))
+			return false;
+		if (operationId == null) {
+			if (other.operationId != null)
 				return false;
-		} 
-		if ((operatorMatricola == null && other.operatorMatricola != null) || !operatorMatricola.equals(other.operatorMatricola)) {
+		} else if (!operationId.equals(other.operationId))
+			return false;
+		if (operatorMatricola == null) {
+			if (other.operatorMatricola != null)
 				return false;
-		}
-		if (startTime == null && other.startTime != null || !startTime.equals(other.startTime)) {
+		} else if (!operatorMatricola.equals(other.operatorMatricola))
+			return false;
+		if (startTime == null) {
+			if (other.startTime != null)
 				return false;
-		}
+		} else if (!startTime.equals(other.startTime))
+			return false;
 		return true;
 	}
+	
+	
 
 }
