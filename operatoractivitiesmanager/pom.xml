@@ -110,16 +110,19 @@
 					<version>${org.pitest.version}</version>
 					<configuration>
 						<excludedClasses>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager</param>
-						</excludedClasses>
+						<param>*Test</param>
+						<param>*IT</param>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.view.*</param>
+					</excludedClasses>
 						<targetClasses>
-							<!-- excludes class from test -->
 						</targetClasses>
 						<targetTests>
-							<!-- class to test -->
+							<param>com.salvatorecerullo.app.operatoractivitiesmanager.controller.*Test</param>
+							<param>com.salvatorecerullo.app.operatoractivitiesmanager.mongoRepository.*Test</param>
 						</targetTests>
 						<mutators>
-							<mutator>DEFAULTS</mutator>
+							<mutator>STRONGER</mutator>
 						</mutators>
 						<mutationThreshold>100</mutationThreshold>
 					</configuration>
