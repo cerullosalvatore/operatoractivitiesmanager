@@ -110,16 +110,17 @@
 					<version>${org.pitest.version}</version>
 					<configuration>
 						<excludedClasses>
-						<param>*Test</param>
-						<param>*IT</param>
-						<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
-						<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.view.*</param>
-					</excludedClasses>
+							<param>com.salvatorecerullo.app.operatoractivitiesmanager.Main*</param>
+							<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
+						</excludedClasses>
 						<targetClasses>
+							<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongorepository.*</param>
+							<param>com.salvatorecerullo.app.operatoractivitiesmanager.controller.*</param>
 						</targetClasses>
 						<targetTests>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.controller.*Test</param>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.mongoRepository.*Test</param>
+							<param>com.salvatorecerullo.app.operatoractivitiesmanager.*Test</param>
 						</targetTests>
 						<mutators>
 							<mutator>STRONGER</mutator>
