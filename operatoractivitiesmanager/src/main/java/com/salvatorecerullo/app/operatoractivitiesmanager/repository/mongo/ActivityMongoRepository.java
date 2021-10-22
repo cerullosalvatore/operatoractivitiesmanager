@@ -1,4 +1,4 @@
-package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongorepository;
+package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo;
 
 import java.util.Calendar;
 import java.util.Date;

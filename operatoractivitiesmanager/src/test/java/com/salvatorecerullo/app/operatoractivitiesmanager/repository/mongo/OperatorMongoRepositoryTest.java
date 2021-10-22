@@ -1,4 +1,4 @@
-package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongoRepository;
+package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +17,6 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
-import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongorepository.OperatorMongoRepository;
 
 import de.bwaldvogel.mongo.MongoServer;
 import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
