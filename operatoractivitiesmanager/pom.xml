@@ -108,6 +108,7 @@
 						<excludedClasses>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.Main*</param>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
+							<param>*IT</param>
 						</excludedClasses>
 						<targetClasses>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongorepository.*</param>
@@ -188,6 +189,58 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.22.1</version>
+				<configuration>
+					<systemPropertyVariables>
+						<mongo.port>${mongo.mapped.port}</mongo.port>
+					</systemPropertyVariables>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.34.1</version>
+				<configuration>
+					<images>
+						<image>
+							<name>mongo:4.4.3</name>
+							<run>
+								<ports>
+									<port>mongo.mapped.port:27017</port>
+								</ports>
+							</run>
+						</image>
+					</images>
+				</configuration>
+				<executions>
+					<execution>
+						<id>docker-start</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>docker-stop</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 	<!-- Maven profiles are a mechanism that allows you to activate a subset 
