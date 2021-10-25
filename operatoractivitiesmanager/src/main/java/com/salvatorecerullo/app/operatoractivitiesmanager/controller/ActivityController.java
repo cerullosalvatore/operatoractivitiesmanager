@@ -50,7 +50,7 @@ public class ActivityController {
 					} else {
 						activityRepository.save(activity);
 						activityView
-								.showSuccessfull(THEOPERATOR + activity.getOperatorMatricola() + " has been added.");
+								.showSuccessfull(THEACTIVITY + activity.getId() + " has been added.");
 					}
 				}
 			}
@@ -60,7 +60,7 @@ public class ActivityController {
 	public void removeActivity(Activity activity) {
 		if (activityRepository.findById(activity.getId()) != null) {
 			activityRepository.delete(activity.getId());
-			activityView.showSuccessfull(THEOPERATOR + activity.getOperatorMatricola() + " has been removed.");
+			activityView.showSuccessfull(THEACTIVITY + activity.getId() + " has been removed.");
 		} else {
 			activityView.showError(THEACTIVITY + activity.getId() + NOTEXIST);
 		}
