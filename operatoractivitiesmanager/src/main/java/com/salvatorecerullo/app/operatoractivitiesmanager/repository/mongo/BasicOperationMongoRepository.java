@@ -16,6 +16,7 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.BasicOperat
 
 public class BasicOperationMongoRepository implements BasicOperationRepository {
 	private MongoCollection<Document> basicOperationCollection;
+	private static final String DESCRIPTION = "description";
 
 	public BasicOperationMongoRepository(MongoClient mongoClient, String dbName, String collectionName) {
 		basicOperationCollection = mongoClient.getDatabase(dbName).getCollection(collectionName);
@@ -42,7 +43,7 @@ public class BasicOperationMongoRepository implements BasicOperationRepository {
 		if (basicOperationCollection.find(Filters.eq("_id", newBasicOperation.getId())).first() == null) {
 			basicOperationCollection.insertOne(
 					new Document().append("_id", newBasicOperation.getId()).append("name", newBasicOperation.getName())
-							.append("description", newBasicOperation.getDescription()));
+							.append(DESCRIPTION, newBasicOperation.getDescription()));
 		}
 	}
 
@@ -54,13 +55,13 @@ public class BasicOperationMongoRepository implements BasicOperationRepository {
 	@Override
 	public void update(BasicOperation newBasicOperation) {
 		Bson update1 = Updates.set("name", newBasicOperation.getName());
-		Bson update2 = Updates.set("description", newBasicOperation.getDescription());
+		Bson update2 = Updates.set(DESCRIPTION, newBasicOperation.getDescription());
 		Bson updates = Updates.combine(update1, update2);
 		basicOperationCollection.updateOne(Filters.eq("_id", newBasicOperation.getId()), updates);
 	}
 
 	private BasicOperation fromDocumentToBasicOperation(Document document) {
 		return new BasicOperation(document.getString("_id"), document.getString("name"),
-				document.getString("description"));
+				document.getString(DESCRIPTION));
 	}
 }
