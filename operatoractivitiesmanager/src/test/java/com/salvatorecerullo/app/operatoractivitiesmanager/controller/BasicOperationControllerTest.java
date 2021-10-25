@@ -115,7 +115,7 @@ public class BasicOperationControllerTest {
 		InOrder inOrder = Mockito.inOrder(basicOperationRepository, basicOperationView);
 		inOrder.verify(basicOperationRepository).update(newBasicOperation);
 		inOrder.verify(basicOperationView)
-				.showSuccessfull(BASICOPERATION + newBasicOperation.getId() + " has been added.");
+				.showSuccessfull(BASICOPERATION + newBasicOperation.getId() + " has been updated.");
 		inOrder.verifyNoMoreInteractions();
 	}
 

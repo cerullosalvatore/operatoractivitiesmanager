@@ -45,7 +45,7 @@ public class BasicOperationController {
 	public void updateBasicOperation(BasicOperation newBasicOperation) {
 		if (basicOperationRepository.findById(newBasicOperation.getId()) != null) {
 			basicOperationRepository.update(newBasicOperation);
-			basicOperationView.showSuccessfull(BASICOPERATION + newBasicOperation.getId() + " has been added.");
+			basicOperationView.showSuccessfull(BASICOPERATION + newBasicOperation.getId() + " has been updated.");
 		} else {
 			basicOperationView.showError(BASICOPERATION + newBasicOperation.getId() + NOTEXIST);
 		}

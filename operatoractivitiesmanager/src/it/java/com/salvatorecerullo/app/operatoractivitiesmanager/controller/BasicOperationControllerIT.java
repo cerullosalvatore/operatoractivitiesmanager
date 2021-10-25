@@ -1,6 +1,7 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.controller;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.util.Arrays;
 
@@ -21,6 +22,8 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.view.BasicOperationVie
 import de.bwaldvogel.mongo.bson.ObjectId;
 
 public class BasicOperationControllerIT {
+	private static final String BASICOPERATION = "The BasicOperation with ID: ";
+
 	private static final String DB_NAME = "operatoractivities";
 	private static final String COLLECTION_NAME = "basicoperation";
 	private static int mongoPort = Integer.parseInt(System.getProperty("mongo.port", "27017"));
@@ -54,6 +57,48 @@ public class BasicOperationControllerIT {
 		basicOperationController.allBasicOperations();
 		// Verify
 		verify(basicOperationView).showAllBasicOperations(Arrays.asList(basicOperation1,basicOperation2));
+	}
+	
+	@Test
+	public void testAddBasicOperation() {
+		// Setup
+		BasicOperation basicOperation = new BasicOperation(new ObjectId().toString(), "name", "description");
+		
+		// Exercise
+		basicOperationController.addBasicOperation(basicOperation);
+		
+		// Verify
+		verify(basicOperationView).showSuccessfull(BASICOPERATION + basicOperation.getId() + " has been added.");
+		verifyNoMoreInteractions(basicOperationView);
+	}
+	
+	@Test
+	public void testRemoveBasicOperation() {
+		// Setup
+		BasicOperation basicOperation = new BasicOperation(new ObjectId().toString(), "name", "description");
+		basicOperationRepository.save(basicOperation);
+
+		// Exercise
+		basicOperationController.removeBasicOperation(basicOperation);
+		
+		// Verify
+		verify(basicOperationView).showSuccessfull(BASICOPERATION + basicOperation.getId() + " has been removed.");
+		verifyNoMoreInteractions(basicOperationView);
+	}
+	
+	@Test
+	public void testUpdateBasicOperation() {
+		// Setup
+		BasicOperation basicOperationOld = new BasicOperation(new ObjectId().toString(), "nameOld", "descriptionOld");
+		BasicOperation basicOperationUpdated = new BasicOperation(basicOperationOld.getId(), "nameUpdated", "descriptionUpdated");
+		basicOperationRepository.save(basicOperationOld);
+		
+		// Exercise
+		basicOperationController.updateBasicOperation(basicOperationUpdated);
+		
+		// Verify
+		verify(basicOperationView).showSuccessfull(BASICOPERATION + basicOperationUpdated.getId() + " has been updated.");
+		verifyNoMoreInteractions(basicOperationView);
 	}
 	
 }
