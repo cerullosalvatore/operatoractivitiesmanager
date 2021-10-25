@@ -86,7 +86,7 @@ public class ActivityControllerTest {
 		InOrder inOrder = Mockito.inOrder(activityRepository, activityView);
 		inOrder.verify(activityRepository).save(newActivity);
 		inOrder.verify(activityView)
-				.showSuccessfull(THEOPERATOR + newActivity.getOperatorMatricola() + " has been added.");
+				.showSuccessfull(THEACTIVITY + newActivity.getId() + " has been added.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -167,7 +167,7 @@ public class ActivityControllerTest {
 		InOrder inOrder = Mockito.inOrder(activityRepository, activityView);
 		inOrder.verify(activityRepository).delete(oldActivity.getId());
 		inOrder.verify(activityView)
-				.showSuccessfull(THEOPERATOR + oldActivity.getOperatorMatricola() + " has been removed.");
+				.showSuccessfull(THEACTIVITY + oldActivity.getId() + " has been removed.");
 	}
 
 	@Test

@@ -11,6 +11,13 @@ public class BasicOperationController {
 	private BasicOperationRepository basicOperationRepository;
 	private BasicOperationView basicOperationView;
 
+	public BasicOperationController(BasicOperationRepository basicOperationRepository,
+			BasicOperationView basicOperationView) {
+		super();
+		this.basicOperationRepository = basicOperationRepository;
+		this.basicOperationView = basicOperationView;
+	}
+
 	public void allBasicOperations() {
 		basicOperationView.showAllBasicOperations(basicOperationRepository.findAll());
 	}
@@ -36,7 +43,7 @@ public class BasicOperationController {
 	public void updateBasicOperation(BasicOperation newBasicOperation) {
 		if (basicOperationRepository.findById(newBasicOperation.getId()) != null) {
 			basicOperationRepository.update(newBasicOperation);
-			basicOperationView.showSuccessfull(BASICOPERATION + newBasicOperation.getId() + " has been added.");
+			basicOperationView.showSuccessfull(BASICOPERATION + newBasicOperation.getId() + " has been updated.");
 		} else {
 			basicOperationView.showError(BASICOPERATION + newBasicOperation.getId() + NOTEXIST);
 		}

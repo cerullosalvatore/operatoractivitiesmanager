@@ -11,6 +11,11 @@ public class OperatorController {
 	private OperatorRepository operatorRepository;
 	private OperatorView operatorView;
 
+	public OperatorController(OperatorRepository operatorRepository, OperatorView operatorView) {
+		this.operatorRepository = operatorRepository;
+		this.operatorView = operatorView;
+	}
+
 	public void allOperators() {
 		operatorView.showAllOperators(operatorRepository.findAll());
 	}

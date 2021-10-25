@@ -1,4 +1,4 @@
-package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongoRepository;
+package com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,7 +20,6 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
-import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongorepository.ActivityMongoRepository;
 
 import de.bwaldvogel.mongo.MongoServer;
 import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
@@ -162,6 +161,7 @@ public class ActivityMongoRepositoryTest {
 		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
 				startTime, endTime);
 		addActivityToDB(activity1);
+		addActivityToDB(activity2);
 
 		// Exercise
 		activityMongoRepository.delete(activity2.getId());

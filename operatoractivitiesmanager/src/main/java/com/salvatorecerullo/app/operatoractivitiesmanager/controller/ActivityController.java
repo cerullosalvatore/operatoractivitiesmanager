@@ -20,6 +20,14 @@ public class ActivityController {
 
 	private ActivityView activityView;
 
+	public ActivityController(ActivityRepository activityRepository, OperatorRepository operatorRepository,
+			BasicOperationRepository basicOperationRepository, ActivityView activityView) {
+		this.activityRepository = activityRepository;
+		this.operatorRepository = operatorRepository;
+		this.basicOperationRepository = basicOperationRepository;
+		this.activityView = activityView;
+	}
+
 	public void allActivities() {
 		activityView.showActivities(activityRepository.findAll());
 	}
@@ -39,8 +47,7 @@ public class ActivityController {
 								+ activity.getEndTime());
 					} else {
 						activityRepository.save(activity);
-						activityView
-								.showSuccessfull(THEOPERATOR + activity.getOperatorMatricola() + " has been added.");
+						activityView.showSuccessfull(THEACTIVITY + activity.getId() + " has been added.");
 					}
 				}
 			}
@@ -50,7 +57,7 @@ public class ActivityController {
 	public void removeActivity(Activity activity) {
 		if (activityRepository.findById(activity.getId()) != null) {
 			activityRepository.delete(activity.getId());
-			activityView.showSuccessfull(THEOPERATOR + activity.getOperatorMatricola() + " has been removed.");
+			activityView.showSuccessfull(THEACTIVITY + activity.getId() + " has been removed.");
 		} else {
 			activityView.showError(THEACTIVITY + activity.getId() + NOTEXIST);
 		}
