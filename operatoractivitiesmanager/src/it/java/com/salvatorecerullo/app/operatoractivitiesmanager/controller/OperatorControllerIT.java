@@ -1,6 +1,7 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.controller;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.util.Arrays;
 
@@ -19,6 +20,8 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.Opera
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.OperatorView;
 
 public class OperatorControllerIT {
+	private static final String THEOPERATOR = "The Operator: ";
+
 	private static final String DB_NAME = "operatoractivities";
 	private static final String COLLECTION_NAME = "operator";
 	private static int mongoPort = Integer.parseInt(System.getProperty("mongo.port", "27017"));
@@ -52,5 +55,40 @@ public class OperatorControllerIT {
 		// Verify
 		verify(operatorView).showAllOperators(Arrays.asList(operator1,operator2));
 	}
-
+	
+	@Test
+	public void testAddOperator() {
+		// Setup
+		Operator newOperator = new Operator("testMatricola", "testName", "testSurname");
+		// Exercise
+		operatorController.addOperator(newOperator);
+		// Verify
+		verify(operatorView).showSuccessfull(THEOPERATOR + newOperator.getMatricola() + " has been added.");
+		verifyNoMoreInteractions(operatorView);
+	}
+	
+	@Test
+	public void testRemoveOperator() {
+		// Setup
+		Operator operatorToDelete = new Operator("testMatricola", "testName", "testSurname");
+		operatorRepository.save(operatorToDelete);
+		// Exercise
+		operatorController.removeOperator(operatorToDelete);
+		// Verify
+		verify(operatorView).showSuccessfull(THEOPERATOR + operatorToDelete.getMatricola() + " has been removed.");
+		verifyNoMoreInteractions(operatorView);
+	}
+	
+	@Test
+	public void testUpdateOperatorSuccessfull() {
+		// Setup
+		Operator updatedOperator = new Operator("testMatricola", "testName", "testSurname");
+		Operator oldOperator = new Operator("testMatricola", "testNameOld", "testSurnameOld");
+		operatorRepository.save(oldOperator);
+		// Exercise
+		operatorController.updateOperator(updatedOperator);
+		// verify
+		verify(operatorView).showSuccessfull(THEOPERATOR + updatedOperator.getMatricola() + " has been updated.");
+		verifyNoMoreInteractions(operatorView);
+	}
 }
