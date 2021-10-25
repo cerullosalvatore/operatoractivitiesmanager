@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.bson.Document;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -59,7 +58,7 @@ public class OperatorMongoRepostoryIT {
 		operatorMongoRepository.save(newOperator);
 
 		// Verify
-		assertThat(operatorMongoRepository.findAll()).containsExactly(newOperator);
+		assertThat(operatorMongoRepository.findAll().get(0)).isEqualTo(newOperator);
 	}
 	
 	@Test
@@ -67,11 +66,13 @@ public class OperatorMongoRepostoryIT {
 		// Setup
 		Operator operator1 = new Operator("matricola1", "name1", "surname1");
 		Operator operator2 = new Operator("matricola2", "name2", "surname2");
+		Operator operator3 = new Operator("matricola3", "name3", "surname3");
 		addOperatorToDB(operator1);
 		addOperatorToDB(operator2);
+		addOperatorToDB(operator3);
 
 		// Exercise
-		Operator operatorRetrivied = operatorMongoRepository.findByMatricola(operator2.getMatricola());
+		Operator operatorRetrivied = operatorMongoRepository.findByMatricola("matricola2");
 
 		// Verify
 		assertThat(operatorRetrivied).isEqualTo(operator2);
@@ -81,13 +82,15 @@ public class OperatorMongoRepostoryIT {
 	public void testDeleteOperator() {
 		// Setup
 		Operator operator1 = new Operator("matricola1", "name1", "surname1");
+		Operator operator2 = new Operator("matricola2", "name2", "surname2");
 		addOperatorToDB(operator1);
+		addOperatorToDB(operator2);
 
 		// Exercise
-		operatorMongoRepository.delete(operator1.getMatricola());
+		operatorMongoRepository.delete("matricola1");
 
 		// Verify
-		assertThat(readAllOperatorsFromDB()).isEmpty();
+		assertThat(readAllOperatorsFromDB()).containsExactly(operator2);
 	}
 
 	@Test
@@ -101,7 +104,7 @@ public class OperatorMongoRepostoryIT {
 		operatorMongoRepository.update(operatorNew);
 
 		// Verify
-		assertThat(readAllOperatorsFromDB().get(0)).isEqualTo(operatorNew);
+		assertThat(readAllOperatorsFromDB()).containsExactly(operatorNew);
 	}
 	
 	private void addOperatorToDB(Operator operator) {
