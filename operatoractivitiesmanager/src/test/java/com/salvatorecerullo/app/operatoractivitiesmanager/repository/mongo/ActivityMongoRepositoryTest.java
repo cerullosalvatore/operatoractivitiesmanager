@@ -161,6 +161,7 @@ public class ActivityMongoRepositoryTest {
 		Activity activity2 = new Activity(new ObjectId().toString(), "operatorMatricola2", "basicOperationID2",
 				startTime, endTime);
 		addActivityToDB(activity1);
+		addActivityToDB(activity2);
 
 		// Exercise
 		activityMongoRepository.delete(activity2.getId());
