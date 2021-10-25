@@ -20,6 +20,16 @@ public class ActivityController {
 
 	private ActivityView activityView;
 
+	
+	public ActivityController(ActivityRepository activityRepository, OperatorRepository operatorRepository,
+			BasicOperationRepository basicOperationRepository, ActivityView activityView) {
+		super();
+		this.activityRepository = activityRepository;
+		this.operatorRepository = operatorRepository;
+		this.basicOperationRepository = basicOperationRepository;
+		this.activityView = activityView;
+	}
+
 	public void allActivities() {
 		activityView.showActivities(activityRepository.findAll());
 	}
