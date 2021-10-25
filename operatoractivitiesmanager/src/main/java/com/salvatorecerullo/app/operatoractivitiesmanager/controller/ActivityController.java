@@ -20,10 +20,8 @@ public class ActivityController {
 
 	private ActivityView activityView;
 
-	
 	public ActivityController(ActivityRepository activityRepository, OperatorRepository operatorRepository,
 			BasicOperationRepository basicOperationRepository, ActivityView activityView) {
-		super();
 		this.activityRepository = activityRepository;
 		this.operatorRepository = operatorRepository;
 		this.basicOperationRepository = basicOperationRepository;
@@ -49,8 +47,7 @@ public class ActivityController {
 								+ activity.getEndTime());
 					} else {
 						activityRepository.save(activity);
-						activityView
-								.showSuccessfull(THEACTIVITY + activity.getId() + " has been added.");
+						activityView.showSuccessfull(THEACTIVITY + activity.getId() + " has been added.");
 					}
 				}
 			}

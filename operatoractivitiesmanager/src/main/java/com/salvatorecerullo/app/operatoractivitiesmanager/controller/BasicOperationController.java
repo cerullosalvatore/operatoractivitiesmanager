@@ -11,8 +11,6 @@ public class BasicOperationController {
 	private BasicOperationRepository basicOperationRepository;
 	private BasicOperationView basicOperationView;
 
-	
-	
 	public BasicOperationController(BasicOperationRepository basicOperationRepository,
 			BasicOperationView basicOperationView) {
 		super();
