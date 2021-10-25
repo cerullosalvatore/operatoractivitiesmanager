@@ -11,6 +11,15 @@ public class BasicOperationController {
 	private BasicOperationRepository basicOperationRepository;
 	private BasicOperationView basicOperationView;
 
+	
+	
+	public BasicOperationController(BasicOperationRepository basicOperationRepository,
+			BasicOperationView basicOperationView) {
+		super();
+		this.basicOperationRepository = basicOperationRepository;
+		this.basicOperationView = basicOperationView;
+	}
+
 	public void allBasicOperations() {
 		basicOperationView.showAllBasicOperations(basicOperationRepository.findAll());
 	}
