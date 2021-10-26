@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class operatoractivitiesmanagerTest {
+public class OperatorActivitiesManagerViewTest {
 
 	@Test
 	public void test() {

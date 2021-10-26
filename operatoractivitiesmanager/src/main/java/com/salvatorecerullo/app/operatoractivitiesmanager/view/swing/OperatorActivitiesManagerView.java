@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class operatoractivitiesmanager extends JFrame {
+public class OperatorActivitiesManagerView extends JFrame {
 
 	private JPanel contentPane;
 
@@ -18,7 +18,7 @@ public class operatoractivitiesmanager extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					operatoractivitiesmanager frame = new operatoractivitiesmanager();
+					OperatorActivitiesManagerView frame = new OperatorActivitiesManagerView();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -30,7 +30,7 @@ public class operatoractivitiesmanager extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public operatoractivitiesmanager() {
+	public OperatorActivitiesManagerView() {
 		setTitle("Operator Activities Manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
