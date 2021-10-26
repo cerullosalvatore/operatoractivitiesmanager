@@ -6,8 +6,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+import javax.swing.BoxLayout;
+import java.awt.GridLayout;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
 public class OperatorActivitiesManagerView extends JFrame {
 
@@ -16,6 +19,10 @@ public class OperatorActivitiesManagerView extends JFrame {
 	 */
 	private static final long serialVersionUID = -4591844476430172042L;
 	private JPanel contentPane;
+	private JTextField textFieldStartDataActivity;
+	private JTextField textFieldEndDataActivity;
+	private JTextField textFieldEndHourActivity;
+	private JTextField textFieldStartHourActivity;
 
 	/**
 	 * Launch the application.
@@ -39,33 +46,83 @@ public class OperatorActivitiesManagerView extends JFrame {
 	public OperatorActivitiesManagerView() {
 		setTitle("Operator Activities Manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 794, 734);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[] { 440, 0 };
-		gbl_contentPane.rowHeights = new int[] { 260, 0 };
-		gbl_contentPane.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
-		gbl_contentPane.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
-		contentPane.setLayout(gbl_contentPane);
+		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 		contentPane.setName("contentPane");
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
-		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
-		gbc_tabbedPane.gridx = 0;
-		gbc_tabbedPane.gridy = 0;
-		contentPane.add(tabbedPane, gbc_tabbedPane);
+		contentPane.add(tabbedPane);
 		tabbedPane.setName("tabbedPane");
 
-		JPanel panelActivity = new JPanel();
-		tabbedPane.addTab("Activities", null, panelActivity, null);
+		JPanel activitiesPanel = new JPanel();
+		tabbedPane.addTab("Activities", null, activitiesPanel, null);
+		activitiesPanel.setName("activitiesPanel");
+		activitiesPanel.setLayout(new GridLayout(0, 1, 0, 0));
 
-		JPanel panelOperator = new JPanel();
-		tabbedPane.addTab("Operators", null, panelOperator, null);
+		JPanel newActivityPanel = new JPanel();
+		activitiesPanel.add(newActivityPanel);
+		activitiesPanel.setName("newActivityPanel");
+		newActivityPanel.setLayout(new GridLayout(0, 2, 0, 0));
 
-		JPanel panelBasicOperation = new JPanel();
-		tabbedPane.addTab("Basic Operations", null, panelBasicOperation, null);
+		JLabel labelOperatorActivity = new JLabel("Operator:");
+		newActivityPanel.add(labelOperatorActivity);
+		labelOperatorActivity.setName("labelOperatorActivity");
+
+		JComboBox comboBoxOperatorActivity = new JComboBox();
+		newActivityPanel.add(comboBoxOperatorActivity);
+		comboBoxOperatorActivity.setName("comboBoxOperatorActivity");
+
+		JLabel labelBasicOperationActivity = new JLabel("Basic Operation:");
+		newActivityPanel.add(labelBasicOperationActivity);
+		labelBasicOperationActivity.setName("labelBasicOperationActivity");
+
+		JComboBox comboBoxBasicOperationActivity = new JComboBox();
+		newActivityPanel.add(comboBoxBasicOperationActivity);
+		comboBoxBasicOperationActivity.setName("comboBoxBasicOperationActivity");
+
+		JLabel labelStartDataActivity = new JLabel("Start Data:");
+		newActivityPanel.add(labelStartDataActivity);
+		labelStartDataActivity.setName("labelStartDataActivity");
+
+		textFieldStartDataActivity = new JTextField();
+		newActivityPanel.add(textFieldStartDataActivity);
+		textFieldStartDataActivity.setColumns(10);
+		textFieldStartDataActivity.setName("textFieldStartDataActivity");
+
+		JLabel labelStartHourActivity = new JLabel("Start Hour:");
+		newActivityPanel.add(labelStartHourActivity);
+		labelStartHourActivity.setName("labelStartHourActivity");
+
+		textFieldStartHourActivity = new JTextField();
+		newActivityPanel.add(textFieldStartHourActivity);
+		textFieldStartHourActivity.setColumns(10);
+		textFieldStartHourActivity.setName("textFieldStartHourActivity");
+
+		JLabel labelEndDataActivity = new JLabel("End Data:");
+		newActivityPanel.add(labelEndDataActivity);
+		labelEndDataActivity.setName("labelEndDataActivity");
+
+		textFieldEndDataActivity = new JTextField();
+		newActivityPanel.add(textFieldEndDataActivity);
+		textFieldEndDataActivity.setColumns(10);
+		textFieldEndDataActivity.setName("textFieldEndDataActivity");
+
+		JLabel labelEndHourActivity = new JLabel("End Hour:");
+		newActivityPanel.add(labelEndHourActivity);
+		labelEndHourActivity.setName("labelEndHourActivity");
+
+		textFieldEndHourActivity = new JTextField();
+		newActivityPanel.add(textFieldEndHourActivity);
+		textFieldEndHourActivity.setColumns(10);
+		textFieldEndHourActivity.setName("textFieldEndHourActivity");
+
+		JPanel operatorPanel = new JPanel();
+		tabbedPane.addTab("Operators", null, operatorPanel, null);
+
+		JPanel basicOperationPanel = new JPanel();
+		tabbedPane.addTab("Basic Operations", null, basicOperationPanel, null);
 	}
 }

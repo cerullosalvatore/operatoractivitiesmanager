@@ -3,6 +3,7 @@ package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.fixture.JTabbedPaneFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
@@ -39,8 +40,28 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 	@GUITest
 	public void testTabbedPaneIsPresent() {
 		// Verify
+		frameFixture.requireTitle("Operator Activities Manager");
 		JTabbedPaneFixture tabbedPaneFixture = frameFixture.panel("contentPane").tabbedPane("tabbedPane");
 		tabbedPaneFixture.requireTabTitles("Activities", "Operators", "Basic Operations");
+	}
+
+	@Test
+	@GUITest
+	public void testActivitiesTabControlsArePresent() {
+		// Verify
+		JPanelFixture newActivityPanel = frameFixture.panel("contentPane").panel("newActivityPanel");
+		newActivityPanel.label("labelOperatorActivity");
+		newActivityPanel.label("labelBasicOperationActivity");
+		newActivityPanel.label("labelStartDataActivity");
+		newActivityPanel.label("labelStartHourActivity");
+		newActivityPanel.label("labelEndDataActivity");
+		newActivityPanel.label("labelEndHourActivity");
+		newActivityPanel.comboBox("comboBoxOperatorActivity");
+		newActivityPanel.comboBox("comboBoxBasicOperationActivity");
+		newActivityPanel.textBox("textFieldStartDataActivity");
+		newActivityPanel.textBox("textFieldStartHourActivity");
+		newActivityPanel.textBox("textFieldEndDataActivity");
+		newActivityPanel.textBox("textFieldEndHourActivity");
 	}
 
 }
