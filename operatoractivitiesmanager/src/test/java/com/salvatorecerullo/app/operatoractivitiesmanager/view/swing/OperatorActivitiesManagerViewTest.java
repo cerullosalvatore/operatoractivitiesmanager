@@ -49,19 +49,7 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 	@GUITest
 	public void testActivitiesTabControlsArePresent() {
 		// Verify
-		JPanelFixture newActivityPanel = frameFixture.panel("contentPane").panel("newActivityPanel");
-		newActivityPanel.label("labelOperatorActivity");
-		newActivityPanel.label("labelBasicOperationActivity");
-		newActivityPanel.label("labelStartDataActivity");
-		newActivityPanel.label("labelStartHourActivity");
-		newActivityPanel.label("labelEndDataActivity");
-		newActivityPanel.label("labelEndHourActivity");
-		newActivityPanel.comboBox("comboBoxOperatorActivity");
-		newActivityPanel.comboBox("comboBoxBasicOperationActivity");
-		newActivityPanel.textBox("textFieldStartDataActivity");
-		newActivityPanel.textBox("textFieldStartHourActivity");
-		newActivityPanel.textBox("textFieldEndDataActivity");
-		newActivityPanel.textBox("textFieldEndHourActivity");
+		frameFixture.panel("contentPane").panel("newActivityPanel");
 	}
 
 }
