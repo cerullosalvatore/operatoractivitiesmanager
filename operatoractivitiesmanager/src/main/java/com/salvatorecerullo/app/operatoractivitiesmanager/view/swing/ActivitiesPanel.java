@@ -2,13 +2,27 @@ package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
 import javax.swing.JPanel;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.JList;
 import javax.swing.JToggleButton;
+
+import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
+import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
+import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
+import javax.swing.JTextField;
 
 public class ActivitiesPanel extends JPanel {
 
@@ -20,9 +34,11 @@ public class ActivitiesPanel extends JPanel {
 	private JPanel formActivityPanel;
 	private JLabel labelNewActivity;
 	private JLabel labelOperatorActivity;
-	private JComboBox comboBoxOperatorActivity;
+	private JComboBox<Operator> comboBoxOperatorActivity;
+	private DefaultComboBoxModel<Operator> comboBoxOperatorsModel;
 	private JLabel labelBasicOperationActivity;
-	private JComboBox comboBoxBasicOperationActivity;
+	private JComboBox<BasicOperation> comboBoxBasicOperationActivity;
+	private DefaultComboBoxModel<BasicOperation> comboBoxOperationsModel;
 	private JLabel labelStartDataActivity;
 	private JFormattedTextField textFieldStartDataActivity;
 	private JLabel labelStartHourActivity;
@@ -35,18 +51,21 @@ public class ActivitiesPanel extends JPanel {
 	private JPanel listActivitiesPanel;
 	private JPanel newActivityPanel;
 	private JPanel listTopMenuPanel;
-	private JList listActivities;
-	private JToggleButton tglbtnShowAll;
-	private JToggleButton tglbtnFindByOperator;
-	private JToggleButton tglbtnFindByBasicOperation;
-	private JComboBox comboBoxSelectorSearch;
+	private JList<Activity> listActivities;
 	private JPanel listBottomMenuPanel;
 	private JButton btnModifyActivity;
 	private JButton btnDeleteActivity;
+	private JButton btnUpdateActivity;
+	private JPanel buttonsFormActivityPanel;
+	private JButton btnShowAll;
+	private JButton btnFindByOperator;
+	private JButton btnFindByBasicOperation;
+	private JButton btnFindByData;
 
 	/**
 	 * Create the panel.
 	 */
+
 	public ActivitiesPanel() {
 		setLayout(new GridLayout(0, 1, 0, 0));
 
@@ -61,13 +80,15 @@ public class ActivitiesPanel extends JPanel {
 		labelOperatorActivity = new JLabel("Operator:");
 		formActivityPanel.add(labelOperatorActivity);
 
-		comboBoxOperatorActivity = new JComboBox();
+		comboBoxOperatorsModel = new DefaultComboBoxModel<Operator>();
+		comboBoxOperatorActivity = new JComboBox<Operator>(comboBoxOperatorsModel);
 		formActivityPanel.add(comboBoxOperatorActivity);
 
 		labelBasicOperationActivity = new JLabel("Basic Operation:");
 		formActivityPanel.add(labelBasicOperationActivity);
 
-		comboBoxBasicOperationActivity = new JComboBox();
+		comboBoxOperationsModel = new DefaultComboBoxModel<BasicOperation>();
+		comboBoxBasicOperationActivity = new JComboBox<BasicOperation>(comboBoxOperationsModel);
 		formActivityPanel.add(comboBoxBasicOperationActivity);
 
 		labelStartDataActivity = new JLabel("Start Data:");
@@ -94,45 +115,87 @@ public class ActivitiesPanel extends JPanel {
 		textFieldEndHourActivity = new JFormattedTextField();
 		formActivityPanel.add(textFieldEndHourActivity);
 
-		labelNewActivity = new JLabel("New Activity");
+		labelNewActivity = new JLabel("Activity");
 		newActivityPanel.add(labelNewActivity, BorderLayout.NORTH);
 
-		btnAddActivity = new JButton("Add Activity");
-		newActivityPanel.add(btnAddActivity, BorderLayout.SOUTH);
+		buttonsFormActivityPanel = new JPanel();
+		newActivityPanel.add(buttonsFormActivityPanel, BorderLayout.SOUTH);
 
+		// BUTTON ADD ACTIVITY
+		btnAddActivity = new JButton("Add Activity");
+		btnAddActivity.setEnabled(false);
+		buttonsFormActivityPanel.add(btnAddActivity);
+		KeyAdapter btnAddActivityEnablerKey = new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnAddActivity.setEnabled(comboBoxOperatorActivity.getSelectedItem() != null
+						&& comboBoxBasicOperationActivity.getSelectedItem() != null
+						&& !textFieldStartDataActivity.getText().isEmpty()
+						&& !textFieldStartHourActivity.getText().isEmpty()
+						&& !textFieldEndDataActivity.getText().isEmpty()
+						&& !textFieldEndHourActivity.getText().isEmpty());
+			}
+		};
+
+		textFieldStartDataActivity.addKeyListener(btnAddActivityEnablerKey);
+		textFieldStartHourActivity.addKeyListener(btnAddActivityEnablerKey);
+		textFieldEndDataActivity.addKeyListener(btnAddActivityEnablerKey);
+		textFieldEndHourActivity.addKeyListener(btnAddActivityEnablerKey);
+
+		// BUTTON UPDATE ACTIVITY
+		btnUpdateActivity = new JButton("UpdateActivity");
+		buttonsFormActivityPanel.add(btnUpdateActivity);
+		btnUpdateActivity.setEnabled(false);
+
+		// LIST ACTIVITIES PANEL
 		listActivitiesPanel = new JPanel();
 		add(listActivitiesPanel);
 		listActivitiesPanel.setLayout(new GridLayout(0, 1, 0, 0));
 
+		// TOP MENU PANEL
 		listTopMenuPanel = new JPanel();
 		listActivitiesPanel.add(listTopMenuPanel);
-		listTopMenuPanel.setLayout(new GridLayout(0, 3, 0, 0));
+		listTopMenuPanel.setLayout(new GridLayout(0, 4, 0, 0));
 
-		tglbtnShowAll = new JToggleButton("Show All");
-		listTopMenuPanel.add(tglbtnShowAll);
+		// BUTTON SHOW ALL
+		btnShowAll = new JButton("ShowAll");
+		listTopMenuPanel.add(btnShowAll);
 
-		tglbtnFindByOperator = new JToggleButton("Find By Operator");
-		listTopMenuPanel.add(tglbtnFindByOperator);
+		// BUTTON FIND BY OPERATOR
+		btnFindByOperator = new JButton("FindByOperator");
+		listTopMenuPanel.add(btnFindByOperator);
+		btnFindByOperator.setEnabled(false);
 
-		tglbtnFindByBasicOperation = new JToggleButton("Find By Operation");
-		listTopMenuPanel.add(tglbtnFindByBasicOperation);
+		// BUTTON FIND BY BASIC OPERATION
+		btnFindByBasicOperation = new JButton("FindByOperation");
+		listTopMenuPanel.add(btnFindByBasicOperation);
+		btnFindByBasicOperation.setEnabled(false);
 
-		comboBoxSelectorSearch = new JComboBox();
-		listActivitiesPanel.add(comboBoxSelectorSearch);
+		// BUTTON FIND BY DATA
+		btnFindByData = new JButton("FindByData");
+		listTopMenuPanel.add(btnFindByData);
+		btnFindByData.setEnabled(false);
 
-		listActivities = new JList();
+		// LIST ACTIVITIES
+		listActivities = new JList<Activity>();
 		listActivitiesPanel.add(listActivities);
-		
+
+		// BOTTOM MENU PANEL
 		listBottomMenuPanel = new JPanel();
 		listActivitiesPanel.add(listBottomMenuPanel);
 		listBottomMenuPanel.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		btnModifyActivity = new JButton("New button");
-		listBottomMenuPanel.add(btnModifyActivity);
-		
-		btnDeleteActivity = new JButton("New button");
-		listBottomMenuPanel.add(btnDeleteActivity);
 
+		// MODIFY ACTIVITY BUTTON
+		btnModifyActivity = new JButton("MODIFY");
+		listBottomMenuPanel.add(btnModifyActivity);
+		btnModifyActivity.setEnabled(false);
+
+		// DELETE ACTIVITY BUTTON
+		btnDeleteActivity = new JButton("DELETE");
+		listBottomMenuPanel.add(btnDeleteActivity);
+		btnDeleteActivity.setEnabled(false);
+
+		// Call Set Names
 		setNames();
 
 	}
@@ -140,6 +203,7 @@ public class ActivitiesPanel extends JPanel {
 	private void setNames() {
 		newActivityPanel.setName("newActivityPanel");
 		labelNewActivity.setName("labelNewActivity");
+
 		formActivityPanel.setName("formActivityPanel");
 		labelOperatorActivity.setName("labelOperatorActivity");
 		comboBoxOperatorActivity.setName("comboBoxOperatorActivity");
@@ -153,20 +217,31 @@ public class ActivitiesPanel extends JPanel {
 		textFieldEndDataActivity.setName("textFieldEndDataActivity");
 		labelEndHourActivity.setName("labelEndHourActivity");
 		textFieldEndHourActivity.setName("textFieldEndHourActivity");
+
+		buttonsFormActivityPanel.setName("buttonsFormActivityPanel");
 		btnAddActivity.setName("btnAddActivity");
+		btnUpdateActivity.setName("btnUpdateActivity");
+
+		btnShowAll.setName("btnShowAll");
+		btnFindByOperator.setName("btnFindByOperator");
+		btnFindByBasicOperation.setName("btnFindByBasicOperation");
+		btnFindByData.setName("btnFindByData");
+
 		listActivitiesPanel.setName("listActivitiesPanel");
 		listTopMenuPanel.setName("listTopMenuPanel");
 		listActivities.setName("listActivities");
-
-		tglbtnShowAll.setName("tglbtnShowAll");
-		tglbtnFindByOperator.setName("tglbtnFindByOperator");
-		tglbtnFindByBasicOperation.setName("tglbtnFindByBasicOperation");
-		tglbtnFindByOperator.setName("tglbtnFindByOperator");
-		tglbtnFindByBasicOperation.setName("tglbtnFindByBasicOperation");
-		comboBoxSelectorSearch.setName("comboBoxSelectorSearch");
 		listBottomMenuPanel.setName("listBottomMenuPanel");
 		btnModifyActivity.setName("btnModifyActivity");
 		btnDeleteActivity.setName("btnDeleteActivity");
 
 	}
+
+	public DefaultComboBoxModel<Operator> getComboBoxOperatorsModel() {
+		return comboBoxOperatorsModel;
+	}
+
+	public DefaultComboBoxModel<BasicOperation> getComboBoxOperationsModel() {
+		return comboBoxOperationsModel;
+	}
+
 }

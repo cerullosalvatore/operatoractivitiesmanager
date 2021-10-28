@@ -27,6 +27,7 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 			operatorActivitiesManagerView = new OperatorActivitiesManagerView();
 			return operatorActivitiesManagerView;
 		});
+		
 
 		MockitoAnnotations.initMocks(this);
 		// FrameFixture will then be used to interact with our view’s controls (labels,
