@@ -212,7 +212,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		});
 		formTopMenuPanel.button("btnFindByOperator").requireDisabled();
 	}
-	
+
 	@Test
 	@GUITest
 	public void testFindByBasicOperationButtonShouldBeEnabledOnlyWhenBasicOperationIsSelected() {
@@ -222,7 +222,8 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> {
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
-					.addElement(new BasicOperation("IdBasicOperationTest", "Name Operation Test", "Basic Operation Description  Test"));
+					.addElement(new BasicOperation("IdBasicOperationTest", "Name Operation Test",
+							"Basic Operation Description  Test"));
 		});
 
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
@@ -242,17 +243,17 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture formTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("InputDataTest");
-		
+
 		// Verify
 		formTopMenuPanel.button("btnFindByData").requireEnabled();
-		
-		//Setup
+
+		// Setup
 		formActivityPanel.textBox("textFieldStartDataActivity").deleteText();
 
 		// Verify
 		formTopMenuPanel.button("btnFindByData").requireDisabled();
 	}
-	
+
 	@Test
 	@GUITest
 	public void testDeleteButtonAndModifyShouldBeEnabledOnlyWhenAnActivityIsSelected() {
@@ -275,10 +276,105 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		listBottomMenuPanel.button("btnModifyActivity").requireEnabled();
 
 		listActivitiesPanel.list("listActivities").clearSelection();
-		
+
 		listBottomMenuPanel.button("btnDeleteActivity").requireDisabled();
 		listBottomMenuPanel.button("btnModifyActivity").requireDisabled();
 	}
-	
-	
+
+	@Test
+	@GUITest
+	public void testModifyButtonIsPressedAndUpdateButtonIsEnabled() {
+		// Setup
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
+				.panel("buttonsFormActivityPanel");
+		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
+		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 1, 8, 0, 00);
+		Date startTime = cal.getTime();
+		cal.set(2021, 1, 1, 16, 00, 00);
+		Date endTime = cal.getTime();
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
+					.addElement(new Activity("ActivityId", "MatricolaOperator", "IdOperation", startTime, endTime));
+		});
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
+		});
+
+		formActivityPanel.textBox("textFieldStartDataActivity").enterText("TestInput1");
+		formActivityPanel.textBox("textFieldStartHourActivity").enterText("TestInput2");
+		formActivityPanel.textBox("textFieldEndDataActivity").enterText("TestInput3");
+		formActivityPanel.textBox("textFieldEndHourActivity").enterText("TestInput4");
+		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
+
+		// Execute
+		listActivitiesPanel.list("listActivities").selectItem(0);
+		listBottomMenuPanel.button("btnModifyActivity").click();
+
+		// Verify
+		listActivitiesPanel.list("listActivities").requireDisabled();
+		buttonsFormActivityPanel.button("btnUpdateActivity").requireEnabled();
+		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
+
+		// Setup
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().removeAllElements();
+		});
+	}
+
+	@Test
+	@GUITest
+	public void testUpdateActivityIsPressedListEnabled() {
+		// Setup
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
+				.panel("buttonsFormActivityPanel");
+		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
+		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 1, 8, 0, 00);
+		Date startTime = cal.getTime();
+		cal.set(2021, 1, 1, 16, 00, 00);
+		Date endTime = cal.getTime();
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
+					.addElement(new Activity("ActivityId", "MatricolaOperator", "IdOperation", startTime, endTime));
+		});
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
+		});
+
+		formActivityPanel.textBox("textFieldStartDataActivity").enterText("TestInput1");
+		formActivityPanel.textBox("textFieldStartHourActivity").enterText("TestInput2");
+		formActivityPanel.textBox("textFieldEndDataActivity").enterText("TestInput3");
+		formActivityPanel.textBox("textFieldEndHourActivity").enterText("TestInput4");
+		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
+		listActivitiesPanel.list("listActivities").selectItem(0);
+		listBottomMenuPanel.button("btnModifyActivity").click();
+		
+		// Execute
+		buttonsFormActivityPanel.button("btnUpdateActivity").click();
+		
+		// Verify
+		listActivitiesPanel.list("listActivities").isEnabled();
+		formActivityPanel.comboBox("comboBoxOperatorActivity").requireSelection(0);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").requireSelection(0);
+		formActivityPanel.textBox("textFieldStartDataActivity").requireEmpty();
+		formActivityPanel.textBox("textFieldStartHourActivity").requireEmpty();
+		formActivityPanel.textBox("textFieldEndDataActivity").requireEmpty();
+		formActivityPanel.textBox("textFieldEndHourActivity").requireEmpty();
+		buttonsFormActivityPanel.button("btnUpdateActivity").requireDisabled();
+		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
+	}
+
 }

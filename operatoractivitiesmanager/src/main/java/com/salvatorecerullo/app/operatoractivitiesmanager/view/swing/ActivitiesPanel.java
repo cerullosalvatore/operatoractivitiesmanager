@@ -62,12 +62,14 @@ public class ActivitiesPanel extends JPanel {
 	private JButton btnFindByOperator;
 	private JButton btnFindByBasicOperation;
 	private JButton btnFindByData;
+	private boolean updateInProgress;
 
 	/**
 	 * Create the panel.
 	 */
 
 	public ActivitiesPanel() {
+		updateInProgress = false;
 		setMinimumSize(new Dimension(0, 0));
 		setLayout(new GridLayout(0, 1, 0, 0));
 
@@ -90,6 +92,7 @@ public class ActivitiesPanel extends JPanel {
 		ActionListener actionListenerComboBoxOperatorsModel = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				btnAddActivity.setEnabled(setButtonAddEnabled());
+				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
 				btnFindByOperator.setEnabled(comboBoxOperatorActivity.getSelectedIndex() != -1);
 			}
 		};
@@ -120,6 +123,7 @@ public class ActivitiesPanel extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				btnAddActivity.setEnabled(setButtonAddEnabled());
+				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
 				btnFindByData.setEnabled(!textFieldStartDataActivity.getText().isEmpty());
 			}
 		};
@@ -158,6 +162,7 @@ public class ActivitiesPanel extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				btnAddActivity.setEnabled(setButtonAddEnabled());
+				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
 			}
 		};
 
@@ -169,6 +174,23 @@ public class ActivitiesPanel extends JPanel {
 		btnUpdateActivity = new JButton("UpdateActivity");
 		buttonsFormActivityPanel.add(btnUpdateActivity);
 		btnUpdateActivity.setEnabled(false);
+		
+		ActionListener actionListenerButtonUpdateActivity = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				updateInProgress = false;
+				listActivities.setEnabled(true);
+				comboBoxOperatorActivity.setSelectedIndex(0);
+				comboBoxBasicOperationActivity.setSelectedIndex(0);
+				textFieldStartDataActivity.setText("");
+				textFieldStartHourActivity.setText("");
+				textFieldEndDataActivity.setText("");
+				textFieldEndHourActivity.setText("");
+				btnUpdateActivity.setEnabled(false);
+				btnAddActivity.setEnabled(false);
+			}
+		};
+		btnUpdateActivity.addActionListener(actionListenerButtonUpdateActivity);
+
 
 		// LIST ACTIVITIES PANEL
 		listActivitiesPanel = new JPanel();
@@ -220,6 +242,15 @@ public class ActivitiesPanel extends JPanel {
 		btnModifyActivity = new JButton("MODIFY");
 		listBottomMenuPanel.add(btnModifyActivity);
 		btnModifyActivity.setEnabled(false);
+		ActionListener actionListenerModifyButton = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				updateInProgress = true;
+				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
+				btnAddActivity.setEnabled(setButtonAddEnabled());
+				listActivities.setEnabled(false);
+			}
+		};
+		btnModifyActivity.addActionListener(actionListenerModifyButton);
 
 		// DELETE ACTIVITY BUTTON
 		btnDeleteActivity = new JButton("DELETE");
@@ -280,6 +311,14 @@ public class ActivitiesPanel extends JPanel {
 	}
 
 	private boolean setButtonAddEnabled() {
+		return !updateInProgress && statusFieldCompiled();
+	}
+
+	private boolean setButtonUpdateEnabled() {
+		return updateInProgress && statusFieldCompiled();
+	}
+
+	private boolean statusFieldCompiled() {
 		return comboBoxOperatorActivity.getSelectedIndex() != -1
 				&& comboBoxBasicOperationActivity.getSelectedIndex() != -1
 				&& !textFieldStartDataActivity.getText().isEmpty() && !textFieldStartHourActivity.getText().isEmpty()
