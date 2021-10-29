@@ -6,8 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -17,13 +15,14 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.JList;
-import javax.swing.JToggleButton;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
-import javax.swing.JTextField;
 import java.awt.Dimension;
+import javax.swing.ListSelectionModel;
 
 public class ActivitiesPanel extends JPanel {
 
@@ -53,6 +52,7 @@ public class ActivitiesPanel extends JPanel {
 	private JPanel newActivityPanel;
 	private JPanel listTopMenuPanel;
 	private JList<Activity> listActivities;
+	private DefaultListModel<Activity> listActivitiesModel;
 	private JPanel listBottomMenuPanel;
 	private JButton btnModifyActivity;
 	private JButton btnDeleteActivity;
@@ -89,6 +89,7 @@ public class ActivitiesPanel extends JPanel {
 
 		ActionListener actionListenerComboBoxOperatorsModel = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
+				btnAddActivity.setEnabled(setButtonAddEnabled());
 				btnFindByOperator.setEnabled(comboBoxOperatorActivity.getSelectedIndex() != -1);
 			}
 		};
@@ -112,8 +113,18 @@ public class ActivitiesPanel extends JPanel {
 		labelStartDataActivity = new JLabel("Start Data:");
 		formActivityPanel.add(labelStartDataActivity);
 
+		// FIELD DATA START
 		textFieldStartDataActivity = new JFormattedTextField();
 		formActivityPanel.add(textFieldStartDataActivity);
+		KeyAdapter textInputDataKeyListener = new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnAddActivity.setEnabled(setButtonAddEnabled());
+				btnFindByData.setEnabled(!textFieldStartDataActivity.getText().isEmpty());
+			}
+		};
+
+		textFieldStartDataActivity.addKeyListener(textInputDataKeyListener);
 
 		labelStartHourActivity = new JLabel("Start Hour:");
 		formActivityPanel.add(labelStartHourActivity);
@@ -143,22 +154,16 @@ public class ActivitiesPanel extends JPanel {
 		btnAddActivity = new JButton("Add Activity");
 		btnAddActivity.setEnabled(false);
 		buttonsFormActivityPanel.add(btnAddActivity);
-		KeyAdapter btnAddActivityEnablerKey = new KeyAdapter() {
+		KeyAdapter textInputKeyListener = new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				btnAddActivity.setEnabled(comboBoxOperatorActivity.getSelectedIndex() != -1
-						&& comboBoxBasicOperationActivity.getSelectedIndex() != -1
-						&& !textFieldStartDataActivity.getText().isEmpty()
-						&& !textFieldStartHourActivity.getText().isEmpty()
-						&& !textFieldEndDataActivity.getText().isEmpty()
-						&& !textFieldEndHourActivity.getText().isEmpty());
+				btnAddActivity.setEnabled(setButtonAddEnabled());
 			}
 		};
 
-		textFieldStartDataActivity.addKeyListener(btnAddActivityEnablerKey);
-		textFieldStartHourActivity.addKeyListener(btnAddActivityEnablerKey);
-		textFieldEndDataActivity.addKeyListener(btnAddActivityEnablerKey);
-		textFieldEndHourActivity.addKeyListener(btnAddActivityEnablerKey);
+		textFieldStartHourActivity.addKeyListener(textInputKeyListener);
+		textFieldEndDataActivity.addKeyListener(textInputKeyListener);
+		textFieldEndHourActivity.addKeyListener(textInputKeyListener);
 
 		// BUTTON UPDATE ACTIVITY
 		btnUpdateActivity = new JButton("UpdateActivity");
@@ -195,9 +200,17 @@ public class ActivitiesPanel extends JPanel {
 		btnFindByData.setEnabled(false);
 
 		// LIST ACTIVITIES
-		listActivities = new JList<Activity>();
+		listActivitiesModel = new DefaultListModel<Activity>();
+		listActivities = new JList<Activity>(listActivitiesModel);
+		listActivities.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listActivitiesPanel.add(listActivities);
-
+		listActivities.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				btnDeleteActivity.setEnabled(listActivities.getSelectedIndex() != -1);
+				btnModifyActivity.setEnabled(listActivities.getSelectedIndex() != -1);
+			}
+		});
 		// BOTTOM MENU PANEL
 		listBottomMenuPanel = new JPanel();
 		listActivitiesPanel.add(listBottomMenuPanel);
@@ -262,4 +275,14 @@ public class ActivitiesPanel extends JPanel {
 		return comboBoxOperationsModel;
 	}
 
+	public DefaultListModel<Activity> getListActivitiesModel() {
+		return listActivitiesModel;
+	}
+
+	private boolean setButtonAddEnabled() {
+		return comboBoxOperatorActivity.getSelectedIndex() != -1
+				&& comboBoxBasicOperationActivity.getSelectedIndex() != -1
+				&& !textFieldStartDataActivity.getText().isEmpty() && !textFieldStartHourActivity.getText().isEmpty()
+				&& !textFieldEndDataActivity.getText().isEmpty() && !textFieldEndHourActivity.getText().isEmpty();
+	}
 }

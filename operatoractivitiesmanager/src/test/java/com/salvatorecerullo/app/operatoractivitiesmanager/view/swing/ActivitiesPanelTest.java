@@ -1,5 +1,8 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
@@ -9,6 +12,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
+import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 
@@ -230,4 +234,51 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formTopMenuPanel.button("btnFindByBasicOperation").requireDisabled();
 	}
 
+	@Test
+	@GUITest
+	public void testFindByDateButtonShouldBeEnabledOnlyWhenStartDataIsCompiled() {
+		// Setup
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture formTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
+
+		formActivityPanel.textBox("textFieldStartDataActivity").enterText("InputDataTest");
+		
+		// Verify
+		formTopMenuPanel.button("btnFindByData").requireEnabled();
+		
+		//Setup
+		formActivityPanel.textBox("textFieldStartDataActivity").deleteText();
+
+		// Verify
+		formTopMenuPanel.button("btnFindByData").requireDisabled();
+	}
+	
+	@Test
+	@GUITest
+	public void testDeleteButtonAndModifyShouldBeEnabledOnlyWhenAnActivityIsSelected() {
+		// Setup
+		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
+		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 1, 8, 0, 00);
+		Date startTime = cal.getTime();
+		cal.set(2021, 1, 1, 16, 00, 00);
+		Date endTime = cal.getTime();
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
+					.addElement(new Activity("ActivityId", "OperatorMatricola", "OperationId", startTime, endTime));
+		});
+
+		listActivitiesPanel.list("listActivities").selectItem(0);
+
+		listBottomMenuPanel.button("btnDeleteActivity").requireEnabled();
+		listBottomMenuPanel.button("btnModifyActivity").requireEnabled();
+
+		listActivitiesPanel.list("listActivities").clearSelection();
+		
+		listBottomMenuPanel.button("btnDeleteActivity").requireDisabled();
+		listBottomMenuPanel.button("btnModifyActivity").requireDisabled();
+	}
+	
+	
 }
