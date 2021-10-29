@@ -23,6 +23,7 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 import javax.swing.JTextField;
+import java.awt.Dimension;
 
 public class ActivitiesPanel extends JPanel {
 
@@ -67,6 +68,7 @@ public class ActivitiesPanel extends JPanel {
 	 */
 
 	public ActivitiesPanel() {
+		setMinimumSize(new Dimension(0, 0));
 		setLayout(new GridLayout(0, 1, 0, 0));
 
 		newActivityPanel = new JPanel();
@@ -80,16 +82,32 @@ public class ActivitiesPanel extends JPanel {
 		labelOperatorActivity = new JLabel("Operator:");
 		formActivityPanel.add(labelOperatorActivity);
 
+		// COMBO BOX OPERATOR
 		comboBoxOperatorsModel = new DefaultComboBoxModel<Operator>();
 		comboBoxOperatorActivity = new JComboBox<Operator>(comboBoxOperatorsModel);
 		formActivityPanel.add(comboBoxOperatorActivity);
 
+		ActionListener actionListenerComboBoxOperatorsModel = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				btnFindByOperator.setEnabled(comboBoxOperatorActivity.getSelectedIndex() != -1);
+			}
+		};
+		comboBoxOperatorActivity.addActionListener(actionListenerComboBoxOperatorsModel);
+
 		labelBasicOperationActivity = new JLabel("Basic Operation:");
 		formActivityPanel.add(labelBasicOperationActivity);
 
+		// COMBO BOX BASIC OPERATION
 		comboBoxOperationsModel = new DefaultComboBoxModel<BasicOperation>();
 		comboBoxBasicOperationActivity = new JComboBox<BasicOperation>(comboBoxOperationsModel);
 		formActivityPanel.add(comboBoxBasicOperationActivity);
+
+		ActionListener actionListenerComboBoxOperationsModel = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				btnFindByBasicOperation.setEnabled(comboBoxBasicOperationActivity.getSelectedIndex() != -1);
+			}
+		};
+		comboBoxBasicOperationActivity.addActionListener(actionListenerComboBoxOperationsModel);
 
 		labelStartDataActivity = new JLabel("Start Data:");
 		formActivityPanel.add(labelStartDataActivity);
@@ -128,8 +146,8 @@ public class ActivitiesPanel extends JPanel {
 		KeyAdapter btnAddActivityEnablerKey = new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				btnAddActivity.setEnabled(comboBoxOperatorActivity.getSelectedItem() != null
-						&& comboBoxBasicOperationActivity.getSelectedItem() != null
+				btnAddActivity.setEnabled(comboBoxOperatorActivity.getSelectedIndex() != -1
+						&& comboBoxBasicOperationActivity.getSelectedIndex() != -1
 						&& !textFieldStartDataActivity.getText().isEmpty()
 						&& !textFieldStartHourActivity.getText().isEmpty()
 						&& !textFieldEndDataActivity.getText().isEmpty()

@@ -89,9 +89,9 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("TestInput3");
 		formActivityPanel.textBox("textFieldEndHourActivity").enterText("TestInput4");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
-		
-		// Verify
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
+
+		// Verify
 		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
 				.panel("buttonsFormActivityPanel");
 		buttonsFormActivityPanel.button("btnAddActivity").requireEnabled();
@@ -108,7 +108,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("");
 		formActivityPanel.textBox("textFieldEndHourActivity").enterText("");
-		
+
 		// Verify
 		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
 				.panel("buttonsFormActivityPanel");
@@ -128,15 +128,14 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
 		});
 
-		// Exercise 
+		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("");
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("TestInput2");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("TestInput3");
 		formActivityPanel.textBox("textFieldEndHourActivity").enterText("TestInput4");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
-		
-		
+
 		// Verify
 		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
 				.panel("buttonsFormActivityPanel");
@@ -160,8 +159,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("TestInput3");
 		formActivityPanel.textBox("textFieldEndHourActivity").enterText("TestInput4");
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
-		
-		
+
 		// Verify
 		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
 				.panel("buttonsFormActivityPanel");
@@ -183,11 +181,53 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("TestInput2");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("TestInput3");
 		formActivityPanel.textBox("textFieldEndHourActivity").enterText("TestInput4");
-		
+
 		// Verify
 		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
 				.panel("buttonsFormActivityPanel");
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
+	}
+
+	@Test
+	@GUITest
+	public void testFindByOperatorButtonShouldBeEnabledOnlyWhenOperatorIsSelected() {
+		// Setup
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture formTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
+		});
+
+		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
+
+		formTopMenuPanel.button("btnFindByOperator").requireEnabled();
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().removeAllElements();
+		});
+		formTopMenuPanel.button("btnFindByOperator").requireDisabled();
+	}
+	
+	@Test
+	@GUITest
+	public void testFindByBasicOperationButtonShouldBeEnabledOnlyWhenBasicOperationIsSelected() {
+		// Setup
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture formTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+					.addElement(new BasicOperation("IdBasicOperationTest", "Name Operation Test", "Basic Operation Description  Test"));
+		});
+
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
+
+		formTopMenuPanel.button("btnFindByBasicOperation").requireEnabled();
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().removeAllElements();
+		});
+		formTopMenuPanel.button("btnFindByBasicOperation").requireDisabled();
 	}
 
 }
