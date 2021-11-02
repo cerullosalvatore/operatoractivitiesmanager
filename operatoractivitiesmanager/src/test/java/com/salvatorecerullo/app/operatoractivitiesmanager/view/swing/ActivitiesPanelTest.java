@@ -103,7 +103,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testActivitiesAddButtonInitialStatesDisabledWhenAllInputAreNotCompiled() {
+	public void testActivitiesAddButtonInitialStatesDisabledWhenAllInputAreEmpty() {
 		// Setup
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 
@@ -144,17 +144,39 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
 				.panel("buttonsFormActivityPanel");
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
+
+		// Exercise
+		formActivityPanel.textBox("textFieldStartDataActivity").enterText("TestInput1");
+		formActivityPanel.textBox("textFieldStartHourActivity").deleteText();
+
+		// Verify
+		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
+
+		// Exercise
+		formActivityPanel.textBox("textFieldStartHourActivity").enterText("TestInput2");
+		formActivityPanel.textBox("textFieldEndDataActivity").deleteText();
+
+		// Verify
+		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
+
+		// Exercise
+		formActivityPanel.textBox("textFieldEndDataActivity").enterText("TestInput3");
+		formActivityPanel.textBox("textFieldEndHourActivity").deleteText();
+
+		// Verify
+		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
 	}
 
 	@Test
 	@GUITest
-	public void testActivitiesAddButtonInitialStatesDisabledWhenOperatorIsNotSelected() {
+	public void testActivitiesAddButtonInitialStatesDisabledWhenOneComboBoxIsNotSelected() {
 		// Setup
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
-					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().removeAllElements();
 		});
 
 		// Exercise
@@ -162,33 +184,28 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("TestInput2");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("TestInput3");
 		formActivityPanel.textBox("textFieldEndHourActivity").enterText("TestInput4");
-		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
+		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 
 		// Verify
 		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
 				.panel("buttonsFormActivityPanel");
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
-	}
 
-	@Test
-	@GUITest
-	public void testActivitiesAddButtonInitialStatesDisabledWhenBasicOperationIsNotSelected() {
 		// Setup
-		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
-					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
+		});
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().removeAllElements();
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
 		});
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("");
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("TestInput2");
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("TestInput3");
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText("TestInput4");
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 
 		// Verify
-		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
-				.panel("buttonsFormActivityPanel");
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
 	}
 
@@ -283,7 +300,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testModifyButtonIsPressedAndUpdateButtonIsEnabled() {
+	public void testModifyButtonIsPressedListDisabledAndUpdateButtonIsEnabled() {
 		// Setup
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
@@ -296,14 +313,12 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		cal.set(2021, 1, 1, 16, 00, 00);
 		Date endTime = cal.getTime();
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
-					.addElement(new Activity("ActivityId", "MatricolaOperator", "IdOperation", startTime, endTime));
-		});
-		GuiActionRunner.execute(() -> {
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
+					.addElement(new Activity("ActivityId", "MatricolaTest", "OperationId", startTime, endTime));
 		});
 
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("TestInput1");
@@ -321,16 +336,11 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		listActivitiesPanel.list("listActivities").requireDisabled();
 		buttonsFormActivityPanel.button("btnUpdateActivity").requireEnabled();
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
-
-		// Setup
-		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().removeAllElements();
-		});
 	}
 
 	@Test
 	@GUITest
-	public void testUpdateActivityIsPressedListEnabled() {
+	public void testUpdateActivityIsPressedListEnabledAndInputReset() {
 		// Setup
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
@@ -343,14 +353,12 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		cal.set(2021, 1, 1, 16, 00, 00);
 		Date endTime = cal.getTime();
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
-					.addElement(new Activity("ActivityId", "MatricolaOperator", "IdOperation", startTime, endTime));
-		});
-		GuiActionRunner.execute(() -> {
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
+					.addElement(new Activity("ActivityId", "MatricolaTest", "OperationId", startTime, endTime));
 		});
 
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("TestInput1");
@@ -361,10 +369,10 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 		listActivitiesPanel.list("listActivities").selectItem(0);
 		listBottomMenuPanel.button("btnModifyActivity").click();
-		
+
 		// Execute
 		buttonsFormActivityPanel.button("btnUpdateActivity").click();
-		
+
 		// Verify
 		listActivitiesPanel.list("listActivities").isEnabled();
 		formActivityPanel.comboBox("comboBoxOperatorActivity").requireSelection(0);
