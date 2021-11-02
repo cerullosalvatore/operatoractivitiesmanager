@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -18,6 +20,7 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.salvatorecerullo.app.operatoractivitiesmanager.controller.ActivityController;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
@@ -63,6 +66,8 @@ public class ActivitiesPanel extends JPanel {
 	private JButton btnFindByBasicOperation;
 	private JButton btnFindByData;
 	private boolean updateInProgress;
+
+	private ActivityController activityController;
 
 	/**
 	 * Create the panel.
@@ -117,14 +122,15 @@ public class ActivitiesPanel extends JPanel {
 		formActivityPanel.add(labelStartDataActivity);
 
 		// FIELD DATA START
-		textFieldStartDataActivity = new JFormattedTextField();
+		textFieldStartDataActivity = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
 		formActivityPanel.add(textFieldStartDataActivity);
 		KeyAdapter textInputDataKeyListener = new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				btnAddActivity.setEnabled(setButtonAddEnabled());
 				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
-				btnFindByData.setEnabled(!textFieldStartDataActivity.getText().isEmpty());
+				btnFindByData.setEnabled(!textFieldStartDataActivity.getText().isEmpty()
+						&& dateIsValid(textFieldStartDataActivity.getText()));
 			}
 		};
 
@@ -133,19 +139,19 @@ public class ActivitiesPanel extends JPanel {
 		labelStartHourActivity = new JLabel("Start Hour:");
 		formActivityPanel.add(labelStartHourActivity);
 
-		textFieldStartHourActivity = new JFormattedTextField();
+		textFieldStartHourActivity = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
 		formActivityPanel.add(textFieldStartHourActivity);
 
 		labelEndDataActivity = new JLabel("End Data:");
 		formActivityPanel.add(labelEndDataActivity);
 
-		textFieldEndDataActivity = new JFormattedTextField();
+		textFieldEndDataActivity = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
 		formActivityPanel.add(textFieldEndDataActivity);
 
 		labelEndHourActivity = new JLabel("End Hour:");
 		formActivityPanel.add(labelEndHourActivity);
 
-		textFieldEndHourActivity = new JFormattedTextField();
+		textFieldEndHourActivity = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
 		formActivityPanel.add(textFieldEndHourActivity);
 
 		labelNewActivity = new JLabel("Activity");
@@ -174,7 +180,7 @@ public class ActivitiesPanel extends JPanel {
 		btnUpdateActivity = new JButton("UpdateActivity");
 		buttonsFormActivityPanel.add(btnUpdateActivity);
 		btnUpdateActivity.setEnabled(false);
-		
+
 		ActionListener actionListenerButtonUpdateActivity = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				updateInProgress = false;
@@ -190,7 +196,6 @@ public class ActivitiesPanel extends JPanel {
 			}
 		};
 		btnUpdateActivity.addActionListener(actionListenerButtonUpdateActivity);
-
 
 		// LIST ACTIVITIES PANEL
 		listActivitiesPanel = new JPanel();
@@ -310,6 +315,14 @@ public class ActivitiesPanel extends JPanel {
 		return listActivitiesModel;
 	}
 
+	public ActivityController getActivityController() {
+		return activityController;
+	}
+
+	public void setActivityController(ActivityController activityController) {
+		this.activityController = activityController;
+	}
+
 	private boolean setButtonAddEnabled() {
 		return !updateInProgress && statusFieldCompiled();
 	}
@@ -322,6 +335,32 @@ public class ActivitiesPanel extends JPanel {
 		return comboBoxOperatorActivity.getSelectedIndex() != -1
 				&& comboBoxBasicOperationActivity.getSelectedIndex() != -1
 				&& !textFieldStartDataActivity.getText().isEmpty() && !textFieldStartHourActivity.getText().isEmpty()
-				&& !textFieldEndDataActivity.getText().isEmpty() && !textFieldEndHourActivity.getText().isEmpty();
+				&& !textFieldEndDataActivity.getText().isEmpty() && !textFieldEndHourActivity.getText().isEmpty()
+				&& dateIsValid(textFieldStartDataActivity.getText())
+				&& hourIsValid(textFieldStartHourActivity.getText()) && dateIsValid(textFieldEndDataActivity.getText())
+				&& hourIsValid(textFieldEndHourActivity.getText());
 	}
+
+	private boolean dateIsValid(String dateString) {
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			dateFormatter.parse(dateString);
+			return true;
+		} catch (ParseException e) {
+			return false;
+		}
+
+	}
+
+	public boolean hourIsValid(String hourString) {
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm");
+		try {
+			dateFormatter.parse(hourString);
+			return true;
+		} catch (ParseException e) {
+			return false;
+		}
+
+	}
+
 }
