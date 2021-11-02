@@ -62,6 +62,12 @@ public class Activity {
 	}
 
 	@Override
+	public String toString() {
+		return "Id: " + id + " - OperatorMatricola: " + operatorMatricola + " - OperationId: " + operationId
+				+ " - StartTime: " + startTime + " - EndTime: " + endTime;
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

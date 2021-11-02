@@ -385,4 +385,5 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
 	}
 
+	
 }
