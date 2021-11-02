@@ -1,5 +1,9 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
+import static org.mockito.Mockito.verify;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -9,7 +13,6 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -20,7 +23,6 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 
 public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
-	@InjectMocks
 	private OperatorActivitiesManagerView operatorActivitiesManagerView;
 
 	@Mock
@@ -30,6 +32,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 	@Override
 	protected void onSetUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
 		// Our frame and the fixture will be recreated for each test method so that we
 		// always start with a fresh user interface.
 		GuiActionRunner.execute(() -> {
@@ -37,8 +40,6 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 			operatorActivitiesManagerView.getActivitiesPanel().setActivityController(activityController);
 			return operatorActivitiesManagerView;
 		});
-
-		MockitoAnnotations.initMocks(this);
 		// FrameFixture will then be used to interact with our view’s controls (labels,
 		// text fields, buttons, etc.).
 		frameFixture = new FrameFixture(robot(), operatorActivitiesManagerView);
@@ -556,4 +557,53 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		buttonsFormActivityPanel.button("btnUpdateActivity").requireDisabled();
 	}
 
+	// Tests for the interaction between our buttons and the controllers:
+	@Test
+	@GUITest
+	public void testAddButtonShouldDelegateToActivityControllerNewActivity() throws ParseException {
+		// Setup
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel").panel("buttonsFormActivityPanel");
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 1, 8, 00, 00);
+		Date startTime = cal.getTime();
+		cal.set(2021, 1, 1, 16, 00, 00);
+		Date endTime = cal.getTime();
+		
+		Operator operator = new Operator("MatricolaTest", "Name Test", "Surname Test");
+		BasicOperation basicOperation = new BasicOperation("OperationId", "Name Operation", "Description Operation");
+		String activityIdTemp = operatorActivitiesManagerView.getActivitiesPanel().getActivityIdTemp();
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().addElement(operator);
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().addElement(basicOperation);
+		});
+
+		String formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime);
+		String formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime);
+		String formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime);
+		String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime);
+		
+		Date parsedStartDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+				.parse(formattedStartDate + " " + formattedStartHour + ":00");
+
+		Date parsedEndDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+				.parse(formattedEndDate + " " + formattedEndHour + ":00");
+
+		Activity activityNew = new Activity(activityIdTemp, operator.getMatricola(), basicOperation.getId(), parsedStartDate,
+				parsedEndDate);
+
+		formActivityPanel.textBox("textFieldStartDataActivity").enterText(formattedStartDate);
+		formActivityPanel.textBox("textFieldStartHourActivity").enterText(formattedStartHour);
+		formActivityPanel.textBox("textFieldEndDataActivity").enterText(formattedEndDate);
+		formActivityPanel.textBox("textFieldEndHourActivity").enterText(formattedEndHour);
+		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
+		
+		//Execution
+		buttonsFormActivityPanel.button("btnAddActivity").click();
+
+		//Verify
+		verify(activityController).addActivity(activityNew);
+	}
 }

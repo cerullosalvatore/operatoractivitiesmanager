@@ -8,6 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -20,10 +21,13 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.bson.types.ObjectId;
+
 import com.salvatorecerullo.app.operatoractivitiesmanager.controller.ActivityController;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
+
 import java.awt.Dimension;
 import javax.swing.ListSelectionModel;
 
@@ -66,6 +70,7 @@ public class ActivitiesPanel extends JPanel {
 	private JButton btnFindByBasicOperation;
 	private JButton btnFindByData;
 	private boolean updateInProgress;
+	private String activityIdTemp;
 
 	private ActivityController activityController;
 
@@ -74,6 +79,7 @@ public class ActivitiesPanel extends JPanel {
 	 */
 
 	public ActivitiesPanel() {
+		activityIdTemp = new ObjectId().toString();
 		updateInProgress = false;
 		setMinimumSize(new Dimension(0, 0));
 		setLayout(new GridLayout(0, 1, 0, 0));
@@ -164,6 +170,8 @@ public class ActivitiesPanel extends JPanel {
 		btnAddActivity = new JButton("Add Activity");
 		btnAddActivity.setEnabled(false);
 		buttonsFormActivityPanel.add(btnAddActivity);
+		btnAddActivity.addActionListener(e -> actionAddButton());
+
 		KeyAdapter textInputKeyListener = new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -315,12 +323,12 @@ public class ActivitiesPanel extends JPanel {
 		return listActivitiesModel;
 	}
 
-	public ActivityController getActivityController() {
-		return activityController;
-	}
-
 	public void setActivityController(ActivityController activityController) {
 		this.activityController = activityController;
+	}
+
+	public String getActivityIdTemp() {
+		return activityIdTemp;
 	}
 
 	private boolean setButtonAddEnabled() {
@@ -352,7 +360,7 @@ public class ActivitiesPanel extends JPanel {
 
 	}
 
-	public boolean hourIsValid(String hourString) {
+	private boolean hourIsValid(String hourString) {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm");
 		try {
 			dateFormatter.parse(hourString);
@@ -362,5 +370,28 @@ public class ActivitiesPanel extends JPanel {
 		}
 
 	}
+
+	private void actionAddButton() {
+		Operator operator = comboBoxOperatorsModel.getElementAt(comboBoxOperatorActivity.getSelectedIndex());
+		BasicOperation basicOperation = comboBoxOperationsModel
+				.getElementAt(comboBoxBasicOperationActivity.getSelectedIndex());
+		try {
+			Date startDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+					.parse(textFieldStartDataActivity.getText() + " " + textFieldStartHourActivity.getText() + ":00");
+
+			Date endDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:s")
+					.parse(textFieldEndDataActivity.getText() + " " + textFieldEndHourActivity.getText() + ":00");
+
+			Activity newActivity = new Activity(activityIdTemp, operator.getMatricola(),
+					basicOperation.getId(), startDate, endDate);
+
+			activityController.addActivity(newActivity);
+			activityIdTemp = new ObjectId().toString();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 
 }
