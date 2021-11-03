@@ -440,6 +440,101 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
+	public void testModifyButtonIsPressedFieldWasCompiledCorrectly() {
+		// Setup
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
+				.panel("buttonsFormActivityPanel");
+		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
+		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+
+		// Setting 2 different activity
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 1, 00, 00, 00);
+		Date startTime1 = cal.getTime();
+		cal.set(2021, 1, 1, 23, 59, 00);
+		Date endTime1 = cal.getTime();
+
+		cal.set(2022, 2, 2, 10, 00, 00);
+		Date startTime2 = cal.getTime();
+		cal.set(2022, 2, 2, 10, 39, 00);
+		Date endTime2 = cal.getTime();
+
+		Operator operator1 = new Operator("MatricolaTest1", "Name Test1", "Surname Test1");
+		Operator operator2 = new Operator("MatricolaTest2", "Name Test2", "Surname Test2");
+		BasicOperation basicOperation1 = new BasicOperation("OperationId1", "Name Operation1",
+				"Description Operation1");
+		BasicOperation basicOperation2 = new BasicOperation("OperationId2", "Name Operation2",
+				"Description Operation2");
+		Activity activity1 = new Activity("ActivityId1", "MatricolaTest1", "OperationId1", startTime1, endTime1);
+		Activity activity2 = new Activity("ActivityId2", "MatricolaTest2", "OperationId2", startTime2, endTime2);
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().addElement(operator1);
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().addElement(operator2);
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().addElement(basicOperation1);
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().addElement(basicOperation2);
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(activity1);
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(activity2);
+		});
+
+		// Execute
+		listActivitiesPanel.list("listActivities").selectItem(0);
+		listBottomMenuPanel.button("btnModifyActivity").click();
+
+		// Verify
+		String formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime1);
+		String formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime1);
+		String formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime1);
+		String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime1);
+
+		formActivityPanel.textBox("textFieldStartDataActivity").requireText(formattedStartDate);
+		formActivityPanel.textBox("textFieldStartHourActivity").requireText(formattedStartHour);
+		formActivityPanel.textBox("textFieldEndDataActivity").requireText(formattedEndDate);
+		formActivityPanel.textBox("textFieldEndHourActivity").requireText(formattedEndHour);
+		formActivityPanel.comboBox("comboBoxOperatorActivity").requireSelection(0);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").requireSelection(0);
+
+		// Execute
+		buttonsFormActivityPanel.button("btnUpdateActivity").click();
+		listActivitiesPanel.list("listActivities").selectItem(1);
+		listBottomMenuPanel.button("btnModifyActivity").click();
+
+		// Verify
+		formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime2);
+		formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime2);
+		formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime2);
+		formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime2);
+
+		formActivityPanel.textBox("textFieldStartDataActivity").requireText(formattedStartDate);
+		formActivityPanel.textBox("textFieldStartHourActivity").requireText(formattedStartHour);
+		formActivityPanel.textBox("textFieldEndDataActivity").requireText(formattedEndDate);
+		formActivityPanel.textBox("textFieldEndHourActivity").requireText(formattedEndHour);
+		formActivityPanel.comboBox("comboBoxOperatorActivity").requireSelection(1);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").requireSelection(1);
+
+		// Setup
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(
+					new Activity("ActivityIdTesting", "MatricolaTestNotPresent", "OperationIdNotPresent", startTime2, endTime2));
+		});
+
+		// Exercise
+		buttonsFormActivityPanel.button("btnUpdateActivity").click();
+		listActivitiesPanel.list("listActivities").selectItem(2);
+		listBottomMenuPanel.button("btnModifyActivity").click();
+
+		// Verify
+		formActivityPanel.textBox("textFieldStartDataActivity").requireText(formattedStartDate);
+		formActivityPanel.textBox("textFieldStartHourActivity").requireText(formattedStartHour);
+		formActivityPanel.textBox("textFieldEndDataActivity").requireText(formattedEndDate);
+		formActivityPanel.textBox("textFieldEndHourActivity").requireText(formattedEndHour);
+		formActivityPanel.comboBox("comboBoxOperatorActivity").requireSelection(0);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").requireSelection(0);
+	}
+
+	@Test
+	@GUITest
 	public void testUpdateActivityIsPressedListEnabledAndInputReset() {
 		// Setup
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
@@ -563,14 +658,15 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 	public void testAddButtonShouldDelegateToActivityControllerNewActivity() throws ParseException {
 		// Setup
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
-		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel").panel("buttonsFormActivityPanel");
-		
+		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
+				.panel("buttonsFormActivityPanel");
+
 		Calendar cal = Calendar.getInstance();
 		cal.set(2021, 1, 1, 8, 00, 00);
 		Date startTime = cal.getTime();
 		cal.set(2021, 1, 1, 16, 00, 00);
 		Date endTime = cal.getTime();
-		
+
 		Operator operator = new Operator("MatricolaTest", "Name Test", "Surname Test");
 		BasicOperation basicOperation = new BasicOperation("OperationId", "Name Operation", "Description Operation");
 		String activityIdTemp = operatorActivitiesManagerView.getActivitiesPanel().getActivityIdTemp();
@@ -583,15 +679,15 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		String formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime);
 		String formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime);
 		String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime);
-		
+
 		Date parsedStartDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
 				.parse(formattedStartDate + " " + formattedStartHour + ":00");
 
 		Date parsedEndDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
 				.parse(formattedEndDate + " " + formattedEndHour + ":00");
 
-		Activity activityNew = new Activity(activityIdTemp, operator.getMatricola(), basicOperation.getId(), parsedStartDate,
-				parsedEndDate);
+		Activity activityNew = new Activity(activityIdTemp, operator.getMatricola(), basicOperation.getId(),
+				parsedStartDate, parsedEndDate);
 
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText(formattedStartDate);
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText(formattedStartHour);
@@ -599,11 +695,12 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formActivityPanel.textBox("textFieldEndHourActivity").enterText(formattedEndHour);
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
-		
-		//Execution
+
+		// Execution
 		buttonsFormActivityPanel.button("btnAddActivity").click();
 
-		//Verify
+		// Verify
 		verify(activityController).addActivity(activityNew);
 	}
+
 }
