@@ -515,8 +515,8 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Setup
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(
-					new Activity("ActivityIdTesting", "MatricolaTestNotPresent", "OperationIdNotPresent", startTime2, endTime2));
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(new Activity(
+					"ActivityIdTesting", "MatricolaTestNotPresent", "OperationIdNotPresent", startTime2, endTime2));
 		});
 
 		// Exercise
@@ -701,6 +701,152 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Verify
 		verify(activityController).addActivity(activityNew);
+	}
+
+	@Test
+	@GUITest
+	public void testDeleteButtonShouldDelegateToActivityControllerRemoveActivity() throws ParseException {
+		// Setup
+		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
+		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 1, 8, 00, 00);
+		Date startTime = cal.getTime();
+		cal.set(2021, 1, 1, 16, 00, 00);
+		Date endTime = cal.getTime();
+
+		Activity activity1 = new Activity("ActivityId1", "operator1", "operation1", startTime, endTime);
+		Activity activity2 = new Activity("ActivityId2", "operator2", "operation2", startTime, endTime);
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(activity1);
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(activity2);
+		});
+
+		// Execution
+		listActivitiesPanel.list("listActivities").selectItem(1);
+		listBottomMenuPanel.button("btnDeleteActivity").click();
+
+		// Verify
+		verify(activityController).removeActivity(activity2);
+
+		// Execution
+		listActivitiesPanel.list("listActivities").selectItem(0);
+		listBottomMenuPanel.button("btnDeleteActivity").click();
+
+		// Verify
+		verify(activityController).removeActivity(activity1);
+	}
+
+	@Test
+	@GUITest
+	public void testShowAllButtonShouldDelegateToActivityControllerAllActivities() {
+		// Setup
+		JPanelFixture listTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
+
+		listTopMenuPanel.button("btnShowAll").click();
+
+		// Verify
+		verify(activityController).allActivities();
+	}
+
+	@Test
+	@GUITest
+	public void testFindByOperatorButtonShouldDelegateToActivityControllerFindByOperatorActivities() {
+		// Setup
+		JPanelFixture listTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
+
+		Operator operator1 = new Operator("IdOperator", "Name", "Surname");
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().addElement(operator1);
+		});
+
+		listTopMenuPanel.button("btnFindByOperator").click();
+
+		// Verify
+		verify(activityController).findByOperator(operator1.getMatricola());
+
+	}
+
+	@Test
+	@GUITest
+	public void testFindByBasicOperationButtonShouldDelegateToActivityControllerFindByBasicOperationActivities() {
+		// Setup
+		JPanelFixture listTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
+		BasicOperation basicOperation = new BasicOperation("IdOperation", "Name", "Description");
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().addElement(basicOperation);
+		});
+
+		listTopMenuPanel.button("btnFindByBasicOperation").click();
+
+		// Verify
+		verify(activityController).findByBasicOperation(basicOperation.getId());
+
+	}
+
+	@Test
+	@GUITest
+	public void testFindByDateButtonShouldDelegateToActivityControllerFindByDayActivities() throws ParseException {
+		// Setup
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture listTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
+
+		// Exercise
+		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2021");
+		Date startData = new SimpleDateFormat("dd/MM/yyyy")
+				.parse(formActivityPanel.textBox("textFieldStartDataActivity").text());
+		listTopMenuPanel.button("btnFindByData").click();
+
+		// Verify
+		verify(activityController).findByDay(startData);
+
+	}
+
+	@Test
+	@GUITest
+	public void testUpdateButtonShouldDelegateToActivityControllerNewActivity() throws ParseException {
+		// Setup
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
+				.panel("buttonsFormActivityPanel");
+		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
+		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 1, 8, 0, 00);
+		Date startTime = cal.getTime();
+		cal.set(2021, 1, 1, 16, 00, 00);
+		Date endTime = cal.getTime();
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
+			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
+			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
+					.addElement(new Activity("ActivityId", "MatricolaTest", "OperationId", startTime, endTime));
+		});
+
+		// Execute
+		listActivitiesPanel.list("listActivities").selectItem(0);
+		listBottomMenuPanel.button("btnModifyActivity").click();
+		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText().enterText("02/02/2002");
+		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText().enterText("00:00");
+		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText("02/02/2002");
+		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText("10:00");
+		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
+		buttonsFormActivityPanel.button("btnUpdateActivity").click();
+
+		// Verify
+		Date parsedStartDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse("02/02/2002 00:00:00");
+		Date parsedEndDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse("02/02/2002 10:00:00");
+		Activity activityUpdated = new Activity("ActivityId", "MatricolaTest", "OperationId", parsedStartDate,
+				parsedEndDate);
+
+		verify(activityController).updadeActivity(activityUpdated);
 	}
 
 }
