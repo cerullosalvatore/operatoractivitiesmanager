@@ -1,7 +1,6 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
