@@ -97,8 +97,8 @@ public class ActivitiesPanel extends JPanel {
 		formActivityPanel.add(labelOperatorActivity);
 
 		// COMBO BOX OPERATOR
-		comboBoxOperatorsModel = new DefaultComboBoxModel<Operator>();
-		comboBoxOperatorActivity = new JComboBox<Operator>(comboBoxOperatorsModel);
+		comboBoxOperatorsModel = new DefaultComboBoxModel<>();
+		comboBoxOperatorActivity = new JComboBox<>(comboBoxOperatorsModel);
 		formActivityPanel.add(comboBoxOperatorActivity);
 
 		ActionListener actionListenerComboBoxOperatorsModel = new ActionListener() {
@@ -114,8 +114,8 @@ public class ActivitiesPanel extends JPanel {
 		formActivityPanel.add(labelBasicOperationActivity);
 
 		// COMBO BOX BASIC OPERATION
-		comboBoxOperationsModel = new DefaultComboBoxModel<BasicOperation>();
-		comboBoxBasicOperationActivity = new JComboBox<BasicOperation>(comboBoxOperationsModel);
+		comboBoxOperationsModel = new DefaultComboBoxModel<>();
+		comboBoxBasicOperationActivity = new JComboBox<>(comboBoxOperationsModel);
 		formActivityPanel.add(comboBoxBasicOperationActivity);
 
 		ActionListener actionListenerComboBoxOperationsModel = new ActionListener() {
@@ -225,8 +225,8 @@ public class ActivitiesPanel extends JPanel {
 		btnFindByData.addActionListener(getActionListenerFindByDataButton());
 
 		// LIST ACTIVITIES
-		listActivitiesModel = new DefaultListModel<Activity>();
-		listActivities = new JList<Activity>(listActivitiesModel);
+		listActivitiesModel = new DefaultListModel<>();
+		listActivities = new JList<>(listActivitiesModel);
 		listActivities.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listActivitiesPanel.add(listActivities);
 		listActivities.addListSelectionListener(new ListSelectionListener() {
