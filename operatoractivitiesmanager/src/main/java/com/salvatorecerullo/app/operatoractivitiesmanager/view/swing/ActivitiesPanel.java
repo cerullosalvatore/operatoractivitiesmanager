@@ -108,6 +108,7 @@ public class ActivitiesPanel extends JPanel {
 				btnFindByOperator.setEnabled(comboBoxOperatorActivity.getSelectedIndex() != -1);
 			}
 		};
+
 		comboBoxOperatorActivity.addActionListener(actionListenerComboBoxOperatorsModel);
 
 		labelBasicOperationActivity = new JLabel("Basic Operation:");
@@ -171,7 +172,7 @@ public class ActivitiesPanel extends JPanel {
 		btnAddActivity = new JButton("Add Activity");
 		btnAddActivity.setEnabled(false);
 		buttonsFormActivityPanel.add(btnAddActivity);
-		btnAddActivity.addActionListener(getActionListenerAddButton());
+		btnAddActivity.addActionListener(e -> actionListenerAddButton());
 
 		KeyAdapter textInputKeyListener = new KeyAdapter() {
 			@Override
@@ -354,25 +355,21 @@ public class ActivitiesPanel extends JPanel {
 
 	}
 
-	private ActionListener getActionListenerAddButton() {
-		return new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				Operator operator = comboBoxOperatorsModel.getElementAt(comboBoxOperatorActivity.getSelectedIndex());
-				BasicOperation basicOperation = comboBoxOperationsModel
-						.getElementAt(comboBoxBasicOperationActivity.getSelectedIndex());
+	private void actionListenerAddButton() {
+		Operator operator = comboBoxOperatorsModel.getElementAt(comboBoxOperatorActivity.getSelectedIndex());
+		BasicOperation basicOperation = comboBoxOperationsModel
+				.getElementAt(comboBoxBasicOperationActivity.getSelectedIndex());
 
-				Date startData = transformDayHourInDate(dateIsValid(textFieldStartDataActivity.getText()),
-						hourIsValid(textFieldStartHourActivity.getText()));
-				Date endData = transformDayHourInDate(dateIsValid(textFieldEndDataActivity.getText()),
-						hourIsValid(textFieldEndHourActivity.getText()));
+		Date startData = transformDayHourInDate(dateIsValid(textFieldStartDataActivity.getText()),
+				hourIsValid(textFieldStartHourActivity.getText()));
+		Date endData = transformDayHourInDate(dateIsValid(textFieldEndDataActivity.getText()),
+				hourIsValid(textFieldEndHourActivity.getText()));
 
-				Activity newActivity = new Activity(activityIdTemp, operator.getMatricola(), basicOperation.getId(),
-						startData, endData);
+		Activity newActivity = new Activity(activityIdTemp, operator.getMatricola(), basicOperation.getId(), startData,
+				endData);
 
-				activityController.addActivity(newActivity);
-				activityIdTemp = new ObjectId().toString();
-			}
-		};
+		activityController.addActivity(newActivity);
+		activityIdTemp = new ObjectId().toString();
 	}
 
 	private ActionListener getActionListenerModifyButton() {
