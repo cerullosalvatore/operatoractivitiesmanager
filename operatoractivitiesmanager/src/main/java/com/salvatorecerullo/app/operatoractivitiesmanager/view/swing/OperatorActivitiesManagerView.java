@@ -1,11 +1,11 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.BoxLayout;
 
 public class OperatorActivitiesManagerView extends JFrame {
@@ -38,7 +38,7 @@ public class OperatorActivitiesManagerView extends JFrame {
 	 */
 	public OperatorActivitiesManagerView() {
 		setTitle("Operator Activities Manager");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 794, 734);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -46,7 +46,7 @@ public class OperatorActivitiesManagerView extends JFrame {
 		contentPane.setName("contentPane");
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
 		contentPane.add(tabbedPane);
 		tabbedPane.setName("tabbedPane");
 

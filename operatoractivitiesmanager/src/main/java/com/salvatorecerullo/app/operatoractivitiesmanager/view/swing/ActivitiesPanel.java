@@ -100,16 +100,7 @@ public class ActivitiesPanel extends JPanel {
 		comboBoxOperatorsModel = new DefaultComboBoxModel<>();
 		comboBoxOperatorActivity = new JComboBox<>(comboBoxOperatorsModel);
 		formActivityPanel.add(comboBoxOperatorActivity);
-
-		ActionListener actionListenerComboBoxOperatorsModel = new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				btnAddActivity.setEnabled(setButtonAddEnabled());
-				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
-				btnFindByOperator.setEnabled(comboBoxOperatorActivity.getSelectedIndex() != -1);
-			}
-		};
-
-		comboBoxOperatorActivity.addActionListener(actionListenerComboBoxOperatorsModel);
+		comboBoxOperatorActivity.addActionListener(e -> actionListenerComboBoxOperatorsModel());
 
 		labelBasicOperationActivity = new JLabel("Basic Operation:");
 		formActivityPanel.add(labelBasicOperationActivity);
@@ -119,12 +110,7 @@ public class ActivitiesPanel extends JPanel {
 		comboBoxBasicOperationActivity = new JComboBox<>(comboBoxOperationsModel);
 		formActivityPanel.add(comboBoxBasicOperationActivity);
 
-		ActionListener actionListenerComboBoxOperationsModel = new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				btnFindByBasicOperation.setEnabled(comboBoxBasicOperationActivity.getSelectedIndex() != -1);
-			}
-		};
-		comboBoxBasicOperationActivity.addActionListener(actionListenerComboBoxOperationsModel);
+		comboBoxBasicOperationActivity.addActionListener(e -> actionListenerComboBoxOperationsModel());
 
 		labelStartDataActivity = new JLabel("Start Data:");
 		formActivityPanel.add(labelStartDataActivity);
@@ -190,7 +176,7 @@ public class ActivitiesPanel extends JPanel {
 		btnUpdateActivity = new JButton("UpdateActivity");
 		buttonsFormActivityPanel.add(btnUpdateActivity);
 		btnUpdateActivity.setEnabled(false);
-		btnUpdateActivity.addActionListener(getActionListenerUpdateButton());
+		btnUpdateActivity.addActionListener(e -> actionListenerUpdateButton());
 
 		// LIST ACTIVITIES PANEL
 		listActivitiesPanel = new JPanel();
@@ -205,38 +191,33 @@ public class ActivitiesPanel extends JPanel {
 		// BUTTON SHOW ALL
 		btnShowAll = new JButton("ShowAll");
 		listTopMenuPanel.add(btnShowAll);
-		btnShowAll.addActionListener(getActionListenerShowAllButton());
+		btnShowAll.addActionListener(e -> actionListenerShowAllButton());
 
 		// BUTTON FIND BY OPERATOR
 		btnFindByOperator = new JButton("FindByOperator");
 		listTopMenuPanel.add(btnFindByOperator);
 		btnFindByOperator.setEnabled(false);
-		btnFindByOperator.addActionListener(getActionListenerFindByOperatorButton());
+		btnFindByOperator.addActionListener(e -> actionListenerFindByOperatorButton());
 
 		// BUTTON FIND BY BASIC OPERATION
 		btnFindByBasicOperation = new JButton("FindByOperation");
 		listTopMenuPanel.add(btnFindByBasicOperation);
 		btnFindByBasicOperation.setEnabled(false);
-		btnFindByBasicOperation.addActionListener(getActionListenerFindByBasicOperationButton());
+		btnFindByBasicOperation.addActionListener(e -> actionListenerFindByBasicOperationButton());
 
 		// BUTTON FIND BY DATA
 		btnFindByData = new JButton("FindByData");
 		listTopMenuPanel.add(btnFindByData);
 		btnFindByData.setEnabled(false);
-		btnFindByData.addActionListener(getActionListenerFindByDataButton());
+		btnFindByData.addActionListener(e -> actionListenerFindByDataButton());
 
 		// LIST ACTIVITIES
 		listActivitiesModel = new DefaultListModel<>();
 		listActivities = new JList<>(listActivitiesModel);
 		listActivities.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listActivitiesPanel.add(listActivities);
-		listActivities.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				btnDeleteActivity.setEnabled(listActivities.getSelectedIndex() != -1);
-				btnModifyActivity.setEnabled(listActivities.getSelectedIndex() != -1);
-			}
-		});
+		listActivities.addListSelectionListener(e -> actionListenerListActivities());
+		
 		// BOTTOM MENU PANEL
 		listBottomMenuPanel = new JPanel();
 		listActivitiesPanel.add(listBottomMenuPanel);
@@ -246,13 +227,13 @@ public class ActivitiesPanel extends JPanel {
 		btnModifyActivity = new JButton("MODIFY");
 		listBottomMenuPanel.add(btnModifyActivity);
 		btnModifyActivity.setEnabled(false);
-		btnModifyActivity.addActionListener(getActionListenerModifyButton());
+		btnModifyActivity.addActionListener(e -> actionListenerModifyButton());
 
 		// DELETE ACTIVITY BUTTON
 		btnDeleteActivity = new JButton("DELETE");
 		listBottomMenuPanel.add(btnDeleteActivity);
 		btnDeleteActivity.setEnabled(false);
-		btnDeleteActivity.addActionListener(getActionListenerDeleteButton());
+		btnDeleteActivity.addActionListener(e -> actionListenerDeleteButton());
 
 		// Call Set Names
 		setNames();
@@ -355,6 +336,18 @@ public class ActivitiesPanel extends JPanel {
 
 	}
 
+	// ACTION LISTENERS
+
+	private void actionListenerComboBoxOperatorsModel() {
+		btnAddActivity.setEnabled(setButtonAddEnabled());
+		btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
+		btnFindByOperator.setEnabled(comboBoxOperatorActivity.getSelectedIndex() != -1);
+	}
+
+	private void actionListenerComboBoxOperationsModel() {
+		btnFindByBasicOperation.setEnabled(comboBoxBasicOperationActivity.getSelectedIndex() != -1);
+	}
+
 	private void actionListenerAddButton() {
 		Operator operator = comboBoxOperatorsModel.getElementAt(comboBoxOperatorActivity.getSelectedIndex());
 		BasicOperation basicOperation = comboBoxOperationsModel
@@ -372,126 +365,102 @@ public class ActivitiesPanel extends JPanel {
 		activityIdTemp = new ObjectId().toString();
 	}
 
-	private ActionListener getActionListenerModifyButton() {
-		return new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				updateInProgress = true;
-				Activity activitySelected = listActivitiesModel.getElementAt(listActivities.getSelectedIndex());
-				int indexOperator = 0;
-				for (int i = 0; i < comboBoxOperatorsModel.getSize(); i++) {
-					if (comboBoxOperatorsModel.getElementAt(i).getMatricola()
-							.equals(activitySelected.getOperatorMatricola())) {
-						indexOperator = i;
-						break;
-					}
-					indexOperator = 0;
-				}
-				int indexBasicOperation = 0;
-				for (int i = 0; i < comboBoxOperationsModel.getSize(); i++) {
-					if (comboBoxOperationsModel.getElementAt(i).getId().equals(activitySelected.getOperationId())) {
-						indexBasicOperation = i;
-						break;
-					}
-					indexBasicOperation = 0;
-				}
+	private void actionListenerUpdateButton() {
+		Operator operator = comboBoxOperatorsModel.getElementAt(comboBoxOperatorActivity.getSelectedIndex());
+		BasicOperation basicOperation = comboBoxOperationsModel
+				.getElementAt(comboBoxBasicOperationActivity.getSelectedIndex());
+		Activity activitySelected = listActivitiesModel.getElementAt(listActivities.getSelectedIndex());
 
-				comboBoxOperatorActivity.setSelectedIndex(indexOperator);
-				comboBoxBasicOperationActivity.setSelectedIndex(indexBasicOperation);
+		Date startData = transformDayHourInDate(dateIsValid(textFieldStartDataActivity.getText()),
+				hourIsValid(textFieldStartHourActivity.getText()));
+		Date endData = transformDayHourInDate(dateIsValid(textFieldEndDataActivity.getText()),
+				hourIsValid(textFieldEndHourActivity.getText()));
 
-				Date startTime = activitySelected.getStartTime();
-				Date endTime = activitySelected.getEndTime();
-				String formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime);
-				String formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime);
-				String formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime);
-				String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime);
+		Activity updatedActivity = new Activity(activitySelected.getId(), operator.getMatricola(),
+				basicOperation.getId(), startData, endData);
+		activityController.updadeActivity(updatedActivity);
 
-				textFieldStartDataActivity.setText(formattedStartDate);
-				textFieldStartHourActivity.setText(formattedStartHour);
-				textFieldEndDataActivity.setText(formattedEndDate);
-				textFieldEndHourActivity.setText(formattedEndHour);
-
-				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
-				btnAddActivity.setEnabled(setButtonAddEnabled());
-				btnDeleteActivity.setEnabled(false);
-				listActivities.setEnabled(false);
-			}
-		};
+		updateInProgress = false;
+		listActivities.setEnabled(true);
+		btnDeleteActivity.setEnabled(true);
+		comboBoxOperatorActivity.setSelectedIndex(0);
+		comboBoxBasicOperationActivity.setSelectedIndex(0);
+		textFieldStartDataActivity.setText("");
+		textFieldStartHourActivity.setText("");
+		textFieldEndDataActivity.setText("");
+		textFieldEndHourActivity.setText("");
+		btnUpdateActivity.setEnabled(false);
+		btnAddActivity.setEnabled(false);
 	}
 
-	private ActionListener getActionListenerDeleteButton() {
-		return new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				Activity activitySelected = listActivitiesModel.getElementAt(listActivities.getSelectedIndex());
-				activityController.removeActivity(activitySelected);
-			}
-		};
+	private void actionListenerShowAllButton() {
+		activityController.allActivities();
 	}
 
-	private ActionListener getActionListenerShowAllButton() {
-		return new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				activityController.allActivities();
-			}
-		};
+	private void actionListenerFindByOperatorButton() {
+		activityController.findByOperator(
+				comboBoxOperatorsModel.getElementAt(comboBoxOperatorActivity.getSelectedIndex()).getMatricola());
 	}
 
-	private ActionListener getActionListenerFindByOperatorButton() {
-		return new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				activityController.findByOperator(comboBoxOperatorsModel
-						.getElementAt(comboBoxOperatorActivity.getSelectedIndex()).getMatricola());
-			}
-		};
+	private void actionListenerFindByBasicOperationButton() {
+		activityController.findByBasicOperation(
+				comboBoxOperationsModel.getElementAt(comboBoxBasicOperationActivity.getSelectedIndex()).getId());
 	}
 
-	private ActionListener getActionListenerFindByBasicOperationButton() {
-		return new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				activityController.findByBasicOperation(comboBoxOperationsModel
-						.getElementAt(comboBoxBasicOperationActivity.getSelectedIndex()).getId());
-			}
-		};
+	private void actionListenerFindByDataButton() {
+		Date startData = dateIsValid(textFieldStartDataActivity.getText());
+		activityController.findByDay(startData);
 	}
 
-	private ActionListener getActionListenerFindByDataButton() {
-		return new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				Date startData = dateIsValid(textFieldStartDataActivity.getText());
-				activityController.findByDay(startData);
+	private void actionListenerModifyButton() {
+		updateInProgress = true;
+		Activity activitySelected = listActivitiesModel.getElementAt(listActivities.getSelectedIndex());
+		int indexOperator = 0;
+		for (int i = 0; i < comboBoxOperatorsModel.getSize(); i++) {
+			if (comboBoxOperatorsModel.getElementAt(i).getMatricola().equals(activitySelected.getOperatorMatricola())) {
+				indexOperator = i;
+				break;
 			}
-		};
+			indexOperator = 0;
+		}
+		int indexBasicOperation = 0;
+		for (int i = 0; i < comboBoxOperationsModel.getSize(); i++) {
+			if (comboBoxOperationsModel.getElementAt(i).getId().equals(activitySelected.getOperationId())) {
+				indexBasicOperation = i;
+				break;
+			}
+			indexBasicOperation = 0;
+		}
+
+		comboBoxOperatorActivity.setSelectedIndex(indexOperator);
+		comboBoxBasicOperationActivity.setSelectedIndex(indexBasicOperation);
+
+		Date startTime = activitySelected.getStartTime();
+		Date endTime = activitySelected.getEndTime();
+		String formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime);
+		String formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime);
+		String formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime);
+		String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime);
+
+		textFieldStartDataActivity.setText(formattedStartDate);
+		textFieldStartHourActivity.setText(formattedStartHour);
+		textFieldEndDataActivity.setText(formattedEndDate);
+		textFieldEndHourActivity.setText(formattedEndHour);
+
+		btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
+		btnAddActivity.setEnabled(setButtonAddEnabled());
+		btnDeleteActivity.setEnabled(false);
+		listActivities.setEnabled(false);
 	}
 
-	private ActionListener getActionListenerUpdateButton() {
-		return new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				Operator operator = comboBoxOperatorsModel.getElementAt(comboBoxOperatorActivity.getSelectedIndex());
-				BasicOperation basicOperation = comboBoxOperationsModel
-						.getElementAt(comboBoxBasicOperationActivity.getSelectedIndex());
-				Activity activitySelected = listActivitiesModel.getElementAt(listActivities.getSelectedIndex());
+	private void actionListenerListActivities() {
+		btnDeleteActivity.setEnabled(listActivities.getSelectedIndex() != -1);
+		btnModifyActivity.setEnabled(listActivities.getSelectedIndex() != -1);
+	}
 
-				Date startData = transformDayHourInDate(dateIsValid(textFieldStartDataActivity.getText()),
-						hourIsValid(textFieldStartHourActivity.getText()));
-				Date endData = transformDayHourInDate(dateIsValid(textFieldEndDataActivity.getText()),
-						hourIsValid(textFieldEndHourActivity.getText()));
-
-				Activity updatedActivity = new Activity(activitySelected.getId(), operator.getMatricola(),
-						basicOperation.getId(), startData, endData);
-				activityController.updadeActivity(updatedActivity);
-
-				updateInProgress = false;
-				listActivities.setEnabled(true);
-				btnDeleteActivity.setEnabled(true);
-				comboBoxOperatorActivity.setSelectedIndex(0);
-				comboBoxBasicOperationActivity.setSelectedIndex(0);
-				textFieldStartDataActivity.setText("");
-				textFieldStartHourActivity.setText("");
-				textFieldEndDataActivity.setText("");
-				textFieldEndHourActivity.setText("");
-				btnUpdateActivity.setEnabled(false);
-				btnAddActivity.setEnabled(false);
-			}
-		};
+	private void actionListenerDeleteButton() {
+		Activity activitySelected = listActivitiesModel.getElementAt(listActivities.getSelectedIndex());
+		activityController.removeActivity(activitySelected);
 	}
 
 	private Date transformDayHourInDate(Date date, Date hour) {
