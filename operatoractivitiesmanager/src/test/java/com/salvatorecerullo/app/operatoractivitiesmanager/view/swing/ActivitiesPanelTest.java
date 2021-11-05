@@ -47,7 +47,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
-
+	@GUITest
 	public void testActivitiesControlsArePrestentAndInitialStates() {
 		// Verify
 		frameFixture.panel("newActivityPanel").label("labelNewActivity").requireVisible();

@@ -2,8 +2,6 @@ package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
 import javax.swing.JPanel;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
@@ -19,8 +17,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.JList;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import org.bson.types.ObjectId;
 
@@ -39,6 +35,9 @@ public class ActivitiesPanel extends JPanel {
 	 */
 
 	private static final long serialVersionUID = -6391077047327115858L;
+	private static final String DATE_FORMAT = "dd/MM/yyyy";
+	private static final String HOUR_FORMAT = "HH:mm";
+	
 	private JPanel formActivityPanel;
 	private JLabel labelNewActivity;
 	private JLabel labelOperatorActivity;
@@ -116,7 +115,7 @@ public class ActivitiesPanel extends JPanel {
 		formActivityPanel.add(labelStartDataActivity);
 
 		// FIELD DATA START
-		textFieldStartDataActivity = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+		textFieldStartDataActivity = new JFormattedTextField(new SimpleDateFormat(DATE_FORMAT));
 		formActivityPanel.add(textFieldStartDataActivity);
 		KeyAdapter textInputDataKeyListener = new KeyAdapter() {
 			@Override
@@ -133,19 +132,19 @@ public class ActivitiesPanel extends JPanel {
 		labelStartHourActivity = new JLabel("Start Hour:");
 		formActivityPanel.add(labelStartHourActivity);
 
-		textFieldStartHourActivity = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
+		textFieldStartHourActivity = new JFormattedTextField(new SimpleDateFormat(HOUR_FORMAT));
 		formActivityPanel.add(textFieldStartHourActivity);
 
 		labelEndDataActivity = new JLabel("End Data:");
 		formActivityPanel.add(labelEndDataActivity);
 
-		textFieldEndDataActivity = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+		textFieldEndDataActivity = new JFormattedTextField(new SimpleDateFormat(DATE_FORMAT));
 		formActivityPanel.add(textFieldEndDataActivity);
 
 		labelEndHourActivity = new JLabel("End Hour:");
 		formActivityPanel.add(labelEndHourActivity);
 
-		textFieldEndHourActivity = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
+		textFieldEndHourActivity = new JFormattedTextField(new SimpleDateFormat(HOUR_FORMAT));
 		formActivityPanel.add(textFieldEndHourActivity);
 
 		labelNewActivity = new JLabel("Activity");
@@ -316,7 +315,7 @@ public class ActivitiesPanel extends JPanel {
 	}
 
 	private Date dateIsValid(String dateString) {
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
 		try {
 			return dateFormatter.parse(dateString);
 		} catch (ParseException e) {
@@ -326,7 +325,7 @@ public class ActivitiesPanel extends JPanel {
 	}
 
 	private Date hourIsValid(String hourString) {
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat dateFormatter = new SimpleDateFormat(HOUR_FORMAT);
 		try {
 			dateFormatter.parse(hourString);
 			return dateFormatter.parse(hourString);
@@ -437,10 +436,10 @@ public class ActivitiesPanel extends JPanel {
 
 		Date startTime = activitySelected.getStartTime();
 		Date endTime = activitySelected.getEndTime();
-		String formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime);
-		String formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime);
-		String formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime);
-		String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime);
+		String formattedStartDate = new SimpleDateFormat(DATE_FORMAT).format(startTime);
+		String formattedStartHour = new SimpleDateFormat(HOUR_FORMAT).format(startTime);
+		String formattedEndDate = new SimpleDateFormat(DATE_FORMAT).format(endTime);
+		String formattedEndHour = new SimpleDateFormat(HOUR_FORMAT).format(endTime);
 
 		textFieldStartDataActivity.setText(formattedStartDate);
 		textFieldStartHourActivity.setText(formattedStartHour);
