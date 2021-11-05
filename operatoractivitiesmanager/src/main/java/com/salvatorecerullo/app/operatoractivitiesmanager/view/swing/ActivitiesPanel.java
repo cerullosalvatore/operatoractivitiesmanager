@@ -8,15 +8,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 import org.bson.types.ObjectId;
 
@@ -24,11 +27,12 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.controller.ActivityCon
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
+import com.salvatorecerullo.app.operatoractivitiesmanager.view.ActivityView;
 
 import java.awt.Dimension;
 import javax.swing.ListSelectionModel;
 
-public class ActivitiesPanel extends JPanel {
+public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	/**
 	 * 
@@ -71,6 +75,7 @@ public class ActivitiesPanel extends JPanel {
 	private JButton btnFindByData;
 	private boolean updateInProgress;
 	private String activityIdTemp;
+	private JOptionPane infoDialog;
 
 	private ActivityController activityController;
 
@@ -471,6 +476,24 @@ public class ActivitiesPanel extends JPanel {
 		calFinal.set(Calendar.MINUTE, calTempHour.get(Calendar.MINUTE));
 		calFinal.set(Calendar.SECOND, calTempHour.get(Calendar.SECOND));
 		return calFinal.getTime();
+	}
+
+	
+	//INTERFACE METHODS IMPLEMENTED
+	@Override
+	public void showActivities(List<Activity> activities) {
+		listActivitiesModel.clear();
+		activities.stream().forEach(listActivitiesModel::addElement);
+	}
+	
+
+	@Override
+	public void showSuccessfull(String string) {
+	}
+
+	@Override
+	public void showError(String string) {
+		
 	}
 
 }

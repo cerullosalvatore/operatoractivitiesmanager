@@ -51,5 +51,4 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 		// Verify
 		frameFixture.panel("contentPane").panel("newActivityPanel");
 	}
-
 }

@@ -1,11 +1,14 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -878,4 +881,31 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		verify(activityController).updadeActivity(activityUpdated);
 	}
 
+	// TEST INTERFACE METHODS IMPLEMENTED
+	@Test
+	@GUITest
+	public void testShowAllActivities() {
+		// Setup
+		JPanelFixture listTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 1, 1, 8, 0, 00);
+		Date startTime = cal.getTime();
+		cal.set(2021, 1, 1, 16, 00, 00);
+		Date endTime = cal.getTime();
+
+		Activity activity1 = new Activity("ActivityId1", "MatricolaTest1", "OperationId1", startTime, endTime);
+		Activity activity2 = new Activity("ActivityId2", "MatricolaTest2", "OperationId2", startTime, endTime);
+		
+		List<Activity> activities =  new ArrayList<Activity>();
+
+		activities.add(activity1);
+		activities.add(activity2);
+		
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().showActivities(activities);
+		});
+		
+		String[] listContents = listTopMenuPanel.list("listActivities").contents();
+		assertThat(listContents).containsExactly(activity1.toString(), activity2.toString());
+	}
 }
