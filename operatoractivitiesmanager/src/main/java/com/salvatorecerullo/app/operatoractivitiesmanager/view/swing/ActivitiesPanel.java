@@ -8,6 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JLabel;
@@ -136,7 +137,7 @@ public class ActivitiesPanel extends JPanel {
 				btnAddActivity.setEnabled(setButtonAddEnabled());
 				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
 				btnFindByData.setEnabled(!textFieldStartDataActivity.getText().isEmpty()
-						&& dateIsValid(textFieldStartDataActivity.getText()));
+						&& dateIsValid(textFieldStartDataActivity.getText()) != null);
 			}
 		};
 
@@ -326,29 +327,29 @@ public class ActivitiesPanel extends JPanel {
 				&& comboBoxBasicOperationActivity.getSelectedIndex() != -1
 				&& !textFieldStartDataActivity.getText().isEmpty() && !textFieldStartHourActivity.getText().isEmpty()
 				&& !textFieldEndDataActivity.getText().isEmpty() && !textFieldEndHourActivity.getText().isEmpty()
-				&& dateIsValid(textFieldStartDataActivity.getText())
-				&& hourIsValid(textFieldStartHourActivity.getText()) && dateIsValid(textFieldEndDataActivity.getText())
-				&& hourIsValid(textFieldEndHourActivity.getText());
+				&& dateIsValid(textFieldStartDataActivity.getText()) != null
+				&& hourIsValid(textFieldStartHourActivity.getText()) != null
+				&& dateIsValid(textFieldEndDataActivity.getText()) != null
+				&& hourIsValid(textFieldEndHourActivity.getText()) != null;
 	}
 
-	private boolean dateIsValid(String dateString) {
+	private Date dateIsValid(String dateString) {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 		try {
-			dateFormatter.parse(dateString);
-			return true;
+			return dateFormatter.parse(dateString);
 		} catch (ParseException e) {
-			return false;
+			return null;
 		}
 
 	}
 
-	private boolean hourIsValid(String hourString) {
+	private Date hourIsValid(String hourString) {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm");
 		try {
 			dateFormatter.parse(hourString);
-			return true;
+			return dateFormatter.parse(hourString);
 		} catch (ParseException e) {
-			return false;
+			return null;
 		}
 
 	}
@@ -359,21 +360,17 @@ public class ActivitiesPanel extends JPanel {
 				Operator operator = comboBoxOperatorsModel.getElementAt(comboBoxOperatorActivity.getSelectedIndex());
 				BasicOperation basicOperation = comboBoxOperationsModel
 						.getElementAt(comboBoxBasicOperationActivity.getSelectedIndex());
-				try {
-					Date startDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(
-							textFieldStartDataActivity.getText() + " " + textFieldStartHourActivity.getText() + ":00");
 
-					Date endDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:s").parse(
-							textFieldEndDataActivity.getText() + " " + textFieldEndHourActivity.getText() + ":00");
+				Date startData = transformDayHourInDate(dateIsValid(textFieldStartDataActivity.getText()),
+						hourIsValid(textFieldStartHourActivity.getText()));
+				Date endData = transformDayHourInDate(dateIsValid(textFieldEndDataActivity.getText()),
+						hourIsValid(textFieldEndHourActivity.getText()));
 
-					Activity newActivity = new Activity(activityIdTemp, operator.getMatricola(), basicOperation.getId(),
-							startDate, endDate);
+				Activity newActivity = new Activity(activityIdTemp, operator.getMatricola(), basicOperation.getId(),
+						startData, endData);
 
-					activityController.addActivity(newActivity);
-					activityIdTemp = new ObjectId().toString();
-				} catch (ParseException e) {
-
-				}
+				activityController.addActivity(newActivity);
+				activityIdTemp = new ObjectId().toString();
 			}
 		};
 	}
@@ -462,12 +459,8 @@ public class ActivitiesPanel extends JPanel {
 	private ActionListener getActionListenerFindByDataButton() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				try {
-					Date startData = new SimpleDateFormat("dd/MM/yyyy").parse(textFieldStartDataActivity.getText());
-					activityController.findByDay(startData);
-				} catch (ParseException e) {
-
-				}
+				Date startData = dateIsValid(textFieldStartDataActivity.getText());
+				activityController.findByDay(startData);
 			}
 		};
 	}
@@ -480,19 +473,15 @@ public class ActivitiesPanel extends JPanel {
 						.getElementAt(comboBoxBasicOperationActivity.getSelectedIndex());
 				Activity activitySelected = listActivitiesModel.getElementAt(listActivities.getSelectedIndex());
 
-				try {
-					Date startDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(
-							textFieldStartDataActivity.getText() + " " + textFieldStartHourActivity.getText() + ":00");
+				Date startData = transformDayHourInDate(dateIsValid(textFieldStartDataActivity.getText()),
+						hourIsValid(textFieldStartHourActivity.getText()));
+				Date endData = transformDayHourInDate(dateIsValid(textFieldEndDataActivity.getText()),
+						hourIsValid(textFieldEndHourActivity.getText()));
 
-					Date endDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:s").parse(
-							textFieldEndDataActivity.getText() + " " + textFieldEndHourActivity.getText() + ":00");
+				Activity updatedActivity = new Activity(activitySelected.getId(), operator.getMatricola(),
+						basicOperation.getId(), startData, endData);
+				activityController.updadeActivity(updatedActivity);
 
-					Activity updatedActivity = new Activity(activitySelected.getId(), operator.getMatricola(),
-							basicOperation.getId(), startDate, endDate);
-					activityController.updadeActivity(updatedActivity);
-				} catch (ParseException e) {
-
-				}
 				updateInProgress = false;
 				listActivities.setEnabled(true);
 				btnDeleteActivity.setEnabled(true);
@@ -506,6 +495,17 @@ public class ActivitiesPanel extends JPanel {
 				btnAddActivity.setEnabled(false);
 			}
 		};
+	}
+
+	private Date transformDayHourInDate(Date date, Date hour) {
+		Calendar calTempHour = Calendar.getInstance();
+		calTempHour.setTime(hour);
+		Calendar calFinal = Calendar.getInstance();
+		calFinal.setTime(date);
+		calFinal.set(Calendar.HOUR_OF_DAY, calTempHour.get(Calendar.HOUR_OF_DAY));
+		calFinal.set(Calendar.MINUTE, calTempHour.get(Calendar.MINUTE));
+		calFinal.set(Calendar.SECOND, calTempHour.get(Calendar.SECOND));
+		return calFinal.getTime();
 	}
 
 }

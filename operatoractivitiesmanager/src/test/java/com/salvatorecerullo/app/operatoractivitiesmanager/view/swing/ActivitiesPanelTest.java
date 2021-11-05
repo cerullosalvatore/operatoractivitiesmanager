@@ -1,6 +1,7 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -94,7 +95,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
 		});
 
-		// Exercise and Verify
+		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
@@ -121,7 +122,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
 		});
 
-		// Exercise and Verify
+		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
@@ -291,12 +292,18 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
 		});
 
+		// Exercise
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 
+		// Verify
 		formTopMenuPanel.button("btnFindByOperator").requireEnabled();
+
+		// Setup
 		GuiActionRunner.execute(() -> {
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().removeAllElements();
 		});
+
+		// Verify
 		formTopMenuPanel.button("btnFindByOperator").requireDisabled();
 	}
 
@@ -313,12 +320,18 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 							"Basic Operation Description  Test"));
 		});
 
+		// Exercise
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 
+		// Verify
 		formTopMenuPanel.button("btnFindByBasicOperation").requireEnabled();
+
+		// Setup
 		GuiActionRunner.execute(() -> {
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().removeAllElements();
 		});
+
+		// Verify
 		formTopMenuPanel.button("btnFindByBasicOperation").requireDisabled();
 	}
 
@@ -329,12 +342,13 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 		JPanelFixture formTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 
+		// Execute
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
 
 		// Verify
 		formTopMenuPanel.button("btnFindByData").requireEnabled();
 
-		// Setup
+		// Execute
 		formActivityPanel.textBox("textFieldStartDataActivity").setText("");
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("errorInput");
 
@@ -348,23 +362,29 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		// Setup
 		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
 		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+
 		Calendar cal = Calendar.getInstance();
 		cal.set(2021, 1, 1, 8, 0, 00);
 		Date startTime = cal.getTime();
 		cal.set(2021, 1, 1, 16, 00, 00);
 		Date endTime = cal.getTime();
+
 		GuiActionRunner.execute(() -> {
 			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
 					.addElement(new Activity("ActivityId", "OperatorMatricola", "OperationId", startTime, endTime));
 		});
 
+		// Exercise
 		listActivitiesPanel.list("listActivities").selectItem(0);
 
+		// Verify
 		listBottomMenuPanel.button("btnDeleteActivity").requireEnabled();
 		listBottomMenuPanel.button("btnModifyActivity").requireEnabled();
 
+		// Exercise
 		listActivitiesPanel.list("listActivities").clearSelection();
 
+		// Verify
 		listBottomMenuPanel.button("btnDeleteActivity").requireDisabled();
 		listBottomMenuPanel.button("btnModifyActivity").requireDisabled();
 	}
@@ -378,11 +398,13 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 				.panel("buttonsFormActivityPanel");
 		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
 		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+
 		Calendar cal = Calendar.getInstance();
 		cal.set(2021, 1, 1, 8, 0, 00);
 		Date startTime = cal.getTime();
 		cal.set(2021, 1, 1, 16, 00, 00);
 		Date endTime = cal.getTime();
+
 		GuiActionRunner.execute(() -> {
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
@@ -392,6 +414,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 					.addElement(new Activity("ActivityId", "MatricolaTest", "OperationId", startTime, endTime));
 		});
 
+		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
@@ -399,7 +422,6 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 
-		// Execute
 		listActivitiesPanel.list("listActivities").selectItem(0);
 		listBottomMenuPanel.button("btnModifyActivity").click();
 
@@ -478,16 +500,16 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(activity2);
 		});
 
-		// Execute
+		// Exercise
 		listActivitiesPanel.list("listActivities").selectItem(0);
 		listBottomMenuPanel.button("btnModifyActivity").click();
 
-		// Verify
 		String formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime1);
 		String formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime1);
 		String formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime1);
 		String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime1);
 
+		// Verify
 		formActivityPanel.textBox("textFieldStartDataActivity").requireText(formattedStartDate);
 		formActivityPanel.textBox("textFieldStartHourActivity").requireText(formattedStartHour);
 		formActivityPanel.textBox("textFieldEndDataActivity").requireText(formattedEndDate);
@@ -495,17 +517,17 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formActivityPanel.comboBox("comboBoxOperatorActivity").requireSelection(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").requireSelection(0);
 
-		// Execute
+		// Exercise
 		buttonsFormActivityPanel.button("btnUpdateActivity").click();
 		listActivitiesPanel.list("listActivities").selectItem(1);
 		listBottomMenuPanel.button("btnModifyActivity").click();
 
-		// Verify
 		formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime2);
 		formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime2);
 		formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime2);
 		formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime2);
 
+		// Verify
 		formActivityPanel.textBox("textFieldStartDataActivity").requireText(formattedStartDate);
 		formActivityPanel.textBox("textFieldStartHourActivity").requireText(formattedStartHour);
 		formActivityPanel.textBox("textFieldEndDataActivity").requireText(formattedEndDate);
@@ -542,11 +564,13 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 				.panel("buttonsFormActivityPanel");
 		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
 		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+
 		Calendar cal = Calendar.getInstance();
 		cal.set(2021, 1, 1, 8, 0, 00);
 		Date startTime = cal.getTime();
 		cal.set(2021, 1, 1, 16, 00, 00);
 		Date endTime = cal.getTime();
+
 		GuiActionRunner.execute(() -> {
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
@@ -556,6 +580,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 					.addElement(new Activity("ActivityId", "MatricolaTest", "OperationId", startTime, endTime));
 		});
 
+		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
@@ -565,7 +590,6 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		listActivitiesPanel.list("listActivities").selectItem(0);
 		listBottomMenuPanel.button("btnModifyActivity").click();
 
-		// Execute
 		buttonsFormActivityPanel.button("btnUpdateActivity").click();
 
 		// Verify
@@ -589,11 +613,13 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 				.panel("buttonsFormActivityPanel");
 		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
 		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+
 		Calendar cal = Calendar.getInstance();
 		cal.set(2021, 1, 1, 8, 0, 00);
 		Date startTime = cal.getTime();
 		cal.set(2021, 1, 1, 16, 00, 00);
 		Date endTime = cal.getTime();
+
 		GuiActionRunner.execute(() -> {
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
@@ -603,6 +629,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 					.addElement(new Activity("ActivityId", "MatricolaTest", "OperationId", startTime, endTime));
 		});
 
+		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
@@ -689,6 +716,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		Activity activityNew = new Activity(activityIdTemp, operator.getMatricola(), basicOperation.getId(),
 				parsedStartDate, parsedEndDate);
 
+		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText(formattedStartDate);
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText(formattedStartHour);
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText(formattedEndDate);
@@ -696,7 +724,6 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 
-		// Execution
 		buttonsFormActivityPanel.button("btnAddActivity").click();
 
 		// Verify
@@ -724,14 +751,14 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(activity2);
 		});
 
-		// Execution
+		// Exercise
 		listActivitiesPanel.list("listActivities").selectItem(1);
 		listBottomMenuPanel.button("btnDeleteActivity").click();
 
 		// Verify
 		verify(activityController).removeActivity(activity2);
 
-		// Execution
+		// Exercise
 		listActivitiesPanel.list("listActivities").selectItem(0);
 		listBottomMenuPanel.button("btnDeleteActivity").click();
 
@@ -745,6 +772,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		// Setup
 		JPanelFixture listTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 
+		// Exercise
 		listTopMenuPanel.button("btnShowAll").click();
 
 		// Verify
@@ -763,6 +791,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().addElement(operator1);
 		});
 
+		// Exercise
 		listTopMenuPanel.button("btnFindByOperator").click();
 
 		// Verify
@@ -781,6 +810,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().addElement(basicOperation);
 		});
 
+		// Exercise
 		listTopMenuPanel.button("btnFindByBasicOperation").click();
 
 		// Verify
@@ -829,7 +859,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 					.addElement(new Activity("ActivityId", "MatricolaTest", "OperationId", startTime, endTime));
 		});
 
-		// Execute
+		// Exercise
 		listActivitiesPanel.list("listActivities").selectItem(0);
 		listBottomMenuPanel.button("btnModifyActivity").click();
 		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText().enterText("02/02/2002");
