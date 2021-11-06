@@ -82,6 +82,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture listBottomMenuPanel = frameFixture.panel("listBottomMenuPanel");
 		listBottomMenuPanel.button("btnModifyActivity").requireVisible().requireDisabled();
 		listBottomMenuPanel.button("btnDeleteActivity").requireDisabled().requireDisabled();
+		listActivitiesPanel.label("lblMessageStatus").requireVisible().requireText("");
 	}
 
 	@Test
@@ -884,9 +885,9 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 	// TEST INTERFACE METHODS IMPLEMENTED
 	@Test
 	@GUITest
-	public void testShowAllActivities() {
+	public void testShowActivitiesShouldAddActivitiesToTheList() {
 		// Setup
-		JPanelFixture listTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
+		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
 		Calendar cal = Calendar.getInstance();
 		cal.set(2021, 1, 1, 8, 0, 00);
 		Date startTime = cal.getTime();
@@ -905,7 +906,36 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 			operatorActivitiesManagerView.getActivitiesPanel().showActivities(activities);
 		});
 		
-		String[] listContents = listTopMenuPanel.list("listActivities").contents();
+		String[] listContents = listActivitiesPanel.list("listActivities").contents();
 		assertThat(listContents).containsExactly(activity1.toString(), activity2.toString());
+	}
+	
+	@Test
+	@GUITest
+	public void testShowSuccessfullShouldAddAllActivitiesToTheListAndShowSuccessMessage() {
+		// Setup
+		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
+		listActivitiesPanel.list("listActivities").requireVisible().requireEnabled().requireNoSelection();
+		
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().showSuccessfull("Successfull Message.");
+		});
+		
+		verify(activityController).allActivities();
+		listActivitiesPanel.label("lblMessageStatus").requireText("Successfull Message.");
+	}
+	
+	@Test
+	@GUITest
+	public void testShowErrorShouldAddActivitiesToTheListAndShowErroMessage() {
+		// Setup
+		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
+		
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getActivitiesPanel().showError("Error Message.");
+		});
+		
+		verify(activityController).allActivities();		
+		listActivitiesPanel.label("lblMessageStatus").requireText("Error Message.");
 	}
 }

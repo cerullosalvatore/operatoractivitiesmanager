@@ -13,13 +13,11 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 
 import org.bson.types.ObjectId;
 
@@ -75,9 +73,9 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 	private JButton btnFindByData;
 	private boolean updateInProgress;
 	private String activityIdTemp;
-	private JOptionPane infoDialog;
 
 	private ActivityController activityController;
+	private JLabel lblMessageStatus;
 
 	/**
 	 * Create the panel.
@@ -239,6 +237,10 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		btnDeleteActivity.setEnabled(false);
 		btnDeleteActivity.addActionListener(e -> actionListenerDeleteButton());
 
+		// LABEL MESSAGE STATUS
+		lblMessageStatus = new JLabel("");
+		listActivitiesPanel.add(lblMessageStatus);
+		
 		// Call Set Names
 		setNames();
 
@@ -277,7 +279,8 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		listBottomMenuPanel.setName("listBottomMenuPanel");
 		btnModifyActivity.setName("btnModifyActivity");
 		btnDeleteActivity.setName("btnDeleteActivity");
-
+		
+		lblMessageStatus.setName("lblMessageStatus");
 	}
 
 	public DefaultComboBoxModel<Operator> getComboBoxOperatorsModel() {
@@ -489,11 +492,14 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	@Override
 	public void showSuccessfull(String string) {
+		activityController.allActivities();
+		lblMessageStatus.setText(string);
 	}
 
 	@Override
 	public void showError(String string) {
-		
+		activityController.allActivities();		
+		lblMessageStatus.setText(string);
 	}
 
 }
