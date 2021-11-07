@@ -883,6 +883,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 	}
 
 	// TEST INTERFACE METHODS IMPLEMENTED
+	
 	@Test
 	@GUITest
 	public void testShowActivitiesShouldAddActivitiesToTheList() {
