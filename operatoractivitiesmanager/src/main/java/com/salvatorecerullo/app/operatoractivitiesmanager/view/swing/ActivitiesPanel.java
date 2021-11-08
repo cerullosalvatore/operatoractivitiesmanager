@@ -17,6 +17,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.JList;
 
 import org.bson.types.ObjectId;
@@ -76,6 +78,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	private ActivityController activityController;
 	private JLabel lblMessageStatus;
+	private JPanel listBottomMenuPanelButton;
 
 	/**
 	 * Create the panel.
@@ -183,11 +186,38 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		// LIST ACTIVITIES PANEL
 		listActivitiesPanel = new JPanel();
 		add(listActivitiesPanel);
-		listActivitiesPanel.setLayout(new GridLayout(0, 1, 0, 0));
+		listActivitiesPanel.setLayout(new BorderLayout(0, 0));
+
+		// LIST ACTIVITIES
+		listActivitiesModel = new DefaultListModel<>();
+
+		// BOTTOM MENU PANEL
+		listBottomMenuPanel = new JPanel();
+		listActivitiesPanel.add(listBottomMenuPanel, BorderLayout.SOUTH);
+		listBottomMenuPanel.setLayout(new GridLayout(2, 1, 0, 0));
+
+		listBottomMenuPanelButton = new JPanel();
+		listBottomMenuPanel.add(listBottomMenuPanelButton);
+
+		// MODIFY ACTIVITY BUTTON
+		btnModifyActivity = new JButton("MODIFY");
+		listBottomMenuPanelButton.add(btnModifyActivity);
+		btnModifyActivity.setEnabled(false);
+
+		// DELETE ACTIVITY BUTTON
+		btnDeleteActivity = new JButton("DELETE");
+		listBottomMenuPanelButton.add(btnDeleteActivity);
+		btnDeleteActivity.setEnabled(false);
+
+		// LABEL MESSAGE STATUS
+		lblMessageStatus = new JLabel("");
+		listBottomMenuPanel.add(lblMessageStatus);
+		btnDeleteActivity.addActionListener(e -> actionListenerDeleteButton());
+		btnModifyActivity.addActionListener(e -> actionListenerModifyButton());
 
 		// TOP MENU PANEL
 		listTopMenuPanel = new JPanel();
-		listActivitiesPanel.add(listTopMenuPanel);
+		listActivitiesPanel.add(listTopMenuPanel, BorderLayout.NORTH);
 		listTopMenuPanel.setLayout(new GridLayout(0, 4, 0, 0));
 
 		// BUTTON SHOW ALL
@@ -211,35 +241,11 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		btnFindByData = new JButton("FindByData");
 		listTopMenuPanel.add(btnFindByData);
 		btnFindByData.setEnabled(false);
-		btnFindByData.addActionListener(e -> actionListenerFindByDataButton());
-
-		// LIST ACTIVITIES
-		listActivitiesModel = new DefaultListModel<>();
 		listActivities = new JList<>(listActivitiesModel);
+		listActivitiesPanel.add(listActivities, BorderLayout.CENTER);
 		listActivities.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listActivitiesPanel.add(listActivities);
 		listActivities.addListSelectionListener(e -> actionListenerListActivities());
-
-		// BOTTOM MENU PANEL
-		listBottomMenuPanel = new JPanel();
-		listActivitiesPanel.add(listBottomMenuPanel);
-		listBottomMenuPanel.setLayout(new GridLayout(1, 0, 0, 0));
-
-		// MODIFY ACTIVITY BUTTON
-		btnModifyActivity = new JButton("MODIFY");
-		listBottomMenuPanel.add(btnModifyActivity);
-		btnModifyActivity.setEnabled(false);
-		btnModifyActivity.addActionListener(e -> actionListenerModifyButton());
-
-		// DELETE ACTIVITY BUTTON
-		btnDeleteActivity = new JButton("DELETE");
-		listBottomMenuPanel.add(btnDeleteActivity);
-		btnDeleteActivity.setEnabled(false);
-		btnDeleteActivity.addActionListener(e -> actionListenerDeleteButton());
-
-		// LABEL MESSAGE STATUS
-		lblMessageStatus = new JLabel("");
-		listActivitiesPanel.add(lblMessageStatus);
+		btnFindByData.addActionListener(e -> actionListenerFindByDataButton());
 
 		// Call Set Names
 		setNames();
@@ -259,12 +265,14 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 	public void showSuccessfull(String string) {
 		activityController.allActivities();
 		lblMessageStatus.setText(string);
+		lblMessageStatus.setForeground(Color.RED);
 	}
 
 	@Override
 	public void showError(String string) {
 		activityController.allActivities();
 		lblMessageStatus.setText(string);
+		lblMessageStatus.setForeground(Color.RED);
 	}
 
 	// GETTERS AND SETTERS
@@ -504,5 +512,4 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		calFinal.set(Calendar.SECOND, calTempHour.get(Calendar.SECOND));
 		return calFinal.getTime();
 	}
-
 }
