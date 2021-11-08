@@ -91,10 +91,11 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		buttonsFormOperatorPanel = new JPanel();
 		newOperatorPanel.add(buttonsFormOperatorPanel, BorderLayout.SOUTH);
 
+		// BUTTON ADD OPERATOR
 		btnAddOperator = new JButton("Add Operator");
 		buttonsFormOperatorPanel.add(btnAddOperator);
 		btnAddOperator.setEnabled(false);
-
+		btnAddOperator.addActionListener(e -> actionListenerAddButton());
 		// BUTTON UPATE OPERATOR
 		btnUpdateOperator = new JButton("Update Operator");
 		buttonsFormOperatorPanel.add(btnUpdateOperator);
@@ -125,9 +126,11 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		btnModifyOperator.setEnabled(false);
 		btnModifyOperator.addActionListener(e -> actionListenerModifyButton());
 
+		// BUTTON DELETE OPERATOR
 		btnDeleteOperator = new JButton("DELETE");
 		listBottomMenuPanelButton.add(btnDeleteOperator);
 		btnDeleteOperator.setEnabled(false);
+		btnDeleteOperator.addActionListener(e -> actionListenereDeleteButton());
 
 		lblMessageStatus = new JLabel("");
 		listBottomMenuPanel.add(lblMessageStatus);
@@ -200,6 +203,10 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 	}
 
 	private void actionListenerUpdateButton() {
+		Operator operatorSelected = listOperatorsModel.getElementAt(listOperators.getSelectedIndex());
+		Operator operatorUpdated = new Operator(operatorSelected.getMatricola(), textFieldName.getText(),
+				textFieldSurname.getText());
+		operatorController.updateOperator(operatorUpdated);
 		textFieldMatricola.setEditable(true);
 		updateInProgress = false;
 		listOperators.setEnabled(true);
@@ -209,6 +216,17 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		textFieldSurname.setText("");
 		btnUpdateOperator.setEnabled(false);
 		btnAddOperator.setEnabled(false);
+	}
+
+	private void actionListenerAddButton() {
+		Operator newOperator = new Operator(textFieldMatricola.getText(), textFieldName.getText(),
+				textFieldSurname.getText());
+		operatorController.addOperator(newOperator);
+	}
+
+	private void actionListenereDeleteButton() {
+		Operator operator = listOperatorsModel.getElementAt(listOperators.getSelectedIndex());
+		operatorController.removeOperator(operator);
 	}
 
 	// UTILITY

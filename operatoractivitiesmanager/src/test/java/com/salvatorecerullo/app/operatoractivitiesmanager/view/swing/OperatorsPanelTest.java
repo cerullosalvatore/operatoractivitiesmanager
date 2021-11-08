@@ -3,6 +3,7 @@ package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -286,10 +287,10 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		formOperatorPanel.textBox("textFieldMatricola").requireText(operator1.getMatricola()).requireNotEditable();
 		formOperatorPanel.textBox("textFieldName").requireText(operator1.getName());
 		formOperatorPanel.textBox("textFieldSurname").requireText(operator1.getSurname());
-		
+
 		// Exercise
 		buttonsFormOperatorPanel.button("btnUpdateOperator").click();
-		
+
 		// Verify
 		formOperatorPanel.textBox("textFieldMatricola").requireText("").requireEditable();
 	}
@@ -347,4 +348,82 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		listOperatorsPanel.label("lblMessageStatus").requireText("Error Message.");
 	}
 
+	// TEST INTERACTION BETWEEN BUTTON AND CONTROLLERS
+	@Test
+	@GUITest
+	public void testAddButtonShouldDelegateToOperatorControllerNewOperator() throws ParseException {
+		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");
+		JPanelFixture buttonsFormOperatorPanel = frameFixture.panel("newOperatorPanel")
+				.panel("buttonsFormOperatorPanel");
+
+		Operator newOperator = new Operator("MatricolaTest", "NameTest", "SurnameTest");
+
+		// Exercise
+		formOperatorPanel.textBox("textFieldMatricola").enterText("MatricolaTest");
+		formOperatorPanel.textBox("textFieldName").enterText("NameTest");
+		formOperatorPanel.textBox("textFieldSurname").enterText("SurnameTest");
+
+		buttonsFormOperatorPanel.button("btnAddOperator").click();
+
+		// Verify
+		verify(operatorController).addOperator(newOperator);
+	}
+
+	@Test
+	@GUITest
+	public void testDeletedButtonShouldDelegateToOperatorControllerRemoveOperator() throws ParseException {
+		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
+		JPanelFixture listBottomMenuPanel = listOperatorsPanel.panel("listBottomMenuPanel");
+
+		Operator operator1 = new Operator("MatricolaTest1", "NameTest1", "SurnameTest1");
+		Operator operator2 = new Operator("MatricolaTest2", "NameTest2", "SurnameTest2");
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operator1);
+			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operator2);
+		});
+
+		// Exercise
+		listOperatorsPanel.list("listOperators").selectItem(0);
+		listBottomMenuPanel.button("btnDeleteOperator").click();
+
+		// Verify
+		verify(operatorController).removeOperator(operator1);
+
+		// Exercise
+		listOperatorsPanel.list("listOperators").selectItem(1);
+		listBottomMenuPanel.button("btnDeleteOperator").click();
+
+		// Verify
+		verify(operatorController).removeOperator(operator2);
+	}
+
+	@Test
+	@GUITest
+	public void testUpdateButtonShouldDelegateToOperatorControllerUpdateOperator() throws ParseException {
+		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");
+		JPanelFixture buttonsFormOperatorPanel = frameFixture.panel("newOperatorPanel")
+				.panel("buttonsFormOperatorPanel");
+
+		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
+		JPanelFixture listBottomMenuPanel = listOperatorsPanel.panel("listBottomMenuPanel");
+
+		Operator operatorOld = new Operator("MatricolaTestOld", "NameTestOld", "SurnameTestOld");
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operatorOld);
+		});
+		
+		// Exercise
+		listOperatorsPanel.list("listOperators").selectItem(0);
+		listBottomMenuPanel.button("btnModifyOperator").click();
+
+		formOperatorPanel.textBox("textFieldName").deleteText().enterText("NameTestUpdated");
+		formOperatorPanel.textBox("textFieldSurname").deleteText().enterText("SurnameTestUpdated");
+		buttonsFormOperatorPanel.button("btnUpdateOperator").click();
+		
+		// Verify
+		Operator operatorUpdated = new Operator(operatorOld.getMatricola(), "NameTestUpdated", "SurnameTestUpdated");
+		verify(operatorController).updateOperator(operatorUpdated);
+	}
 }
