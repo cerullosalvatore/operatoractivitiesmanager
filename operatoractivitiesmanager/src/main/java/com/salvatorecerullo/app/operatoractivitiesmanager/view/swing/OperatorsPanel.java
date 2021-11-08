@@ -161,7 +161,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 	public void setOperatorController(OperatorController operatorController) {
 		this.operatorController = operatorController;
 	}
-	
+
 	// ACTION KEY LISTENERS
 
 	private KeyAdapter getKeyListenerTextField() {
@@ -188,6 +188,8 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 
 		// Setting the field
 		textFieldMatricola.setText(operatorSelected.getMatricola());
+		textFieldMatricola.setEditable(true);
+
 		textFieldName.setText(operatorSelected.getName());
 		textFieldSurname.setText(operatorSelected.getSurname());
 
@@ -198,6 +200,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 	}
 
 	private void actionListenerUpdateButton() {
+		textFieldMatricola.setEditable(false);
 		updateInProgress = false;
 		listOperators.setEnabled(true);
 		btnDeleteOperator.setEnabled(true);

@@ -172,13 +172,6 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		buttonsFormOperatorPanel.button("btnAddOperator").requireDisabled();
 
 		// Exercise
-		formOperatorPanel.textBox("textFieldMatricola").deleteText();
-
-		// Verify
-		buttonsFormOperatorPanel.button("btnUpdateOperator").requireDisabled();
-
-		// Exercise
-		formOperatorPanel.textBox("textFieldMatricola").enterText("TestMatricola");
 		formOperatorPanel.textBox("textFieldName").deleteText();
 
 		// Verify
@@ -191,12 +184,6 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		// Verify
 		buttonsFormOperatorPanel.button("btnUpdateOperator").requireDisabled();
 
-		// Exercise
-		formOperatorPanel.textBox("textFieldMatricola").deleteText();
-		formOperatorPanel.textBox("textFieldName").deleteText();
-
-		// Verify
-		buttonsFormOperatorPanel.button("btnUpdateOperator").requireDisabled();
 	}
 
 	@Test
@@ -257,7 +244,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		listOperatorsPanel.list("listOperators").selectItem(0);
 		listBottomMenuPanel.button("btnModifyOperator").click();
 
-		// VerifyactivityController
+		// Verify
 		formOperatorPanel.textBox("textFieldMatricola").requireText(operator1.getMatricola());
 		formOperatorPanel.textBox("textFieldName").requireText(operator1.getName());
 		formOperatorPanel.textBox("textFieldSurname").requireText(operator1.getSurname());
@@ -271,6 +258,40 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		formOperatorPanel.textBox("textFieldMatricola").requireText(operator2.getMatricola());
 		formOperatorPanel.textBox("textFieldName").requireText(operator2.getName());
 		formOperatorPanel.textBox("textFieldSurname").requireText(operator2.getSurname());
+	}
+
+	@Test
+	@GUITest
+	public void testTextFieldMatricolaShouldBeNotEditabledWhenModifyButtonIsPressed() {
+		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");
+		JPanelFixture buttonsFormOperatorPanel = frameFixture.panel("newOperatorPanel")
+				.panel("buttonsFormOperatorPanel");
+
+		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
+		JPanelFixture listBottomMenuPanel = listOperatorsPanel.panel("listBottomMenuPanel");
+
+		Operator operator1 = new Operator("MatricolaTest1", "NameTest1", "SurnameTest1");
+		Operator operator2 = new Operator("MatricolaTest2", "NameTest2", "SurnameTest2");
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operator1);
+			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operator2);
+		});
+
+		// Exercise
+		listOperatorsPanel.list("listOperators").selectItem(0);
+		listBottomMenuPanel.button("btnModifyOperator").click();
+
+		// Verify
+		formOperatorPanel.textBox("textFieldMatricola").requireText(operator1.getMatricola()).requireNotEditable();
+		formOperatorPanel.textBox("textFieldName").requireText(operator1.getName());
+		formOperatorPanel.textBox("textFieldSurname").requireText(operator1.getSurname());
+		
+		// Exercise
+		buttonsFormOperatorPanel.button("btnUpdateOperator").click();
+		
+		// Verify
+		formOperatorPanel.textBox("textFieldMatricola").requireText("").requireEditable();
 	}
 
 	// TEST INTERFACE METHODS
