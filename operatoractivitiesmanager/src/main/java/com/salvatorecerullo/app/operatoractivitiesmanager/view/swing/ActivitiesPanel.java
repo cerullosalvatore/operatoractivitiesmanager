@@ -94,6 +94,9 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		add(newActivityPanel);
 		newActivityPanel.setLayout(new BorderLayout(0, 0));
 
+		labelNewActivity = new JLabel("Activity");
+		newActivityPanel.add(labelNewActivity, BorderLayout.NORTH);
+
 		formActivityPanel = new JPanel();
 		newActivityPanel.add(formActivityPanel, BorderLayout.CENTER);
 		formActivityPanel.setLayout(new GridLayout(0, 2, 0, 0));
@@ -152,9 +155,6 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 		textFieldEndHourActivity = new JFormattedTextField(new SimpleDateFormat(HOUR_FORMAT));
 		formActivityPanel.add(textFieldEndHourActivity);
-
-		labelNewActivity = new JLabel("Activity");
-		newActivityPanel.add(labelNewActivity, BorderLayout.NORTH);
 
 		buttonsFormActivityPanel = new JPanel();
 		newActivityPanel.add(buttonsFormActivityPanel, BorderLayout.SOUTH);

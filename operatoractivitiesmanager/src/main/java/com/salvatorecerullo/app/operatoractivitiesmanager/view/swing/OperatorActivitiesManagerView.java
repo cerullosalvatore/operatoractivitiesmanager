@@ -16,6 +16,7 @@ public class OperatorActivitiesManagerView extends JFrame {
 	private static final long serialVersionUID = -4591844476430172042L;
 	private JPanel contentPane;
 	private ActivitiesPanel activitiesPanel;
+	private OperatorsPanel operatorsPanel;
 	
 	/**
 	 * Launch the application.
@@ -53,8 +54,8 @@ public class OperatorActivitiesManagerView extends JFrame {
 		activitiesPanel = new ActivitiesPanel();
 		tabbedPane.addTab("Activities", null, activitiesPanel, null);
 		
-		JPanel operatorPanel = new JPanel();
-		tabbedPane.addTab("Operators", null, operatorPanel, null);
+		operatorsPanel = new OperatorsPanel();
+		tabbedPane.addTab("Operators", null, operatorsPanel, null);
 
 		JPanel basicOperationPanel = new JPanel();
 		tabbedPane.addTab("Basic Operations", null, basicOperationPanel, null);
