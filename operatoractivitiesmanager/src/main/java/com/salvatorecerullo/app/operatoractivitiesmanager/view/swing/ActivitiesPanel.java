@@ -265,7 +265,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 	public void showSuccessfull(String string) {
 		activityController.allActivities();
 		lblMessageStatus.setText(string);
-		lblMessageStatus.setForeground(Color.RED);
+		lblMessageStatus.setForeground(Color.GREEN);
 	}
 
 	@Override
