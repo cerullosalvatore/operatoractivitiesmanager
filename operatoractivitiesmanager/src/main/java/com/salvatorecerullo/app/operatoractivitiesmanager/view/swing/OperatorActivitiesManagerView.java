@@ -64,5 +64,10 @@ public class OperatorActivitiesManagerView extends JFrame {
 	public ActivitiesPanel getActivitiesPanel() {
 		return activitiesPanel;
 	}
+
+	public OperatorsPanel getOperatorsPanel() {
+		return operatorsPanel;
+	}
+	
 	
 }

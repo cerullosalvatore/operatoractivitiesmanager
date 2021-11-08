@@ -8,9 +8,11 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
 public class OperatorsPanel extends JPanel {
@@ -30,17 +32,20 @@ public class OperatorsPanel extends JPanel {
 	private JButton btnUpdateOperator;
 	private JPanel listOperatorsPanel;
 	private JList<Operator> listOperators;
+	private DefaultListModel<Operator> listOperatorsModel;
 	private JPanel listBottomMenuPanel;
 	private JPanel listBottomMenuPanelButton;
 	private JButton btnModifyOperator;
 	private JButton btnDeleteOperator;
 	private JLabel lblMessageStatus;
+	private boolean updateInProgress;
 
 	/**
 	 * Create the panel.
 	 */
 	public OperatorsPanel() {
 		setLayout(new GridLayout(2, 0, 0, 0));
+		updateInProgress = false;
 
 		newOperatorPanel = new JPanel();
 		add(newOperatorPanel);
@@ -84,16 +89,22 @@ public class OperatorsPanel extends JPanel {
 		buttonsFormOperatorPanel.add(btnAddOperator);
 		btnAddOperator.setEnabled(false);
 
+		// BUTTON UPATE OPERATOR
 		btnUpdateOperator = new JButton("Update Operator");
 		buttonsFormOperatorPanel.add(btnUpdateOperator);
 		btnUpdateOperator.setEnabled(false);
-
+		btnUpdateOperator.addActionListener(e -> actionListenerUpdateButton());
+		
 		listOperatorsPanel = new JPanel();
 		add(listOperatorsPanel);
 		listOperatorsPanel.setLayout(new BorderLayout(0, 0));
 
-		listOperators = new JList<>();
+		// LIST OPEATORS
+		listOperatorsModel = new DefaultListModel<>();
+		listOperators = new JList<>(listOperatorsModel);
 		listOperatorsPanel.add(listOperators, BorderLayout.CENTER);
+		listOperators.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listOperators.addListSelectionListener(e -> actionListenerListOperators());
 
 		listBottomMenuPanel = new JPanel();
 		listOperatorsPanel.add(listBottomMenuPanel, BorderLayout.SOUTH);
@@ -102,9 +113,11 @@ public class OperatorsPanel extends JPanel {
 		listBottomMenuPanelButton = new JPanel();
 		listBottomMenuPanel.add(listBottomMenuPanelButton);
 
+		// BUTTON MODIFY
 		btnModifyOperator = new JButton("MODIFY");
 		listBottomMenuPanelButton.add(btnModifyOperator);
 		btnModifyOperator.setEnabled(false);
+		btnModifyOperator.addActionListener(e -> actionListenerModifyButton());
 
 		btnDeleteOperator = new JButton("DELETE");
 		listBottomMenuPanelButton.add(btnDeleteOperator);
@@ -116,17 +129,57 @@ public class OperatorsPanel extends JPanel {
 		setNames();
 	}
 
-	// ACTION LISTENERS
+	// ACTION KEY LISTENERS
 
 	private KeyAdapter getKeyListenerTextField() {
 		return new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				btnAddOperator.setEnabled(setButtonAddEnabled());
+				btnUpdateOperator.setEnabled(setButtonUpdateEnabled());
 			}
 		};
 	}
+
+	// ACTION LISTENERS
+	private void actionListenerListOperators() {
+		btnModifyOperator.setEnabled(listOperators.getSelectedIndex() != -1);
+		btnDeleteOperator.setEnabled(listOperators.getSelectedIndex() != -1);
+	}
+
+	private void actionListenerModifyButton() {
+		updateInProgress = true;
+
+		// Retrieve selected operator
+		Operator operatorSelected = listOperatorsModel.getElementAt(listOperators.getSelectedIndex());
+
+		// Setting the field
+		textFieldMatricola.setText(operatorSelected.getMatricola());
+		textFieldName.setText(operatorSelected.getName());
+		textFieldSurname.setText(operatorSelected.getSurname());
+
+		btnUpdateOperator.setEnabled(setButtonUpdateEnabled());
+		btnAddOperator.setEnabled(setButtonAddEnabled());
+		btnDeleteOperator.setEnabled(false);
+		listOperators.setEnabled(false);
+	}
+
+	private void actionListenerUpdateButton() {
+		updateInProgress = false;
+		listOperators.setEnabled(true);
+		btnDeleteOperator.setEnabled(true);
+		textFieldMatricola.setText("");
+		textFieldName.setText("");
+		textFieldSurname.setText("");
+		btnUpdateOperator.setEnabled(false);
+		btnAddOperator.setEnabled(false);
+	}
+
 	// UTILITY
+
+	public DefaultListModel<Operator> getListOperatorsModel() {
+		return listOperatorsModel;
+	}
 
 	private void setNames() {
 		newOperatorPanel.setName("newOperatorPanel");
@@ -153,6 +206,14 @@ public class OperatorsPanel extends JPanel {
 	}
 
 	private boolean setButtonAddEnabled() {
+		return !updateInProgress && statusFieldCompiled();
+	}
+
+	private boolean setButtonUpdateEnabled() {
+		return updateInProgress && statusFieldCompiled();
+	}
+
+	private boolean statusFieldCompiled() {
 		return !textFieldMatricola.getText().isEmpty() && !textFieldName.getText().isEmpty()
 				&& !textFieldSurname.getText().isEmpty();
 	}

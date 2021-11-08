@@ -126,35 +126,28 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		// FIELD DATA START
 		textFieldStartDataActivity = new JFormattedTextField(new SimpleDateFormat(DATE_FORMAT));
 		formActivityPanel.add(textFieldStartDataActivity);
-		KeyAdapter textInputDataKeyListener = new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				btnAddActivity.setEnabled(setButtonAddEnabled());
-				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
-				btnFindByData.setEnabled(!textFieldStartDataActivity.getText().isEmpty()
-						&& dateIsValid(textFieldStartDataActivity.getText()) != null);
-			}
-		};
-
-		textFieldStartDataActivity.addKeyListener(textInputDataKeyListener);
+		textFieldStartDataActivity.addKeyListener(getKeyListenerDataTextField());
 
 		labelStartHourActivity = new JLabel("Start Hour:");
 		formActivityPanel.add(labelStartHourActivity);
 
 		textFieldStartHourActivity = new JFormattedTextField(new SimpleDateFormat(HOUR_FORMAT));
 		formActivityPanel.add(textFieldStartHourActivity);
+		textFieldStartHourActivity.addKeyListener(getKeyListenerInputTextField());
 
 		labelEndDataActivity = new JLabel("End Data:");
 		formActivityPanel.add(labelEndDataActivity);
 
 		textFieldEndDataActivity = new JFormattedTextField(new SimpleDateFormat(DATE_FORMAT));
 		formActivityPanel.add(textFieldEndDataActivity);
+		textFieldEndDataActivity.addKeyListener(getKeyListenerInputTextField());
 
 		labelEndHourActivity = new JLabel("End Hour:");
 		formActivityPanel.add(labelEndHourActivity);
 
 		textFieldEndHourActivity = new JFormattedTextField(new SimpleDateFormat(HOUR_FORMAT));
 		formActivityPanel.add(textFieldEndHourActivity);
+		textFieldEndHourActivity.addKeyListener(getKeyListenerInputTextField());
 
 		buttonsFormActivityPanel = new JPanel();
 		newActivityPanel.add(buttonsFormActivityPanel, BorderLayout.SOUTH);
@@ -164,18 +157,6 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		btnAddActivity.setEnabled(false);
 		buttonsFormActivityPanel.add(btnAddActivity);
 		btnAddActivity.addActionListener(e -> actionListenerAddButton());
-
-		KeyAdapter textInputKeyListener = new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				btnAddActivity.setEnabled(setButtonAddEnabled());
-				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
-			}
-		};
-
-		textFieldStartHourActivity.addKeyListener(textInputKeyListener);
-		textFieldEndDataActivity.addKeyListener(textInputKeyListener);
-		textFieldEndHourActivity.addKeyListener(textInputKeyListener);
 
 		// BUTTON UPDATE ACTIVITY
 		btnUpdateActivity = new JButton("UpdateActivity");
@@ -187,9 +168,6 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		listActivitiesPanel = new JPanel();
 		add(listActivitiesPanel);
 		listActivitiesPanel.setLayout(new BorderLayout(0, 0));
-
-		// LIST ACTIVITIES
-		listActivitiesModel = new DefaultListModel<>();
 
 		// BOTTOM MENU PANEL
 		listBottomMenuPanel = new JPanel();
@@ -241,12 +219,15 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		btnFindByData = new JButton("FindByData");
 		listTopMenuPanel.add(btnFindByData);
 		btnFindByData.setEnabled(false);
+		btnFindByData.addActionListener(e -> actionListenerFindByDataButton());
+
+		// LIST ACTIVITIES
+		listActivitiesModel = new DefaultListModel<>();
 		listActivities = new JList<>(listActivitiesModel);
 		listActivitiesPanel.add(listActivities, BorderLayout.CENTER);
 		listActivities.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listActivities.addListSelectionListener(e -> actionListenerListActivities());
-		btnFindByData.addActionListener(e -> actionListenerFindByDataButton());
-
+		
 		// Call Set Names
 		setNames();
 
@@ -295,6 +276,30 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	public String getActivityIdTemp() {
 		return activityIdTemp;
+	}
+
+	// KEY LISTENERS
+
+	private KeyAdapter getKeyListenerDataTextField() {
+		return new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnAddActivity.setEnabled(setButtonAddEnabled());
+				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
+				btnFindByData.setEnabled(!textFieldStartDataActivity.getText().isEmpty()
+						&& dateIsValid(textFieldStartDataActivity.getText()) != null);
+			}
+		};
+	}
+
+	private KeyAdapter getKeyListenerInputTextField() {
+		return new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnAddActivity.setEnabled(setButtonAddEnabled());
+				btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
+			}
+		};
 	}
 
 	// ACTION LISTENERS
