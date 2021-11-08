@@ -188,7 +188,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 
 		// Setting the field
 		textFieldMatricola.setText(operatorSelected.getMatricola());
-		textFieldMatricola.setEditable(true);
+		textFieldMatricola.setEditable(false);
 
 		textFieldName.setText(operatorSelected.getName());
 		textFieldSurname.setText(operatorSelected.getSurname());
@@ -200,7 +200,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 	}
 
 	private void actionListenerUpdateButton() {
-		textFieldMatricola.setEditable(false);
+		textFieldMatricola.setEditable(true);
 		updateInProgress = false;
 		listOperators.setEnabled(true);
 		btnDeleteOperator.setEnabled(true);
