@@ -39,7 +39,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 	private static final long serialVersionUID = -6391077047327115858L;
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
 	private static final String HOUR_FORMAT = "HH:mm";
-	
+
 	private JPanel formActivityPanel;
 	private JLabel labelNewActivity;
 	private JLabel labelOperatorActivity;
@@ -219,7 +219,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		listActivities.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listActivitiesPanel.add(listActivities);
 		listActivities.addListSelectionListener(e -> actionListenerListActivities());
-		
+
 		// BOTTOM MENU PANEL
 		listBottomMenuPanel = new JPanel();
 		listActivitiesPanel.add(listBottomMenuPanel);
@@ -240,48 +240,34 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		// LABEL MESSAGE STATUS
 		lblMessageStatus = new JLabel("");
 		listActivitiesPanel.add(lblMessageStatus);
-		
+
 		// Call Set Names
 		setNames();
 
 	}
 
-	private void setNames() {
-		newActivityPanel.setName("newActivityPanel");
-		labelNewActivity.setName("labelNewActivity");
+	// INTERFACE METHODS IMPLEMENTED
+	@Override
 
-		formActivityPanel.setName("formActivityPanel");
-		labelOperatorActivity.setName("labelOperatorActivity");
-		comboBoxOperatorActivity.setName("comboBoxOperatorActivity");
-		labelBasicOperationActivity.setName("labelBasicOperationActivity");
-		comboBoxBasicOperationActivity.setName("comboBoxBasicOperationActivity");
-		labelStartDataActivity.setName("labelStartDataActivity");
-		textFieldStartDataActivity.setName("textFieldStartDataActivity");
-		labelStartHourActivity.setName("labelStartHourActivity");
-		textFieldStartHourActivity.setName("textFieldStartHourActivity");
-		labelEndDataActivity.setName("labelEndDataActivity");
-		textFieldEndDataActivity.setName("textFieldEndDataActivity");
-		labelEndHourActivity.setName("labelEndHourActivity");
-		textFieldEndHourActivity.setName("textFieldEndHourActivity");
-
-		buttonsFormActivityPanel.setName("buttonsFormActivityPanel");
-		btnAddActivity.setName("btnAddActivity");
-		btnUpdateActivity.setName("btnUpdateActivity");
-
-		btnShowAll.setName("btnShowAll");
-		btnFindByOperator.setName("btnFindByOperator");
-		btnFindByBasicOperation.setName("btnFindByBasicOperation");
-		btnFindByData.setName("btnFindByData");
-
-		listActivitiesPanel.setName("listActivitiesPanel");
-		listTopMenuPanel.setName("listTopMenuPanel");
-		listActivities.setName("listActivities");
-		listBottomMenuPanel.setName("listBottomMenuPanel");
-		btnModifyActivity.setName("btnModifyActivity");
-		btnDeleteActivity.setName("btnDeleteActivity");
-		
-		lblMessageStatus.setName("lblMessageStatus");
+	public void showActivities(List<Activity> activities) {
+		listActivitiesModel.clear();
+		activities.stream().forEach(listActivitiesModel::addElement);
+		lblMessageStatus.setText("");
 	}
+
+	@Override
+	public void showSuccessfull(String string) {
+		activityController.allActivities();
+		lblMessageStatus.setText(string);
+	}
+
+	@Override
+	public void showError(String string) {
+		activityController.allActivities();
+		lblMessageStatus.setText(string);
+	}
+
+	// GETTERS AND SETTERS
 
 	public DefaultComboBoxModel<Operator> getComboBoxOperatorsModel() {
 		return comboBoxOperatorsModel;
@@ -301,46 +287,6 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	public String getActivityIdTemp() {
 		return activityIdTemp;
-	}
-
-	private boolean setButtonAddEnabled() {
-		return !updateInProgress && statusFieldCompiled();
-	}
-
-	private boolean setButtonUpdateEnabled() {
-		return updateInProgress && statusFieldCompiled();
-	}
-
-	private boolean statusFieldCompiled() {
-		return comboBoxOperatorActivity.getSelectedIndex() != -1
-				&& comboBoxBasicOperationActivity.getSelectedIndex() != -1
-				&& !textFieldStartDataActivity.getText().isEmpty() && !textFieldStartHourActivity.getText().isEmpty()
-				&& !textFieldEndDataActivity.getText().isEmpty() && !textFieldEndHourActivity.getText().isEmpty()
-				&& dateIsValid(textFieldStartDataActivity.getText()) != null
-				&& hourIsValid(textFieldStartHourActivity.getText()) != null
-				&& dateIsValid(textFieldEndDataActivity.getText()) != null
-				&& hourIsValid(textFieldEndHourActivity.getText()) != null;
-	}
-
-	private Date dateIsValid(String dateString) {
-		SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
-		try {
-			return dateFormatter.parse(dateString);
-		} catch (ParseException e) {
-			return null;
-		}
-
-	}
-
-	private Date hourIsValid(String hourString) {
-		SimpleDateFormat dateFormatter = new SimpleDateFormat(HOUR_FORMAT);
-		try {
-			dateFormatter.parse(hourString);
-			return dateFormatter.parse(hourString);
-		} catch (ParseException e) {
-			return null;
-		}
-
 	}
 
 	// ACTION LISTENERS
@@ -470,6 +416,84 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		activityController.removeActivity(activitySelected);
 	}
 
+	// UTILITY
+
+	private void setNames() {
+		newActivityPanel.setName("newActivityPanel");
+		labelNewActivity.setName("labelNewActivity");
+
+		formActivityPanel.setName("formActivityPanel");
+		labelOperatorActivity.setName("labelOperatorActivity");
+		comboBoxOperatorActivity.setName("comboBoxOperatorActivity");
+		labelBasicOperationActivity.setName("labelBasicOperationActivity");
+		comboBoxBasicOperationActivity.setName("comboBoxBasicOperationActivity");
+		labelStartDataActivity.setName("labelStartDataActivity");
+		textFieldStartDataActivity.setName("textFieldStartDataActivity");
+		labelStartHourActivity.setName("labelStartHourActivity");
+		textFieldStartHourActivity.setName("textFieldStartHourActivity");
+		labelEndDataActivity.setName("labelEndDataActivity");
+		textFieldEndDataActivity.setName("textFieldEndDataActivity");
+		labelEndHourActivity.setName("labelEndHourActivity");
+		textFieldEndHourActivity.setName("textFieldEndHourActivity");
+
+		buttonsFormActivityPanel.setName("buttonsFormActivityPanel");
+		btnAddActivity.setName("btnAddActivity");
+		btnUpdateActivity.setName("btnUpdateActivity");
+
+		btnShowAll.setName("btnShowAll");
+		btnFindByOperator.setName("btnFindByOperator");
+		btnFindByBasicOperation.setName("btnFindByBasicOperation");
+		btnFindByData.setName("btnFindByData");
+
+		listActivitiesPanel.setName("listActivitiesPanel");
+		listTopMenuPanel.setName("listTopMenuPanel");
+		listActivities.setName("listActivities");
+		listBottomMenuPanel.setName("listBottomMenuPanel");
+		btnModifyActivity.setName("btnModifyActivity");
+		btnDeleteActivity.setName("btnDeleteActivity");
+
+		lblMessageStatus.setName("lblMessageStatus");
+	}
+
+	private boolean setButtonAddEnabled() {
+		return !updateInProgress && statusFieldCompiled();
+	}
+
+	private boolean setButtonUpdateEnabled() {
+		return updateInProgress && statusFieldCompiled();
+	}
+
+	private boolean statusFieldCompiled() {
+		return comboBoxOperatorActivity.getSelectedIndex() != -1
+				&& comboBoxBasicOperationActivity.getSelectedIndex() != -1
+				&& !textFieldStartDataActivity.getText().isEmpty() && !textFieldStartHourActivity.getText().isEmpty()
+				&& !textFieldEndDataActivity.getText().isEmpty() && !textFieldEndHourActivity.getText().isEmpty()
+				&& dateIsValid(textFieldStartDataActivity.getText()) != null
+				&& hourIsValid(textFieldStartHourActivity.getText()) != null
+				&& dateIsValid(textFieldEndDataActivity.getText()) != null
+				&& hourIsValid(textFieldEndHourActivity.getText()) != null;
+	}
+
+	private Date dateIsValid(String dateString) {
+		SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
+		try {
+			return dateFormatter.parse(dateString);
+		} catch (ParseException e) {
+			return null;
+		}
+
+	}
+
+	private Date hourIsValid(String hourString) {
+		SimpleDateFormat dateFormatter = new SimpleDateFormat(HOUR_FORMAT);
+		try {
+			dateFormatter.parse(hourString);
+			return dateFormatter.parse(hourString);
+		} catch (ParseException e) {
+			return null;
+		}
+	}
+
 	private Date transformDayHourInDate(Date date, Date hour) {
 		Calendar calTempHour = Calendar.getInstance();
 		calTempHour.setTime(hour);
@@ -479,27 +503,6 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		calFinal.set(Calendar.MINUTE, calTempHour.get(Calendar.MINUTE));
 		calFinal.set(Calendar.SECOND, calTempHour.get(Calendar.SECOND));
 		return calFinal.getTime();
-	}
-
-	
-	//INTERFACE METHODS IMPLEMENTED
-	@Override
-	public void showActivities(List<Activity> activities) {
-		listActivitiesModel.clear();
-		activities.stream().forEach(listActivitiesModel::addElement);
-	}
-	
-
-	@Override
-	public void showSuccessfull(String string) {
-		activityController.allActivities();
-		lblMessageStatus.setText(string);
-	}
-
-	@Override
-	public void showError(String string) {
-		activityController.allActivities();		
-		lblMessageStatus.setText(string);
 	}
 
 }

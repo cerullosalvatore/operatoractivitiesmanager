@@ -908,6 +908,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		
 		String[] listContents = listActivitiesPanel.list("listActivities").contents();
 		assertThat(listContents).containsExactly(activity1.toString(), activity2.toString());
+		listActivitiesPanel.label("lblMessageStatus").requireText("");
 	}
 	
 	@Test
