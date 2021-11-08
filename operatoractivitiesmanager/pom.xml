@@ -33,8 +33,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>3.15.0</version>
+			<artifactId>assertj-swing-junit</artifactId>
+			<version>3.17.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -108,6 +108,7 @@
 						<excludedClasses>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.Main*</param>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
+							<param>*.swing.*</param>
 							<param>*IT</param>
 						</excludedClasses>
 						<targetClasses>
@@ -119,6 +120,9 @@
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.*Test</param>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.*Test</param>
 						</targetTests>
+						<excludedTestClasses>
+							<param>*.swing.*</param>
+						</excludedTestClasses>
 						<mutators>
 							<mutator>STRONGER</mutator>
 						</mutators>

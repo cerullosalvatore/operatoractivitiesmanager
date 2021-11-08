@@ -40,7 +40,7 @@ public class Operator {
 
 	@Override
 	public String toString() {
-		return "Operator [matricola=" + matricola + ", name=" + name + ", surname=" + surname + "]";
+		return "Matricola: " + matricola + " - Name: " + name + " - Surname: " + surname;
 	}
 
 	@Override

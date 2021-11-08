@@ -33,6 +33,6 @@ jobs:
           COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
 
         run: >
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cerullosalvatore_operatoractivitiesmanager org.pitest:pitest-maven:mutationCoverage
+          xvfb-run mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cerullosalvatore_operatoractivitiesmanager org.pitest:pitest-maven:mutationCoverage
           coveralls:report -DrepoToken=$COVERALLS_TOKEN -Pjacoco
         working-directory: operatoractivitiesmanager

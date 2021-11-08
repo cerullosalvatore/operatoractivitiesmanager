@@ -38,9 +38,11 @@ public class BasicOperation {
 		this.description = description;
 	}
 
+	
+
 	@Override
 	public String toString() {
-		return "BasicOperation [name=" + name + ", description=" + description + "]";
+		return "Id: " + id + " - Name: " + name + " - Description: " + description;
 	}
 
 	@Override
