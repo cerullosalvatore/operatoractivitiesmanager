@@ -2,6 +2,8 @@ package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
 import javax.swing.JPanel;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -57,6 +59,7 @@ public class OperatorsPanel extends JPanel {
 		textFieldMatricola = new JTextField();
 		formOperatorPanel.add(textFieldMatricola);
 		textFieldMatricola.setColumns(10);
+		textFieldMatricola.addKeyListener(getKeyListenerTextField());
 
 		lblName = new JLabel("Name:");
 		formOperatorPanel.add(lblName);
@@ -64,6 +67,7 @@ public class OperatorsPanel extends JPanel {
 		textFieldName = new JTextField();
 		formOperatorPanel.add(textFieldName);
 		textFieldName.setColumns(10);
+		textFieldName.addKeyListener(getKeyListenerTextField());
 
 		lblSurname = new JLabel("Surname:");
 		formOperatorPanel.add(lblSurname);
@@ -71,6 +75,7 @@ public class OperatorsPanel extends JPanel {
 		textFieldSurname = new JTextField();
 		formOperatorPanel.add(textFieldSurname);
 		textFieldSurname.setColumns(10);
+		textFieldSurname.addKeyListener(getKeyListenerTextField());
 
 		buttonsFormOperatorPanel = new JPanel();
 		newOperatorPanel.add(buttonsFormOperatorPanel, BorderLayout.SOUTH);
@@ -82,7 +87,7 @@ public class OperatorsPanel extends JPanel {
 		btnUpdateOperator = new JButton("Update Operator");
 		buttonsFormOperatorPanel.add(btnUpdateOperator);
 		btnUpdateOperator.setEnabled(false);
-		
+
 		listOperatorsPanel = new JPanel();
 		add(listOperatorsPanel);
 		listOperatorsPanel.setLayout(new BorderLayout(0, 0));
@@ -100,17 +105,27 @@ public class OperatorsPanel extends JPanel {
 		btnModifyOperator = new JButton("MODIFY");
 		listBottomMenuPanelButton.add(btnModifyOperator);
 		btnModifyOperator.setEnabled(false);
-		
+
 		btnDeleteOperator = new JButton("DELETE");
 		listBottomMenuPanelButton.add(btnDeleteOperator);
 		btnDeleteOperator.setEnabled(false);
-		
+
 		lblMessageStatus = new JLabel("");
 		listBottomMenuPanel.add(lblMessageStatus);
 
 		setNames();
 	}
 
+	// ACTION LISTENERS
+
+	private KeyAdapter getKeyListenerTextField() {
+		return new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnAddOperator.setEnabled(setButtonAddEnabled());
+			}
+		};
+	}
 	// UTILITY
 
 	private void setNames() {
@@ -135,5 +150,10 @@ public class OperatorsPanel extends JPanel {
 		btnModifyOperator.setName("btnModifyOperator");
 		btnDeleteOperator.setName("btnDeleteOperator");
 		lblMessageStatus.setName("lblMessageStatus");
+	}
+
+	private boolean setButtonAddEnabled() {
+		return !textFieldMatricola.getText().isEmpty() && !textFieldName.getText().isEmpty()
+				&& !textFieldSurname.getText().isEmpty();
 	}
 }

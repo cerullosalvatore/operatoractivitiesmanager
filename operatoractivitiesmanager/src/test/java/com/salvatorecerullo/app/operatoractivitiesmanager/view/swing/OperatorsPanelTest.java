@@ -9,6 +9,9 @@ import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
+import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
+import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
+
 public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	private OperatorActivitiesManagerView operatorActivitiesManagerView;
 	private FrameFixture frameFixture;
@@ -55,4 +58,50 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 				.requireDisabled();
 		listBottomMenuPanel.label("lblMessageStatus").requireVisible().requireText("");
 	}
+
+	@Test
+	@GUITest
+	public void testOperatorAddButtonEnabledOnlyWhenAllInputIsCompiled() {
+		// Setup
+		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");
+		JPanelFixture buttonsFormOperatorPanel = frameFixture.panel("newOperatorPanel")
+				.panel("buttonsFormOperatorPanel");
+
+		// Exercise
+		formOperatorPanel.textBox("textFieldMatricola").enterText("TestMatricola");
+		formOperatorPanel.textBox("textFieldName").enterText("TestName");
+		formOperatorPanel.textBox("textFieldSurname").enterText("TestSurname");
+
+		// Verify
+		buttonsFormOperatorPanel.button("btnAddOperator").requireEnabled();
+
+		// Exercise
+		formOperatorPanel.textBox("textFieldMatricola").deleteText();
+
+		// Verify
+		buttonsFormOperatorPanel.button("btnAddOperator").requireDisabled();
+
+		// Exercise
+		formOperatorPanel.textBox("textFieldMatricola").enterText("TestMatricola");
+		formOperatorPanel.textBox("textFieldName").deleteText();
+
+		// Verify
+		buttonsFormOperatorPanel.button("btnAddOperator").requireDisabled();
+
+		// Exercise
+		formOperatorPanel.textBox("textFieldName").enterText("TestName");
+		formOperatorPanel.textBox("textFieldSurname").deleteText();
+
+		// Verify
+		buttonsFormOperatorPanel.button("btnAddOperator").requireDisabled();
+
+		// Exercise
+		formOperatorPanel.textBox("textFieldMatricola").deleteText();
+		formOperatorPanel.textBox("textFieldName").deleteText();
+
+		// Verify
+		buttonsFormOperatorPanel.button("btnAddOperator").requireDisabled();
+
+	}
+
 }
