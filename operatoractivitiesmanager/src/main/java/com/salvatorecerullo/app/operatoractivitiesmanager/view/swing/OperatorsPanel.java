@@ -4,18 +4,23 @@ import javax.swing.JPanel;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
+import com.salvatorecerullo.app.operatoractivitiesmanager.controller.OperatorController;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
+import com.salvatorecerullo.app.operatoractivitiesmanager.view.OperatorView;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
-public class OperatorsPanel extends JPanel {
+public class OperatorsPanel extends JPanel implements OperatorView {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField textFieldMatricola;
@@ -39,6 +44,7 @@ public class OperatorsPanel extends JPanel {
 	private JButton btnDeleteOperator;
 	private JLabel lblMessageStatus;
 	private boolean updateInProgress;
+	private OperatorController operatorController;
 
 	/**
 	 * Create the panel.
@@ -94,7 +100,7 @@ public class OperatorsPanel extends JPanel {
 		buttonsFormOperatorPanel.add(btnUpdateOperator);
 		btnUpdateOperator.setEnabled(false);
 		btnUpdateOperator.addActionListener(e -> actionListenerUpdateButton());
-		
+
 		listOperatorsPanel = new JPanel();
 		add(listOperatorsPanel);
 		listOperatorsPanel.setLayout(new BorderLayout(0, 0));
@@ -129,6 +135,33 @@ public class OperatorsPanel extends JPanel {
 		setNames();
 	}
 
+	// INTERFACE METHODS IMPLEMENTED
+	@Override
+	public void showAllOperators(List<Operator> operators) {
+		listOperatorsModel.clear();
+		operators.stream().forEach(listOperatorsModel::addElement);
+		lblMessageStatus.setText("");
+	}
+
+	@Override
+	public void showSuccessfull(String string) {
+		operatorController.allOperators();
+		lblMessageStatus.setText(string);
+		lblMessageStatus.setForeground(Color.GREEN);
+	}
+
+	@Override
+	public void showError(String string) {
+		operatorController.allOperators();
+		lblMessageStatus.setText(string);
+		lblMessageStatus.setForeground(Color.RED);
+	}
+
+	// GETTERS AND SETTERS
+	public void setOperatorController(OperatorController operatorController) {
+		this.operatorController = operatorController;
+	}
+	
 	// ACTION KEY LISTENERS
 
 	private KeyAdapter getKeyListenerTextField() {
@@ -217,4 +250,5 @@ public class OperatorsPanel extends JPanel {
 		return !textFieldMatricola.getText().isEmpty() && !textFieldName.getText().isEmpty()
 				&& !textFieldSurname.getText().isEmpty();
 	}
+
 }

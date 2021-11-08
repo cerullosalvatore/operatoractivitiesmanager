@@ -1,5 +1,11 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
@@ -7,13 +13,19 @@ import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.fixture.JTabbedPaneFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.salvatorecerullo.app.operatoractivitiesmanager.controller.OperatorController;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 
 public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	private OperatorActivitiesManagerView operatorActivitiesManagerView;
+
 	private FrameFixture frameFixture;
+
+	@Mock
+	private OperatorController operatorController;
 
 	@Override
 	protected void onSetUp() {
@@ -22,6 +34,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		// always start with a fresh user interface.
 		GuiActionRunner.execute(() -> {
 			operatorActivitiesManagerView = new OperatorActivitiesManagerView();
+			operatorActivitiesManagerView.getOperatorsPanel().setOperatorController(operatorController);
 			return operatorActivitiesManagerView;
 		});
 		// FrameFixture will then be used to interact with our view’s controls (labels,
@@ -244,7 +257,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		listOperatorsPanel.list("listOperators").selectItem(0);
 		listBottomMenuPanel.button("btnModifyOperator").click();
 
-		// Verify
+		// VerifyactivityController
 		formOperatorPanel.textBox("textFieldMatricola").requireText(operator1.getMatricola());
 		formOperatorPanel.textBox("textFieldName").requireText(operator1.getName());
 		formOperatorPanel.textBox("textFieldSurname").requireText(operator1.getSurname());
@@ -259,6 +272,58 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		formOperatorPanel.textBox("textFieldName").requireText(operator2.getName());
 		formOperatorPanel.textBox("textFieldSurname").requireText(operator2.getSurname());
 	}
-	
+
+	// TEST INTERFACE METHODS
+	@Test
+	@GUITest
+	public void testShowAllOperatorsShouldAddOperatorsToTheList() {
+		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
+
+		Operator operator1 = new Operator("MatricolaTest1", "NameTest1", "SurnameTest1");
+		Operator operator2 = new Operator("MatricolaTest2", "NameTest2", "SurnameTest2");
+
+		List<Operator> operators = new ArrayList<Operator>();
+
+		operators.add(operator1);
+		operators.add(operator2);
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getOperatorsPanel().showAllOperators(operators);
+		});
+
+		String[] listContents = listOperatorsPanel.list("listOperators").contents();
+		assertThat(listContents).containsExactly(operator1.toString(), operator2.toString());
+		listOperatorsPanel.label("lblMessageStatus").requireText("");
+	}
+
+	@Test
+	@GUITest
+	public void testShowSuccessfullShouldAddOperatorsToTheListAndShowSuccessMessage() {
+		// SETUP
+		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
+		listOperatorsPanel.list("listOperators").requireVisible().requireEnabled().requireNoSelection();
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getOperatorsPanel().showSuccessfull("Successfull Message.");
+		});
+
+		verify(operatorController).allOperators();
+		listOperatorsPanel.label("lblMessageStatus").requireText("Successfull Message.");
+	}
+
+	@Test
+	@GUITest
+	public void testShowErrorShouldAddOperatorsToTheListAndShowErrorMessage() {
+		// SETUP
+		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
+		listOperatorsPanel.list("listOperators").requireVisible().requireEnabled().requireNoSelection();
+
+		GuiActionRunner.execute(() -> {
+			operatorActivitiesManagerView.getOperatorsPanel().showError("Error Message.");
+		});
+
+		verify(operatorController).allOperators();
+		listOperatorsPanel.label("lblMessageStatus").requireText("Error Message.");
+	}
 
 }
