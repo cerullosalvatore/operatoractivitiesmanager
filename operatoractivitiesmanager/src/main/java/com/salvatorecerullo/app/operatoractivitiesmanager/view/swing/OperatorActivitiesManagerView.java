@@ -17,6 +17,7 @@ public class OperatorActivitiesManagerView extends JFrame {
 	private JPanel contentPane;
 	private ActivitiesPanel activitiesPanel;
 	private OperatorsPanel operatorsPanel;
+	private BasicOperationPanel basicOperationPanel;
 	
 	/**
 	 * Launch the application.
@@ -57,7 +58,7 @@ public class OperatorActivitiesManagerView extends JFrame {
 		operatorsPanel = new OperatorsPanel();
 		tabbedPane.addTab("Operators", null, operatorsPanel, null);
 
-		JPanel basicOperationPanel = new JPanel();
+		basicOperationPanel = new BasicOperationPanel();
 		tabbedPane.addTab("Basic Operations", null, basicOperationPanel, null);
 	}
 
@@ -69,5 +70,8 @@ public class OperatorActivitiesManagerView extends JFrame {
 		return operatorsPanel;
 	}
 	
+	public BasicOperationPanel getBasicOperationPanel() {
+		return basicOperationPanel;
+	}
 	
 }
