@@ -67,6 +67,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		lblMatricola = new JLabel("Matricola:");
 		formOperatorPanel.add(lblMatricola);
 
+		// TEXT FIELD MATRICOLA
 		textFieldMatricola = new JTextField();
 		formOperatorPanel.add(textFieldMatricola);
 		textFieldMatricola.setColumns(10);
@@ -75,6 +76,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		lblName = new JLabel("Name:");
 		formOperatorPanel.add(lblName);
 
+		// TEXT FIELD NAME
 		textFieldName = new JTextField();
 		formOperatorPanel.add(textFieldName);
 		textFieldName.setColumns(10);
@@ -83,6 +85,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		lblSurname = new JLabel("Surname:");
 		formOperatorPanel.add(lblSurname);
 
+		// TEXT FIELD SURNAME
 		textFieldSurname = new JTextField();
 		formOperatorPanel.add(textFieldSurname);
 		textFieldSurname.setColumns(10);
