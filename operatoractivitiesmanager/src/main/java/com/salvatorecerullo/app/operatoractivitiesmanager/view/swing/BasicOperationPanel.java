@@ -5,20 +5,25 @@ import javax.swing.JLabel;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import org.bson.types.ObjectId;
 
+import com.salvatorecerullo.app.operatoractivitiesmanager.controller.BasicOperationController;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
+import com.salvatorecerullo.app.operatoractivitiesmanager.view.BasicOperationView;
 
 import javax.swing.JTextArea;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
-public class BasicOperationPanel extends JPanel {
+public class BasicOperationPanel extends JPanel implements BasicOperationView {
 	/**
 	 * 
 	 */
@@ -45,6 +50,7 @@ public class BasicOperationPanel extends JPanel {
 	private JLabel lblMessageStatus;
 	private Boolean updateInProgress;
 	private String basicOperationIdTemp;
+	private BasicOperationController basicOperationController;
 
 	/**
 	 * Create the panel.
@@ -100,16 +106,18 @@ public class BasicOperationPanel extends JPanel {
 		buttonsFormBasicOperationPanel = new JPanel();
 		newBasicOperationPanel.add(buttonsFormBasicOperationPanel, BorderLayout.SOUTH);
 
+		// BUTTON ADD OPERATION
 		btnAddOperation = new JButton("Add Operation");
 		buttonsFormBasicOperationPanel.add(btnAddOperation);
 		btnAddOperation.setEnabled(false);
+		btnAddOperation.addActionListener(e -> actionListenerAddButton());
 
-		// BUTTON UPDATE OPERATIONS
+		// BUTTON UPDATE OPERATION
 		btnUpdateOperation = new JButton("Update Operation");
 		buttonsFormBasicOperationPanel.add(btnUpdateOperation);
 		btnUpdateOperation.setEnabled(false);
 		btnUpdateOperation.addActionListener(e -> actionListenerUpdateButton());
-		
+
 		listBasicOperationsPanel = new JPanel();
 		add(listBasicOperationsPanel);
 		listBasicOperationsPanel.setLayout(new BorderLayout(0, 0));
@@ -138,11 +146,34 @@ public class BasicOperationPanel extends JPanel {
 		btnDelete = new JButton("DELETE");
 		listBottomMenuPanelButton.add(btnDelete);
 		btnDelete.setEnabled(false);
+		btnDelete.addActionListener(e -> actionListenerDeleteButton());
 
 		lblMessageStatus = new JLabel("");
 		listBottomMenuPanel.add(lblMessageStatus);
 
 		setNames();
+	}
+
+	// INTERFACE METHODS
+	@Override
+	public void showAllBasicOperations(List<BasicOperation> basicOperations) {
+		listBasicOpeationModel.clear();
+		basicOperations.stream().forEach(listBasicOpeationModel::addElement);
+		lblMessageStatus.setText("");
+	}
+
+	@Override
+	public void showSuccessfull(String string) {
+		basicOperationController.allBasicOperations();
+		lblMessageStatus.setText(string);
+		lblMessageStatus.setForeground(Color.GREEN);
+	}
+
+	@Override
+	public void showError(String string) {
+		basicOperationController.allBasicOperations();
+		lblMessageStatus.setText(string);
+		lblMessageStatus.setForeground(Color.RED);
 	}
 
 	// GETTERS AND SETTERS
@@ -154,6 +185,9 @@ public class BasicOperationPanel extends JPanel {
 		return listBasicOpeationModel;
 	}
 
+	public void setBasicOperationController(BasicOperationController basicOperationController) {
+		this.basicOperationController = basicOperationController;
+	}
 	// ACTION KEY LISTENERS
 
 	private KeyAdapter getKeyListenerTextField() {
@@ -170,8 +204,9 @@ public class BasicOperationPanel extends JPanel {
 
 	private void actionListenerModifyButton() {
 		updateInProgress = true;
-		
-		BasicOperation basicOperationSelected = listBasicOpeationModel.getElementAt(listBasicOperations.getSelectedIndex());
+
+		BasicOperation basicOperationSelected = listBasicOpeationModel
+				.getElementAt(listBasicOperations.getSelectedIndex());
 
 		textFieldId.setText(basicOperationSelected.getId());
 		textFieldName.setText(basicOperationSelected.getName());
@@ -185,8 +220,13 @@ public class BasicOperationPanel extends JPanel {
 
 	private void actionListenerUpdateButton() {
 		updateInProgress = false;
+
+		BasicOperation basicOperationSelected = listBasicOpeationModel
+				.getElementAt(listBasicOperations.getSelectedIndex());
+		BasicOperation basicOperationUpdated = new BasicOperation(basicOperationSelected.getId(),
+				textFieldName.getText(), textAreaDescription.getText());
+		basicOperationController.updateBasicOperation(basicOperationUpdated);
 		listBasicOperations.setEnabled(true);
-		basicOperationIdTemp = new ObjectId().toString();
 		textFieldId.setText(basicOperationIdTemp);
 		textFieldName.setText("");
 		textAreaDescription.setText("");
@@ -197,6 +237,19 @@ public class BasicOperationPanel extends JPanel {
 	private void actionListenerListOperators() {
 		btnModify.setEnabled(listBasicOperations.getSelectedIndex() != -1);
 		btnDelete.setEnabled(listBasicOperations.getSelectedIndex() != -1);
+	}
+
+	private void actionListenerAddButton() {
+		BasicOperation basicOperation = new BasicOperation(basicOperationIdTemp, textFieldName.getText(),
+				textAreaDescription.getText());
+		basicOperationController.addBasicOperation(basicOperation);
+		basicOperationIdTemp = new ObjectId().toString();
+		textFieldId.setText(basicOperationIdTemp);
+	}
+
+	private void actionListenerDeleteButton() {
+		BasicOperation basicOperation = listBasicOpeationModel.getElementAt(listBasicOperations.getSelectedIndex());
+		basicOperationController.removeBasicOperation(basicOperation);
 	}
 
 	// UTILITY
@@ -233,4 +286,5 @@ public class BasicOperationPanel extends JPanel {
 	private boolean statusFieldCompiled() {
 		return !textFieldName.getText().isEmpty() && !textAreaDescription.getText().isEmpty();
 	}
+
 }
