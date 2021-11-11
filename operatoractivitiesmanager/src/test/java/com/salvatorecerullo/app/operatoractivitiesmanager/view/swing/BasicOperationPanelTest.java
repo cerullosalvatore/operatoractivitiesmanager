@@ -19,7 +19,6 @@ import org.mockito.MockitoAnnotations;
 
 import com.salvatorecerullo.app.operatoractivitiesmanager.controller.BasicOperationController;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
-import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 
 public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 	private OperatorActivitiesManagerView operatorActivitiesManagerView;
