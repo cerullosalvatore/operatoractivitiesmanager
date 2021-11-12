@@ -249,9 +249,9 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		listBottomMenuPanel.button("btnModifyOperator").click();
 
 		// Verify
-		formOperatorPanel.textBox("textFieldMatricola").requireText(operator1.getMatricola());
-		formOperatorPanel.textBox("textFieldName").requireText(operator1.getName());
-		formOperatorPanel.textBox("textFieldSurname").requireText(operator1.getSurname());
+		formOperatorPanel.textBox("textFieldMatricola").requireText("MatricolaTest1");
+		formOperatorPanel.textBox("textFieldName").requireText("NameTest1");
+		formOperatorPanel.textBox("textFieldSurname").requireText("SurnameTest1");
 
 		// Exercise
 		buttonsFormOperatorPanel.button("btnUpdateOperator").click();
@@ -259,9 +259,9 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		listBottomMenuPanel.button("btnModifyOperator").click();
 
 		// Verify
-		formOperatorPanel.textBox("textFieldMatricola").requireText(operator2.getMatricola());
-		formOperatorPanel.textBox("textFieldName").requireText(operator2.getName());
-		formOperatorPanel.textBox("textFieldSurname").requireText(operator2.getSurname());
+		formOperatorPanel.textBox("textFieldMatricola").requireText("MatricolaTest2");
+		formOperatorPanel.textBox("textFieldName").requireText("NameTest2");
+		formOperatorPanel.textBox("textFieldSurname").requireText("SurnameTest2");
 	}
 
 	@Test
@@ -287,9 +287,9 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		listBottomMenuPanel.button("btnModifyOperator").click();
 
 		// Verify
-		formOperatorPanel.textBox("textFieldMatricola").requireText(operator1.getMatricola()).requireNotEditable();
-		formOperatorPanel.textBox("textFieldName").requireText(operator1.getName());
-		formOperatorPanel.textBox("textFieldSurname").requireText(operator1.getSurname());
+		formOperatorPanel.textBox("textFieldMatricola").requireText("MatricolaTest1").requireNotEditable();
+		formOperatorPanel.textBox("textFieldName").requireText("NameTest1");
+		formOperatorPanel.textBox("textFieldSurname").requireText("SurnameTest1");
 
 		// Exercise
 		buttonsFormOperatorPanel.button("btnUpdateOperator").click();
