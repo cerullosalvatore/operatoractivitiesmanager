@@ -802,7 +802,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		listTopMenuPanel.button("btnFindByOperator").click();
 
 		// Verify
-		verify(activityController).findByOperator(operator1.getMatricola());
+		verify(activityController).findByOperator("IdOperator");
 
 	}
 
