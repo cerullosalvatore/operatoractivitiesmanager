@@ -62,16 +62,4 @@ public class OperatorActivitiesManagerView extends JFrame {
 		tabbedPane.addTab("Basic Operations", null, basicOperationPanel, null);
 	}
 
-	public ActivitiesPanel getActivitiesPanel() {
-		return activitiesPanel;
-	}
-
-	public OperatorsPanel getOperatorsPanel() {
-		return operatorsPanel;
-	}
-	
-	public BasicOperationPanel getBasicOperationPanel() {
-		return basicOperationPanel;
-	}
-	
 }

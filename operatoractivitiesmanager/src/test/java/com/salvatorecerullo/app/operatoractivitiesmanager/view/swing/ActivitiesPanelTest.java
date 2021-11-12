@@ -10,6 +10,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JFrame;
+
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
@@ -25,8 +27,9 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 
 public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
+	private JFrame jFrame;
 
-	private OperatorActivitiesManagerView operatorActivitiesManagerView;
+	private ActivitiesPanel activitiesPanel;
 
 	@Mock
 	private ActivityController activityController;
@@ -39,13 +42,15 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		// Our frame and the fixture will be recreated for each test method so that we
 		// always start with a fresh user interface.
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView = new OperatorActivitiesManagerView();
-			operatorActivitiesManagerView.getActivitiesPanel().setActivityController(activityController);
-			return operatorActivitiesManagerView;
+			jFrame = new JFrame();
+			activitiesPanel = new ActivitiesPanel();
+			activitiesPanel.setActivityController(activityController);
+			jFrame.add(activitiesPanel);
+			return jFrame;
 		});
 		// FrameFixture will then be used to interact with our view’s controls (labels,
 		// text fields, buttons, etc.).
-		frameFixture = new FrameFixture(robot(), operatorActivitiesManagerView);
+		frameFixture = new FrameFixture(robot(), jFrame);
 		frameFixture.show(); // shows the frame to test
 	}
 
@@ -92,9 +97,9 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+			activitiesPanel.getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+			activitiesPanel.getComboBoxOperationsModel()
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
 		});
 
@@ -119,9 +124,9 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+			activitiesPanel.getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+			activitiesPanel.getComboBoxOperationsModel()
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
 		});
 
@@ -200,9 +205,9 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+			activitiesPanel.getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+			activitiesPanel.getComboBoxOperationsModel()
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
 		});
 
@@ -248,9 +253,9 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+			activitiesPanel.getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().removeAllElements();
+			activitiesPanel.getComboBoxOperationsModel().removeAllElements();
 		});
 
 		// Exercise
@@ -267,12 +272,12 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Setup
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+			activitiesPanel.getComboBoxOperationsModel()
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
 		});
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().removeAllElements();
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+			activitiesPanel.getComboBoxOperatorsModel().removeAllElements();
+			activitiesPanel.getComboBoxOperationsModel()
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
 		});
 
@@ -291,7 +296,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture formTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+			activitiesPanel.getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
 		});
 
@@ -303,7 +308,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Setup
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().removeAllElements();
+			activitiesPanel.getComboBoxOperatorsModel().removeAllElements();
 		});
 
 		// Verify
@@ -318,9 +323,8 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture formTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
-					.addElement(new BasicOperation("IdBasicOperationTest", "Name Operation Test",
-							"Basic Operation Description  Test"));
+			activitiesPanel.getComboBoxOperationsModel().addElement(new BasicOperation("IdBasicOperationTest",
+					"Name Operation Test", "Basic Operation Description  Test"));
 		});
 
 		// Exercise
@@ -331,7 +335,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Setup
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().removeAllElements();
+			activitiesPanel.getComboBoxOperationsModel().removeAllElements();
 		});
 
 		// Verify
@@ -373,7 +377,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		Date endTime = cal.getTime();
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
+			activitiesPanel.getListActivitiesModel()
 					.addElement(new Activity("ActivityId", "OperatorMatricola", "OperationId", startTime, endTime));
 		});
 
@@ -409,11 +413,11 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		Date endTime = cal.getTime();
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+			activitiesPanel.getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+			activitiesPanel.getComboBoxOperationsModel()
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
+			activitiesPanel.getListActivitiesModel()
 					.addElement(new Activity("ActivityId", "MatricolaTest", "OperationId", startTime, endTime));
 		});
 
@@ -495,12 +499,12 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		Activity activity2 = new Activity("ActivityId2", "MatricolaTest2", "OperationId2", startTime2, endTime2);
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().addElement(operator1);
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().addElement(operator2);
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().addElement(basicOperation1);
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().addElement(basicOperation2);
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(activity1);
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(activity2);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operator1);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operator2);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperation1);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperation2);
+			activitiesPanel.getListActivitiesModel().addElement(activity1);
+			activitiesPanel.getListActivitiesModel().addElement(activity2);
 		});
 
 		// Exercise
@@ -540,8 +544,8 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Setup
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(new Activity(
-					"ActivityIdTesting", "MatricolaTestNotPresent", "OperationIdNotPresent", startTime2, endTime2));
+			activitiesPanel.getListActivitiesModel().addElement(new Activity("ActivityIdTesting",
+					"MatricolaTestNotPresent", "OperationIdNotPresent", startTime2, endTime2));
 		});
 
 		// Exercise
@@ -575,11 +579,11 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		Date endTime = cal.getTime();
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+			activitiesPanel.getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+			activitiesPanel.getComboBoxOperationsModel()
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
+			activitiesPanel.getListActivitiesModel()
 					.addElement(new Activity("ActivityId", "MatricolaTest", "OperationId", startTime, endTime));
 		});
 
@@ -624,11 +628,11 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		Date endTime = cal.getTime();
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+			activitiesPanel.getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+			activitiesPanel.getComboBoxOperationsModel()
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
+			activitiesPanel.getListActivitiesModel()
 					.addElement(new Activity("ActivityId", "MatricolaTest", "OperationId", startTime, endTime));
 		});
 
@@ -699,10 +703,10 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		Operator operator = new Operator("MatricolaTest", "Name Test", "Surname Test");
 		BasicOperation basicOperation = new BasicOperation("OperationId", "Name Operation", "Description Operation");
-		String activityIdTemp = operatorActivitiesManagerView.getActivitiesPanel().getActivityIdTemp();
+		String activityIdTemp = activitiesPanel.getActivityIdTemp();
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().addElement(operator);
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().addElement(basicOperation);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operator);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperation);
 		});
 
 		String formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime);
@@ -750,8 +754,8 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		Activity activity2 = new Activity("ActivityId2", "operator2", "operation2", startTime, endTime);
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(activity1);
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel().addElement(activity2);
+			activitiesPanel.getListActivitiesModel().addElement(activity1);
+			activitiesPanel.getListActivitiesModel().addElement(activity2);
 		});
 
 		// Exercise
@@ -791,7 +795,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		Operator operator1 = new Operator("IdOperator", "Name", "Surname");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel().addElement(operator1);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operator1);
 		});
 
 		// Exercise
@@ -810,7 +814,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		BasicOperation basicOperation = new BasicOperation("IdOperation", "Name", "Description");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel().addElement(basicOperation);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperation);
 		});
 
 		// Exercise
@@ -854,11 +858,11 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		cal.set(2021, 1, 1, 16, 00, 00);
 		Date endTime = cal.getTime();
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperatorsModel()
+			activitiesPanel.getComboBoxOperatorsModel()
 					.addElement(new Operator("MatricolaTest", "Name Test", "Surname Test"));
-			operatorActivitiesManagerView.getActivitiesPanel().getComboBoxOperationsModel()
+			activitiesPanel.getComboBoxOperationsModel()
 					.addElement(new BasicOperation("OperationId", "Name Operation", "Description Operation"));
-			operatorActivitiesManagerView.getActivitiesPanel().getListActivitiesModel()
+			activitiesPanel.getListActivitiesModel()
 					.addElement(new Activity("ActivityId", "MatricolaTest", "OperationId", startTime, endTime));
 		});
 
@@ -896,47 +900,47 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		Activity activity1 = new Activity("ActivityId1", "MatricolaTest1", "OperationId1", startTime, endTime);
 		Activity activity2 = new Activity("ActivityId2", "MatricolaTest2", "OperationId2", startTime, endTime);
-		
-		List<Activity> activities =  new ArrayList<Activity>();
+
+		List<Activity> activities = new ArrayList<Activity>();
 
 		activities.add(activity1);
 		activities.add(activity2);
-		
+
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().showActivities(activities);
+			activitiesPanel.showActivities(activities);
 		});
-		
+
 		String[] listContents = listActivitiesPanel.list("listActivities").contents();
 		assertThat(listContents).containsExactly(activity1.toString(), activity2.toString());
 		listActivitiesPanel.label("lblMessageStatus").requireText("");
 	}
-	
+
 	@Test
 	@GUITest
 	public void testShowSuccessfullShouldAddAllActivitiesToTheListAndShowSuccessMessage() {
 		// Setup
 		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
 		listActivitiesPanel.list("listActivities").requireVisible().requireEnabled().requireNoSelection();
-		
+
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().showSuccessfull("Successfull Message.");
+			activitiesPanel.showSuccessfull("Successfull Message.");
 		});
-		
+
 		verify(activityController).allActivities();
 		listActivitiesPanel.label("lblMessageStatus").requireText("Successfull Message.");
 	}
-	
+
 	@Test
 	@GUITest
 	public void testShowErrorShouldAddActivitiesToTheListAndShowErroMessage() {
 		// Setup
 		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
-		
+
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getActivitiesPanel().showError("Error Message.");
+			activitiesPanel.showError("Error Message.");
 		});
-		
-		verify(activityController).allActivities();		
+
+		verify(activityController).allActivities();
 		listActivitiesPanel.label("lblMessageStatus").requireText("Error Message.");
 	}
 }

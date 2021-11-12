@@ -7,11 +7,12 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
+
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
-import org.assertj.swing.fixture.JTabbedPaneFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -21,10 +22,12 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.controller.BasicOperat
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 
 public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
-	private OperatorActivitiesManagerView operatorActivitiesManagerView;
+	private JFrame jFrame;
 
 	private FrameFixture frameFixture;
 
+	private BasicOperationPanel basicOperationPanel;
+	
 	@Mock
 	private BasicOperationController basicOperationController;
 
@@ -34,17 +37,16 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 		// Our frame and the fixture will be recreated for each test method so that we
 		// always start with a fresh user interface.
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView = new OperatorActivitiesManagerView();
-			operatorActivitiesManagerView.getBasicOperationPanel()
-					.setBasicOperationController(basicOperationController);
-			return operatorActivitiesManagerView;
+			jFrame = new JFrame();
+			basicOperationPanel = new BasicOperationPanel();
+			basicOperationPanel.setBasicOperationController(basicOperationController);
+			jFrame.add(basicOperationPanel);
+			return jFrame;
 		});
 		// FrameFixture will then be used to interact with our view’s controls (labels,
 		// text fields, buttons, etc.).
-		frameFixture = new FrameFixture(robot(), operatorActivitiesManagerView);
+		frameFixture = new FrameFixture(robot(), jFrame);
 		frameFixture.show(); // shows the frame to test
-		JTabbedPaneFixture tabbedPaneFixture = frameFixture.panel("contentPane").tabbedPane("tabbedPane");
-		tabbedPaneFixture.selectTab("Basic Operations");
 	}
 
 	@Test
@@ -56,7 +58,7 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 				.panel("formBasicOperationPanel");
 		formOBasicOperationPanel.label("lblId").requireVisible();
 		formOBasicOperationPanel.textBox("textFieldId").requireVisible().requireNotEditable()
-				.requireText(operatorActivitiesManagerView.getBasicOperationPanel().getBasicOperationIdTemp());
+				.requireText(basicOperationPanel.getBasicOperationIdTemp());
 		formOBasicOperationPanel.label("lblName").requireVisible();
 		formOBasicOperationPanel.textBox("textFieldName").requireVisible().requireEnabled().requireEmpty();
 		formOBasicOperationPanel.label("lblDescription").requireVisible();
@@ -118,7 +120,7 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 
 		BasicOperation newBasicOperation = new BasicOperation("IdOperation", "NameOperation", "TestDescription");
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getBasicOperationPanel().getListBasicOpeationModel()
+			basicOperationPanel.getListBasicOpeationModel()
 					.addElement(newBasicOperation);
 		});
 
@@ -151,7 +153,7 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 
 		BasicOperation newBasicOperation = new BasicOperation("IdOperation", "NameOperation", "TestDescription");
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getBasicOperationPanel().getListBasicOpeationModel()
+			basicOperationPanel.getListBasicOpeationModel()
 					.addElement(newBasicOperation);
 		});
 
@@ -196,7 +198,7 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 
 		BasicOperation newBasicOperation = new BasicOperation("IdOperation", "NameOperation", "TestDescription");
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getBasicOperationPanel().getListBasicOpeationModel()
+			basicOperationPanel.getListBasicOpeationModel()
 					.addElement(newBasicOperation);
 		});
 
@@ -212,7 +214,7 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 		// Verify
 		listBasicOperationsPanel.list("listBasicOperations").isEnabled();
 		formOperationPanel.textBox("textFieldId")
-				.requireText(operatorActivitiesManagerView.getBasicOperationPanel().getBasicOperationIdTemp());
+				.requireText(basicOperationPanel.getBasicOperationIdTemp());
 		formOperationPanel.textBox("textFieldName").requireEmpty();
 		formOperationPanel.textBox("textAreaDescription").requireEmpty();
 
@@ -236,9 +238,9 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 		BasicOperation basicOperation2 = new BasicOperation("IdOperation2", "NameOperation2", "TestDescription2");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getBasicOperationPanel().getListBasicOpeationModel()
+			basicOperationPanel.getListBasicOpeationModel()
 					.addElement(basicOperation1);
-			operatorActivitiesManagerView.getBasicOperationPanel().getListBasicOpeationModel()
+			basicOperationPanel.getListBasicOpeationModel()
 					.addElement(basicOperation2);
 		});
 
@@ -277,7 +279,7 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 		basicOpeations.add(basicOperation2);
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getBasicOperationPanel().showAllBasicOperations(basicOpeations);
+			basicOperationPanel.showAllBasicOperations(basicOpeations);
 		});
 
 		String[] listContents = listBasicOperationsPanel.list("listBasicOperations").contents();
@@ -293,7 +295,7 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 		listBasicOperationsPanel.list("listBasicOperations").requireVisible().requireEnabled().requireNoSelection();
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getBasicOperationPanel().showSuccessfull("Successfull Message.");
+			basicOperationPanel.showSuccessfull("Successfull Message.");
 		});
 
 		verify(basicOperationController).allBasicOperations();
@@ -308,7 +310,7 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 		listBasicOperationsPanel.list("listBasicOperations").requireVisible().requireEnabled().requireNoSelection();
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getBasicOperationPanel().showError("Error Message.");
+			basicOperationPanel.showError("Error Message.");
 		});
 
 		verify(basicOperationController).allBasicOperations();
@@ -325,7 +327,7 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture buttonsFormBasicOperationPanel = frameFixture.panel("newBasicOperationPanel")
 				.panel("buttonsFormBasicOperationPanel");
 
-		String idTemp = operatorActivitiesManagerView.getBasicOperationPanel().getBasicOperationIdTemp();
+		String idTemp = basicOperationPanel.getBasicOperationIdTemp();
 		BasicOperation basicOperation = new BasicOperation(idTemp, "NameOperation", "TestDescription");
 
 		// Exercise
@@ -337,7 +339,7 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 		// Verify
 		verify(basicOperationController).addBasicOperation(basicOperation);
 		formOperationPanel.textBox("textFieldId")
-				.requireText(operatorActivitiesManagerView.getBasicOperationPanel().getBasicOperationIdTemp());
+				.requireText(basicOperationPanel.getBasicOperationIdTemp());
 
 	}
 
@@ -351,9 +353,9 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 		BasicOperation basicOperation2 = new BasicOperation("IdOperation2", "NameOperation2", "TestDescription2");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getBasicOperationPanel().getListBasicOpeationModel()
+			basicOperationPanel.getListBasicOpeationModel()
 					.addElement(basicOperation1);
-			operatorActivitiesManagerView.getBasicOperationPanel().getListBasicOpeationModel()
+			basicOperationPanel.getListBasicOpeationModel()
 					.addElement(basicOperation2);
 		});
 
@@ -387,7 +389,8 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 		BasicOperation basicOperatioOld = new BasicOperation("idOld", "NameOld", "DescriptionOld");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getBasicOperationPanel().getListBasicOpeationModel().addElement(basicOperatioOld);
+			basicOperationPanel.getListBasicOpeationModel()
+					.addElement(basicOperatioOld);
 		});
 
 		// Exercise
@@ -399,10 +402,11 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 		buttonsFormBasicOperationPanel.button("btnUpdateOperation").click();
 
 		// Verify
-		BasicOperation basicOperationUpdated = new BasicOperation(basicOperatioOld.getId(), "NameTestUpdated", "DescriptionTestUpdated");
+		BasicOperation basicOperationUpdated = new BasicOperation(basicOperatioOld.getId(), "NameTestUpdated",
+				"DescriptionTestUpdated");
 		verify(basicOperationController).updateBasicOperation(basicOperationUpdated);
 		formOperationPanel.textBox("textFieldId")
-		.requireText(operatorActivitiesManagerView.getBasicOperationPanel().getBasicOperationIdTemp());
+				.requireText(basicOperationPanel.getBasicOperationIdTemp());
 
 	}
 

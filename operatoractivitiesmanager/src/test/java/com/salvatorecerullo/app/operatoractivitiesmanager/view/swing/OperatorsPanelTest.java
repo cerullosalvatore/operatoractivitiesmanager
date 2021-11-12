@@ -7,11 +7,12 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
+
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
-import org.assertj.swing.fixture.JTabbedPaneFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -21,7 +22,9 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.controller.OperatorCon
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 
 public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
-	private OperatorActivitiesManagerView operatorActivitiesManagerView;
+	private JFrame jFrame;
+
+	private OperatorsPanel operatorsPanel;
 
 	private FrameFixture frameFixture;
 
@@ -34,16 +37,16 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		// Our frame and the fixture will be recreated for each test method so that we
 		// always start with a fresh user interface.
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView = new OperatorActivitiesManagerView();
-			operatorActivitiesManagerView.getOperatorsPanel().setOperatorController(operatorController);
-			return operatorActivitiesManagerView;
+			jFrame = new JFrame();
+			operatorsPanel = new OperatorsPanel();
+			operatorsPanel.setOperatorController(operatorController);
+			jFrame.add(operatorsPanel);
+			return jFrame;
 		});
 		// FrameFixture will then be used to interact with our view’s controls (labels,
 		// text fields, buttons, etc.).
-		frameFixture = new FrameFixture(robot(), operatorActivitiesManagerView);
+		frameFixture = new FrameFixture(robot(), jFrame);
 		frameFixture.show(); // shows the frame to test
-		JTabbedPaneFixture tabbedPaneFixture = frameFixture.panel("contentPane").tabbedPane("tabbedPane");
-		tabbedPaneFixture.selectTab("Operators");
 	}
 
 	@Test
@@ -125,7 +128,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 
 		Operator newOperator = new Operator("MatricolaTest", "NameTest", "SurnameTest");
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(newOperator);
+			operatorsPanel.getListOperatorsModel().addElement(newOperator);
 		});
 
 		// Exercise
@@ -156,7 +159,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 
 		Operator newOperator = new Operator("MatricolaTest", "NameTest", "SurnameTest");
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(newOperator);
+			operatorsPanel.getListOperatorsModel().addElement(newOperator);
 		});
 
 		// Exercise
@@ -200,7 +203,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 
 		Operator newOperator = new Operator("MatricolaTest", "NameTest", "SurnameTest");
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(newOperator);
+			operatorsPanel.getListOperatorsModel().addElement(newOperator);
 		});
 
 		// Exercise
@@ -237,8 +240,8 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		Operator operator2 = new Operator("MatricolaTest2", "NameTest2", "SurnameTest2");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operator1);
-			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operator2);
+			operatorsPanel.getListOperatorsModel().addElement(operator1);
+			operatorsPanel.getListOperatorsModel().addElement(operator2);
 		});
 
 		// Exercise
@@ -275,8 +278,8 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		Operator operator2 = new Operator("MatricolaTest2", "NameTest2", "SurnameTest2");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operator1);
-			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operator2);
+			operatorsPanel.getListOperatorsModel().addElement(operator1);
+			operatorsPanel.getListOperatorsModel().addElement(operator2);
 		});
 
 		// Exercise
@@ -310,7 +313,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		operators.add(operator2);
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getOperatorsPanel().showAllOperators(operators);
+			operatorsPanel.showAllOperators(operators);
 		});
 
 		String[] listContents = listOperatorsPanel.list("listOperators").contents();
@@ -326,7 +329,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		listOperatorsPanel.list("listOperators").requireVisible().requireEnabled().requireNoSelection();
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getOperatorsPanel().showSuccessfull("Successfull Message.");
+			operatorsPanel.showSuccessfull("Successfull Message.");
 		});
 
 		verify(operatorController).allOperators();
@@ -341,7 +344,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		listOperatorsPanel.list("listOperators").requireVisible().requireEnabled().requireNoSelection();
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getOperatorsPanel().showError("Error Message.");
+			operatorsPanel.showError("Error Message.");
 		});
 
 		verify(operatorController).allOperators();
@@ -379,8 +382,8 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		Operator operator2 = new Operator("MatricolaTest2", "NameTest2", "SurnameTest2");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operator1);
-			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operator2);
+			operatorsPanel.getListOperatorsModel().addElement(operator1);
+			operatorsPanel.getListOperatorsModel().addElement(operator2);
 		});
 
 		// Exercise
@@ -411,9 +414,9 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		Operator operatorOld = new Operator("MatricolaTestOld", "NameTestOld", "SurnameTestOld");
 
 		GuiActionRunner.execute(() -> {
-			operatorActivitiesManagerView.getOperatorsPanel().getListOperatorsModel().addElement(operatorOld);
+			operatorsPanel.getListOperatorsModel().addElement(operatorOld);
 		});
-		
+
 		// Exercise
 		listOperatorsPanel.list("listOperators").selectItem(0);
 		listBottomMenuPanel.button("btnModifyOperator").click();
@@ -421,7 +424,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		formOperatorPanel.textBox("textFieldName").deleteText().enterText("NameTestUpdated");
 		formOperatorPanel.textBox("textFieldSurname").deleteText().enterText("SurnameTestUpdated");
 		buttonsFormOperatorPanel.button("btnUpdateOperator").click();
-		
+
 		// Verify
 		Operator operatorUpdated = new Operator(operatorOld.getMatricola(), "NameTestUpdated", "SurnameTestUpdated");
 		verify(operatorController).updateOperator(operatorUpdated);
