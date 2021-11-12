@@ -189,7 +189,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testUpdateActivityIsPressedListEnabledAndInputReset() {
+	public void testUpdateOperatorIsPressedListEnabledAndInputReset() {
 		// Setup
 		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");
 		JPanelFixture buttonsFormOperatorPanel = frameFixture.panel("newOperatorPanel")
