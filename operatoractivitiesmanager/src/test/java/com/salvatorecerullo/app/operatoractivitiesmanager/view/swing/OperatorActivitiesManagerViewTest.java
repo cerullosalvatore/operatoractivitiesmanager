@@ -8,13 +8,9 @@ import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 
 @RunWith(GUITestRunner.class)
 public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase {
-
-	@InjectMocks
 	private OperatorActivitiesManagerView operatorActivitiesManagerView;
 
 	private FrameFixture frameFixture;
@@ -27,9 +23,6 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 			operatorActivitiesManagerView = new OperatorActivitiesManagerView();
 			return operatorActivitiesManagerView;
 		});
-		
-
-		MockitoAnnotations.initMocks(this);
 		// FrameFixture will then be used to interact with our view’s controls (labels,
 		// text fields, buttons, etc.).
 		frameFixture = new FrameFixture(robot(), operatorActivitiesManagerView);
