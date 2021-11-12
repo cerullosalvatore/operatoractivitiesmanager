@@ -18,22 +18,15 @@ public class OperatorActivitiesManagerView extends JFrame {
 	private ActivitiesPanel activitiesPanel;
 	private OperatorsPanel operatorsPanel;
 	private BasicOperationPanel basicOperationPanel;
-	
+
 	/**
 	 * Launch the application.
-	 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					OperatorActivitiesManagerView frame = new OperatorActivitiesManagerView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+	 * 
+	 * public static void main(String[] args) { EventQueue.invokeLater(new
+	 * Runnable() { public void run() { try { OperatorActivitiesManagerView frame =
+	 * new OperatorActivitiesManagerView(); frame.setVisible(true); } catch
+	 * (Exception e) { e.printStackTrace(); } } }); }
+	 */
 
 	/**
 	 * Create the frame.
@@ -54,12 +47,19 @@ public class OperatorActivitiesManagerView extends JFrame {
 
 		activitiesPanel = new ActivitiesPanel();
 		tabbedPane.addTab("Activities", null, activitiesPanel, null);
-		
+
 		operatorsPanel = new OperatorsPanel();
 		tabbedPane.addTab("Operators", null, operatorsPanel, null);
 
 		basicOperationPanel = new BasicOperationPanel();
 		tabbedPane.addTab("Basic Operations", null, basicOperationPanel, null);
+		
+		setNames();
 	}
 
+	private void setNames() {
+		activitiesPanel.setName("activitiesPanel");
+		operatorsPanel.setName("operatorsPanel");
+		basicOperationPanel.setName("basicOperationPanel");
+	}
 }

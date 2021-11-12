@@ -40,8 +40,16 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 
 	@Test
 	@GUITest
-	public void testActivitiesTabControlsArePresent() {
+	public void testActivitiesTabInitialStates() {
 		// Verify
-		frameFixture.panel("contentPane").panel("newActivityPanel");
+		JTabbedPaneFixture tabbedPaneFixture = frameFixture.panel("contentPane").tabbedPane("tabbedPane");
+		tabbedPaneFixture.focus().selectTab("Activities").requireVisible().requireEnabled();
+		frameFixture.panel("contentPane").panel("activitiesPanel");
+	
+		tabbedPaneFixture.focus().selectTab("Operators").requireVisible().requireEnabled();
+		frameFixture.panel("contentPane").panel("operatorsPanel");
+	
+		tabbedPaneFixture.focus().selectTab("Basic Operations").requireVisible().requireEnabled();
+		frameFixture.panel("contentPane").panel("basicOperationPanel");
 	}
 }
