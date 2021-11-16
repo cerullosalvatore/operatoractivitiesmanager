@@ -288,10 +288,11 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Verify
 		formOperatorPanel.textBox("textFieldMatricola").requireText("MatricolaTest1");
-		formOperatorPanel.textBox("textFieldMatricola").requireNotEditable();
 		formOperatorPanel.textBox("textFieldName").requireText("NameTest1");
 		formOperatorPanel.textBox("textFieldSurname").requireText("SurnameTest1");
 
+		formOperatorPanel.textBox("textFieldMatricola").requireNotEditable();
+		
 		// Exercise
 		buttonsFormOperatorPanel.button("btnUpdateOperator").click();
 

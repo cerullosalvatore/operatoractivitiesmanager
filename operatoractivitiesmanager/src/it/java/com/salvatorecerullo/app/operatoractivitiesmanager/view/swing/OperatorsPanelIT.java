@@ -8,12 +8,14 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JListFixture;
 import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoDatabase;
 import com.salvatorecerullo.app.operatoractivitiesmanager.controller.OperatorController;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.OperatorRepository;
@@ -24,9 +26,7 @@ public class OperatorsPanelIT extends AssertJSwingJUnitTestCase {
 	private static final String NOTEXIST = " does not exist.";
 
 	private JFrame jFrame;
-
 	private OperatorsPanel operatorsPanel;
-
 	private FrameFixture frameFixture;
 
 	private static final String DB_NAME = "operatoractivities";
@@ -42,10 +42,6 @@ public class OperatorsPanelIT extends AssertJSwingJUnitTestCase {
 		MongoClient mongoClient = new MongoClient(new ServerAddress("localhost", mongoPort));
 		operatorRepository = new OperatorMongoRepository(mongoClient, DB_NAME, COLLECTION_NAME);
 
-		// Remove all operator from DB
-		for (Operator operator : operatorRepository.findAll()) {
-			operatorRepository.delete(operator.getMatricola());
-		}
 		// Our frame and the fixture will be recreated for each test method so that we
 		// always start with a fresh user interface.
 		GuiActionRunner.execute(() -> {
@@ -60,6 +56,15 @@ public class OperatorsPanelIT extends AssertJSwingJUnitTestCase {
 		// text fields, buttons, etc.).
 		frameFixture = new FrameFixture(robot(), jFrame);
 		frameFixture.show(); // shows the frame to test
+	}
+
+	@Before
+	public void setup() {
+		MongoClient mongoClient = new MongoClient(new ServerAddress("localhost", mongoPort));
+		operatorRepository = new OperatorMongoRepository(mongoClient, DB_NAME, COLLECTION_NAME);
+		MongoDatabase database = mongoClient.getDatabase(DB_NAME);
+		database.drop();
+		operatorController = new OperatorController(operatorRepository, operatorsPanel);
 	}
 
 	@Test

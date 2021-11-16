@@ -194,11 +194,11 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 
 		// Setting the field
 		textFieldMatricola.setText(operatorSelected.getMatricola());
-		textFieldMatricola.setEditable(false);
-
 		textFieldName.setText(operatorSelected.getName());
 		textFieldSurname.setText(operatorSelected.getSurname());
-
+		
+		
+		textFieldMatricola.setEditable(false);
 		btnUpdateOperator.setEnabled(setButtonUpdateEnabled());
 		btnAddOperator.setEnabled(setButtonAddEnabled());
 		btnDeleteOperator.setEnabled(false);
