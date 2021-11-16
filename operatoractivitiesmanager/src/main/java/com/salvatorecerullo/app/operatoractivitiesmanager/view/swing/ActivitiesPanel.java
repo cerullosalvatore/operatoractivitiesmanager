@@ -235,7 +235,6 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	// INTERFACE METHODS IMPLEMENTED
 	@Override
-
 	public void showActivities(List<Activity> activities) {
 		listActivitiesModel.clear();
 		activities.stream().forEach(listActivitiesModel::addElement);
@@ -311,6 +310,8 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 	}
 
 	private void actionListenerComboBoxOperationsModel() {
+		btnAddActivity.setEnabled(setButtonAddEnabled());
+		btnUpdateActivity.setEnabled(setButtonUpdateEnabled());
 		btnFindByBasicOperation.setEnabled(comboBoxBasicOperationActivity.getSelectedIndex() != -1);
 	}
 
