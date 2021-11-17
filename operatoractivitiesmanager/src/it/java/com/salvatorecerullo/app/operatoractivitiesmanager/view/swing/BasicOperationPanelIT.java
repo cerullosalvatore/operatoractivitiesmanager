@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import javax.swing.JFrame;
 
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.Robot;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JListFixture;
-import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
@@ -61,7 +61,9 @@ public class BasicOperationPanelIT  extends AssertJSwingJUnitTestCase {
 		});
 		// FrameFixture will then be used to interact with our view’s controls (labels,
 		// text fields, buttons, etc.).
-		frameFixture = new FrameFixture(robot(), jFrame);
+		Robot robot = robot();
+		robot.settings().delayBetweenEvents(100);
+		frameFixture = new FrameFixture(robot, jFrame);
 		frameFixture.show(); // shows the frame to test
 	}
 
@@ -83,5 +85,8 @@ public class BasicOperationPanelIT  extends AssertJSwingJUnitTestCase {
 		JListFixture listBasicOperations = frameFixture.panel("listBasicOperationsPanel").list("listBasicOperations");
 		assertThat(listBasicOperations.contents()).containsExactly(basicOperation1.toString(), basicOperation2.toString());
 	}
-
+	
+	
+	
+	
 }

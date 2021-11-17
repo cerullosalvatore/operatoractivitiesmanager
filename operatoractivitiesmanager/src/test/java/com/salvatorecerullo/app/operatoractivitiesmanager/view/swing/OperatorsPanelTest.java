@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.Robot;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
@@ -48,7 +49,9 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		});
 		// FrameFixture will then be used to interact with our view’s controls (labels,
 		// text fields, buttons, etc.).
-		frameFixture = new FrameFixture(robot(), jFrame);
+		Robot robot = robot();
+		robot.settings().delayBetweenEvents(100);
+		frameFixture = new FrameFixture(robot, jFrame);
 		frameFixture.show(); // shows the frame to test
 	}
 
