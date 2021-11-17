@@ -7,9 +7,11 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JListFixture;
 import org.assertj.swing.fixture.JPanelFixture;
+import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +23,7 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.OperatorRepository;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.OperatorMongoRepository;
 
+@RunWith(GUITestRunner.class)
 public class OperatorsPanelIT extends AssertJSwingJUnitTestCase {
 	private static final String THEOPERATOR = "The Operator: ";
 	private static final String NOTEXIST = " does not exist.";

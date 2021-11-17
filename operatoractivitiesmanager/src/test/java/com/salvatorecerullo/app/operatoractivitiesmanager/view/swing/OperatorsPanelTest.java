@@ -15,12 +15,15 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.assertj.swing.junit.runner.GUITestRunner;
 
 import com.salvatorecerullo.app.operatoractivitiesmanager.controller.OperatorController;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 
+@RunWith(GUITestRunner.class)
 public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	private JFrame jFrame;
 

@@ -61,27 +61,16 @@ public class ActivityMongoRepository implements ActivityRepository {
 
 	@Override
 	public List<Activity> findByOperatorMatricola(String matricolaOperator) {
-		if (activityCollection.find(Filters.eq(OPERATORMATRICOLA, matricolaOperator)).first() == null) {
-			return null;
-		} else {
-			return StreamSupport
-					.stream(activityCollection.find(Filters.eq(OPERATORMATRICOLA, matricolaOperator)).spliterator(),
-							false)
-					.map(this::fromDocumentToActivity).collect(Collectors.toList());
+		return StreamSupport
+				.stream(activityCollection.find(Filters.eq(OPERATORMATRICOLA, matricolaOperator)).spliterator(), false)
+				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 
-		}
 	}
 
 	@Override
 	public List<Activity> findByBasicOperationId(String operationId) {
-		if (activityCollection.find(Filters.eq(OPERATIONID, operationId)).first() == null ) {
-			return null;
-		}else {
-			return StreamSupport
-					.stream(activityCollection.find(Filters.eq(OPERATIONID, operationId)).spliterator(), false)
-					.map(this::fromDocumentToActivity).collect(Collectors.toList());
-
-		}
+		return StreamSupport.stream(activityCollection.find(Filters.eq(OPERATIONID, operationId)).spliterator(), false)
+				.map(this::fromDocumentToActivity).collect(Collectors.toList());
 	}
 
 	@Override

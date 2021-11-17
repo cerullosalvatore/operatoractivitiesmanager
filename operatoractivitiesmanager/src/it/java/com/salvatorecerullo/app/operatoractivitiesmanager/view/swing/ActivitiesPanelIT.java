@@ -13,9 +13,11 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JListFixture;
 import org.assertj.swing.fixture.JPanelFixture;
+import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 
 import com.mongodb.MongoClient;
@@ -32,6 +34,7 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.Activ
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.BasicOperationMongoRepository;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.OperatorMongoRepository;
 
+@RunWith(GUITestRunner.class)
 public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 	private static final String DB_NAME = "operatoractivities";
 	private static final String COLLECTION_NAME_ACTIVITY = "activity";
@@ -646,7 +649,7 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testUpdateActivitiesButton() {
+	public void testUpdateActivitiesButtonSuccess() {
 		// Setup
 		Activity activityOld = new Activity("activityIdOld", "matricolaOld", "idOld", startTime, endTime);
 		Operator operatorOld = new Operator("matricolaOld", "nameOld", "surnameOld");
@@ -692,8 +695,10 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 				.panel("buttonsFormActivityPanel");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(1);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText().enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText().enterText(formattedStartHour);
+		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText()
+				.enterText(formattedStartDate);
+		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText()
+				.enterText(formattedStartHour);
 		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText(formattedEndDate);
 		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText(formattedEndHour);
 
@@ -701,7 +706,264 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 		// Verify
 		assertThat(listActivities.contents()).containsExactly(activityUpdate.toString());
-		listBottomMenuPanel.label("lblMessageStatus").requireText(THEACTIVITY + activityUpdate.getId() + " has been updated.");
+		listBottomMenuPanel.label("lblMessageStatus")
+				.requireText(THEACTIVITY + activityUpdate.getId() + " has been updated.");
 
 	}
+
+	@Test
+	@GUITest
+	public void testUpdateActivitiesButtonActivityDoesNotExistError() {
+		// Setup
+		Activity activityOld = new Activity("activityIdOld", "matricolaOld", "idOld", startTime, endTime);
+		Operator operatorOld = new Operator("matricolaOld", "nameOld", "surnameOld");
+		BasicOperation basicOperationOld = new BasicOperation("idOld", "nameOld", "descriptionOld");
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 9, 10, 8, 0, 00);
+		Date startTime2 = cal.getTime();
+		cal.set(2021, 10, 9, 16, 00, 00);
+		Date endTime2 = cal.getTime();
+
+		Operator operatorUpdate = new Operator("matricolaUpdate", "nameUpdate", "surnameUpdate");
+		BasicOperation basicOperationUpdate = new BasicOperation("idUpdate", "nameUpdate", "descriptionUpdate");
+
+		operatorRepository.save(operatorOld);
+		operatorRepository.save(operatorUpdate);
+		basicOperationRepository.save(basicOperationOld);
+		basicOperationRepository.save(basicOperationUpdate);
+
+		// Exercise
+		GuiActionRunner.execute(() -> {
+			activitiesPanel.getListActivitiesModel().addElement(activityOld);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperationOld);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperationUpdate);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operatorOld);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operatorUpdate);
+		});
+
+		JListFixture listActivities = frameFixture.panel("listActivitiesPanel").list("listActivities");
+		listActivities.selectItem(0);
+
+		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+		listBottomMenuPanel.button("btnModifyActivity").click();
+
+		String formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime2);
+		String formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime2);
+		String formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime2);
+		String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime2);
+
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
+				.panel("buttonsFormActivityPanel");
+		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(1);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(1);
+		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText()
+				.enterText(formattedStartDate);
+		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText()
+				.enterText(formattedStartHour);
+		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText(formattedEndDate);
+		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText(formattedEndHour);
+
+		buttonsFormActivityPanel.button("btnUpdateActivity").click();
+
+		// Verify
+		assertThat(listActivities.contents()).containsExactly();
+		listBottomMenuPanel.label("lblMessageStatus")
+				.requireText(THEACTIVITY + activityOld.getId() + NOTEXIST);
+
+	}
+	
+	@Test
+	@GUITest
+	public void testUpdateActivitiesButtonNewOperatorDoesNotExistError() {
+		// Setup
+		Activity activityOld = new Activity("activityIdOld", "matricolaOld", "idOld", startTime, endTime);
+		Operator operatorOld = new Operator("matricolaOld", "nameOld", "surnameOld");
+		BasicOperation basicOperationOld = new BasicOperation("idOld", "nameOld", "descriptionOld");
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 9, 10, 8, 0, 00);
+		Date startTime2 = cal.getTime();
+		cal.set(2021, 10, 9, 16, 00, 00);
+		Date endTime2 = cal.getTime();
+
+		Activity activityUpdate = new Activity("activityIdOld", "matricolaUpdate", "idUpdate", startTime2, endTime2);
+		Operator operatorUpdate = new Operator("matricolaUpdate", "nameUpdate", "surnameUpdate");
+		BasicOperation basicOperationUpdate = new BasicOperation("idUpdate", "nameUpdate", "descriptionUpdate");
+
+		operatorRepository.save(operatorOld);
+		basicOperationRepository.save(basicOperationOld);
+		basicOperationRepository.save(basicOperationUpdate);
+
+		// Exercise
+		GuiActionRunner.execute(() -> {
+			activityController.addActivity(activityOld);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperationOld);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperationUpdate);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operatorOld);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operatorUpdate);
+		});
+
+		JListFixture listActivities = frameFixture.panel("listActivitiesPanel").list("listActivities");
+		listActivities.selectItem(0);
+
+		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+		listBottomMenuPanel.button("btnModifyActivity").click();
+
+		String formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime2);
+		String formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime2);
+		String formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime2);
+		String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime2);
+
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
+				.panel("buttonsFormActivityPanel");
+		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(1);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(1);
+		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText()
+				.enterText(formattedStartDate);
+		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText()
+				.enterText(formattedStartHour);
+		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText(formattedEndDate);
+		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText(formattedEndHour);
+
+		buttonsFormActivityPanel.button("btnUpdateActivity").click();
+
+		// Verify
+		listBottomMenuPanel.label("lblMessageStatus")
+				.requireText(THEOPERATOR + activityUpdate.getOperatorMatricola() + NOTEXIST);
+		assertThat(listActivities.contents()).containsExactly(activityOld.toString());
+	}
+	
+	@Test
+	@GUITest
+	public void testUpdateActivitiesButtonNewBasicOperationDoesNotExistError() {
+		// Setup
+		Activity activityOld = new Activity("activityIdOld", "matricolaOld", "idOld", startTime, endTime);
+		Operator operatorOld = new Operator("matricolaOld", "nameOld", "surnameOld");
+		BasicOperation basicOperationOld = new BasicOperation("idOld", "nameOld", "descriptionOld");
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 9, 10, 8, 0, 00);
+		Date startTime2 = cal.getTime();
+		cal.set(2021, 10, 9, 16, 00, 00);
+		Date endTime2 = cal.getTime();
+
+		Activity activityUpdate = new Activity("activityIdOld", "matricolaUpdate", "idUpdate", startTime2, endTime2);
+		Operator operatorUpdate = new Operator("matricolaUpdate", "nameUpdate", "surnameUpdate");
+		BasicOperation basicOperationUpdate = new BasicOperation("idUpdate", "nameUpdate", "descriptionUpdate");
+
+		operatorRepository.save(operatorOld);
+		operatorRepository.save(operatorUpdate);
+		basicOperationRepository.save(basicOperationOld);
+
+		// Exercise
+		GuiActionRunner.execute(() -> {
+			activityController.addActivity(activityOld);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperationOld);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperationUpdate);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operatorOld);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operatorUpdate);
+		});
+
+		JListFixture listActivities = frameFixture.panel("listActivitiesPanel").list("listActivities");
+		listActivities.selectItem(0);
+
+		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+		listBottomMenuPanel.button("btnModifyActivity").click();
+
+		String formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime2);
+		String formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime2);
+		String formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime2);
+		String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime2);
+
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
+				.panel("buttonsFormActivityPanel");
+		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(1);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(1);
+		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText()
+				.enterText(formattedStartDate);
+		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText()
+				.enterText(formattedStartHour);
+		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText(formattedEndDate);
+		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText(formattedEndHour);
+
+		buttonsFormActivityPanel.button("btnUpdateActivity").click();
+
+		// Verify
+		assertThat(listActivities.contents()).containsExactly(activityOld.toString());
+		listBottomMenuPanel.label("lblMessageStatus")
+				.requireText(BASICOPERATION + activityUpdate.getOperationId() + NOTEXIST);
+
+	}
+
+	
+	@Test
+	@GUITest
+	public void testUpdateActivitiesButtonStartDateFollowEndDateError() {
+		// Setup
+		Activity activityOld = new Activity("activityIdOld", "matricolaOld", "idOld", startTime, endTime);
+		Operator operatorOld = new Operator("matricolaOld", "nameOld", "surnameOld");
+		BasicOperation basicOperationOld = new BasicOperation("idOld", "nameOld", "descriptionOld");
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(2021, 10, 9, 8, 0, 00);
+		Date startTime2 = cal.getTime();
+		cal.set(2021, 9, 10, 16, 00, 00);
+		Date endTime2 = cal.getTime();
+
+		Activity activityUpdate = new Activity("activityIdOld", "matricolaUpdate", "idUpdate", startTime2, endTime2);
+		Operator operatorUpdate = new Operator("matricolaUpdate", "nameUpdate", "surnameUpdate");
+		BasicOperation basicOperationUpdate = new BasicOperation("idUpdate", "nameUpdate", "descriptionUpdate");
+
+		operatorRepository.save(operatorOld);
+		operatorRepository.save(operatorUpdate);
+		basicOperationRepository.save(basicOperationOld);
+		basicOperationRepository.save(basicOperationUpdate);
+
+		// Exercise
+		GuiActionRunner.execute(() -> {
+			activityController.addActivity(activityOld);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperationOld);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperationUpdate);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operatorOld);
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operatorUpdate);
+		});
+
+		JListFixture listActivities = frameFixture.panel("listActivitiesPanel").list("listActivities");
+		listActivities.selectItem(0);
+
+		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+		listBottomMenuPanel.button("btnModifyActivity").click();
+
+		String formattedStartDate = new SimpleDateFormat("dd/MM/yyyy").format(startTime2);
+		String formattedStartHour = new SimpleDateFormat("HH:mm").format(startTime2);
+		String formattedEndDate = new SimpleDateFormat("dd/MM/yyyy").format(endTime2);
+		String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime2);
+
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
+				.panel("buttonsFormActivityPanel");
+		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(1);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(1);
+		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText()
+				.enterText(formattedStartDate);
+		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText()
+				.enterText(formattedStartHour);
+		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText(formattedEndDate);
+		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText(formattedEndHour);
+
+		buttonsFormActivityPanel.button("btnUpdateActivity").click();
+
+		// Verify
+		assertThat(listActivities.contents()).containsExactly(activityOld.toString());
+		listBottomMenuPanel.label("lblMessageStatus")
+				.requireText("The Start Date: " + activityUpdate.getStartTime()
+				+ "follow the End Date: " + activityUpdate.getEndTime());
+
+	}
+	
+
 }
