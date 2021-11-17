@@ -233,9 +233,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testModifyButtonIsPressedFieldWasCompiledCorrectly() {
 		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");
-		JPanelFixture buttonsFormOperatorPanel = frameFixture.panel("newOperatorPanel")
-				.panel("buttonsFormOperatorPanel");
-
+		
 		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
 		JPanelFixture listBottomMenuPanel = listOperatorsPanel.panel("listBottomMenuPanel");
 
@@ -278,11 +276,6 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		// Exercise
 		listOperatorsPanel.list("listOperators").selectItem(0);
 		listBottomMenuPanel.button("btnModifyOperator").click();
-
-		// Verify
-		formOperatorPanel.textBox("textFieldMatricola").requireText("MatricolaTest1");
-		formOperatorPanel.textBox("textFieldName").requireText("NameTest1");
-		formOperatorPanel.textBox("textFieldSurname").requireText("SurnameTest1");
 
 		formOperatorPanel.textBox("textFieldMatricola").requireNotEditable();
 		
