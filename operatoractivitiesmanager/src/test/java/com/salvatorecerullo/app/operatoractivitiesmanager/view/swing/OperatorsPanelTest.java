@@ -15,12 +15,15 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.assertj.swing.junit.runner.GUITestRunner;
 
 import com.salvatorecerullo.app.operatoractivitiesmanager.controller.OperatorController;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 
+@RunWith(GUITestRunner.class)
 public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	private JFrame jFrame;
 
@@ -230,9 +233,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testModifyButtonIsPressedFieldWasCompiledCorrectly() {
 		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");
-		JPanelFixture buttonsFormOperatorPanel = frameFixture.panel("newOperatorPanel")
-				.panel("buttonsFormOperatorPanel");
-
+		
 		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
 		JPanelFixture listBottomMenuPanel = listOperatorsPanel.panel("listBottomMenuPanel");
 
@@ -252,16 +253,6 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		formOperatorPanel.textBox("textFieldMatricola").requireText("MatricolaTest1");
 		formOperatorPanel.textBox("textFieldName").requireText("NameTest1");
 		formOperatorPanel.textBox("textFieldSurname").requireText("SurnameTest1");
-
-		// Exercise
-		buttonsFormOperatorPanel.button("btnUpdateOperator").click();
-		listOperatorsPanel.list("listOperators").selectItem(1);
-		listBottomMenuPanel.button("btnModifyOperator").click();
-
-		// Verify
-		formOperatorPanel.textBox("textFieldMatricola").requireText("MatricolaTest2");
-		formOperatorPanel.textBox("textFieldName").requireText("NameTest2");
-		formOperatorPanel.textBox("textFieldSurname").requireText("SurnameTest2");
 	}
 
 	@Test
@@ -286,12 +277,8 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		listOperatorsPanel.list("listOperators").selectItem(0);
 		listBottomMenuPanel.button("btnModifyOperator").click();
 
-		// Verify
-		formOperatorPanel.textBox("textFieldMatricola").requireText("MatricolaTest1");
 		formOperatorPanel.textBox("textFieldMatricola").requireNotEditable();
-		formOperatorPanel.textBox("textFieldName").requireText("NameTest1");
-		formOperatorPanel.textBox("textFieldSurname").requireText("SurnameTest1");
-
+		
 		// Exercise
 		buttonsFormOperatorPanel.button("btnUpdateOperator").click();
 

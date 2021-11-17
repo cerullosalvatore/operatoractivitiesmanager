@@ -13,14 +13,17 @@ import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
+import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.salvatorecerullo.app.operatoractivitiesmanager.controller.BasicOperationController;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 
+@RunWith(GUITestRunner.class)
 public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 	private JFrame jFrame;
 

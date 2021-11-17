@@ -218,7 +218,7 @@ public class ActivityMongoRepositoryTest {
 				.findByOperatorMatricola("operatorMatricolaNotInDb");
 
 		// Verify
-		assertThat(activitiesRetrieved).containsExactly();
+		assertThat(activitiesRetrieved).isEmpty();
 	}
 
 	@Test
@@ -252,7 +252,7 @@ public class ActivityMongoRepositoryTest {
 		List<Activity> activitiesRetrieved = activityMongoRepository.findByBasicOperationId("operationIdNotInDb");
 
 		// Verify
-		assertThat(activitiesRetrieved).containsExactly();
+		assertThat(activitiesRetrieved).isEmpty();
 	}
 
 	@Test

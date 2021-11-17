@@ -1,5 +1,7 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.model;
 
+import java.util.Objects;
+
 public class BasicOperation {
 	private String id;
 	private String name;
@@ -38,8 +40,6 @@ public class BasicOperation {
 		this.description = description;
 	}
 
-	
-
 	@Override
 	public String toString() {
 		return "Id: " + id + " - Name: " + name + " - Description: " + description;
@@ -63,16 +63,8 @@ public class BasicOperation {
 		if (getClass() != obj.getClass())
 			return false;
 		BasicOperation other = (BasicOperation) obj;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+		return Objects.equals(id, other.id) && Objects.equals(name, other.name)
+				&& Objects.equals(description, other.description);
+
 	}
 }

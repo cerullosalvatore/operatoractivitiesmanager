@@ -208,7 +208,7 @@ public class ActivityControllerTest {
 		Activity activity = new Activity("0", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		List<Activity> activities = new ArrayList<Activity>();
 		activities.add(activity);
-		when(activityRepository.findByOperatorMatricola(operator.getMatricola())).thenReturn(null);
+		when(activityRepository.findByOperatorMatricola(operator.getMatricola())).thenReturn(new ArrayList<Activity>());
 		// Exercise
 		activityController.findByOperator(operator.getMatricola());
 		// verify
@@ -240,7 +240,7 @@ public class ActivityControllerTest {
 		Activity activity1 = new Activity("1", operator.getMatricola(), basicOperation.getId(), startTime, endTime);
 		List<Activity> activities = new ArrayList<Activity>();
 		activities.add(activity1);
-		when(activityRepository.findByBasicOperationId(basicOperation.getId())).thenReturn(null);
+		when(activityRepository.findByBasicOperationId(basicOperation.getId())).thenReturn(new ArrayList<Activity>());
 		// Exercise
 		activityController.findByBasicOperation(basicOperation.getId());
 		// verify

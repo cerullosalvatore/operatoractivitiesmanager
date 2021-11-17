@@ -64,7 +64,7 @@ public class ActivityController {
 	}
 
 	public void findByOperator(String matricola) {
-		if (activityRepository.findByOperatorMatricola(matricola) != null) {
+		if (!activityRepository.findByOperatorMatricola(matricola).isEmpty()) {
 			activityView.showActivities(activityRepository.findByOperatorMatricola(matricola));
 		} else {
 			activityView.showError(THEOPERATOR + matricola + NOTEXIST);
@@ -72,7 +72,7 @@ public class ActivityController {
 	}
 
 	public void findByBasicOperation(String id) {
-		if (activityRepository.findByBasicOperationId(id) != null) {
+		if (!activityRepository.findByBasicOperationId(id).isEmpty()) {
 			activityView.showActivities(activityRepository.findByBasicOperationId(id));
 		} else {
 			activityView.showError(BASICOPERATION + id + NOTEXIST);

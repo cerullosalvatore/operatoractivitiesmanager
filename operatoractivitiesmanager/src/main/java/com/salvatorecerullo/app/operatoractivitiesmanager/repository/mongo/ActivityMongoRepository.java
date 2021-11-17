@@ -64,6 +64,7 @@ public class ActivityMongoRepository implements ActivityRepository {
 		return StreamSupport
 				.stream(activityCollection.find(Filters.eq(OPERATORMATRICOLA, matricolaOperator)).spliterator(), false)
 				.map(this::fromDocumentToActivity).collect(Collectors.toList());
+
 	}
 
 	@Override
