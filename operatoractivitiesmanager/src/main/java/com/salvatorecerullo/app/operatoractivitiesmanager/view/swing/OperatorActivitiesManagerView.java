@@ -9,7 +9,6 @@ import javax.swing.WindowConstants;
 import javax.swing.BoxLayout;
 
 public class OperatorActivitiesManagerView extends JFrame {
-
 	/**
 	 * 
 	 */
@@ -27,7 +26,6 @@ public class OperatorActivitiesManagerView extends JFrame {
 	 * new OperatorActivitiesManagerView(); frame.setVisible(true); } catch
 	 * (Exception e) { e.printStackTrace(); } } }); }
 	 */
-
 	/**
 	 * Create the frame.
 	 */
@@ -42,17 +40,16 @@ public class OperatorActivitiesManagerView extends JFrame {
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 
 		JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
+		contentPane.add(tabbedPane);
 		tabbedPane.setName("tabbedPane");
 
 		activitiesPanel = new ActivitiesPanel();
 		tabbedPane.addTab("Activities", null, activitiesPanel, null);
-
 		operatorsPanel = new OperatorsPanel();
 		tabbedPane.addTab("Operators", null, operatorsPanel, null);
-
 		basicOperationPanel = new BasicOperationPanel();
 		tabbedPane.addTab("Basic Operations", null, basicOperationPanel, null);
-		
+
 		setNames();
 	}
 
@@ -60,5 +57,5 @@ public class OperatorActivitiesManagerView extends JFrame {
 		activitiesPanel.setName("activitiesPanel");
 		operatorsPanel.setName("operatorsPanel");
 		basicOperationPanel.setName("basicOperationPanel");
-	}	
+	}
 }
