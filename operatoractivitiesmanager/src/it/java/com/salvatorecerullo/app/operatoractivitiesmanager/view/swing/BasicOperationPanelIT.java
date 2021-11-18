@@ -63,7 +63,7 @@ public class BasicOperationPanelIT extends AssertJSwingJUnitTestCase {
 		// FrameFixture will then be used to interact with our view’s controls (labels,
 		// text fields, buttons, etc.).
 		Robot robot = robot();
-		robot.settings().delayBetweenEvents(100);
+		robot.settings().eventPostingDelay(500);
 		frameFixture = new FrameFixture(robot, jFrame);
 		frameFixture.show(); // shows the frame to test
 	}
@@ -171,7 +171,7 @@ public class BasicOperationPanelIT extends AssertJSwingJUnitTestCase {
 		listBottomMenuPanel.label("lblMessageStatus")
 				.requireText(BASICOPERATION + basicOperation1.getId() + " has been removed.");
 	}
-	
+
 	@Test
 	@GUITest
 	public void testDeleteButtonError() {
@@ -193,8 +193,76 @@ public class BasicOperationPanelIT extends AssertJSwingJUnitTestCase {
 		JListFixture listBasicOperations = frameFixture.panel("listBasicOperationsPanel").list("listBasicOperations");
 		assertThat(listBasicOperations.contents()).isEmpty();
 
-		listBottomMenuPanel.label("lblMessageStatus")
-				.requireText(BASICOPERATION + basicOperation1.getId() + NOTEXIST);
+		listBottomMenuPanel.label("lblMessageStatus").requireText(BASICOPERATION + basicOperation1.getId() + NOTEXIST);
 	}
+
+	@Test
+	@GUITest
+	public void testUpdateButtonSuccess() {
+		// Setup
+		BasicOperation basicOperationOld = new BasicOperation(new ObjectId().toString(), "nameOld", "descriptionOld");
+		BasicOperation basicOperationUpdated = new BasicOperation(basicOperationOld.getId(), "nameUpdated",
+				"descriptionUpdated");
+
+		// Exercise
+		GuiActionRunner.execute(() -> {
+			basicOperationController.addBasicOperation(basicOperationOld);
+		});
+
+		JPanelFixture listBasicOperationsPanel = frameFixture.panel("listBasicOperationsPanel");
+		JPanelFixture listBottomMenuPanel = listBasicOperationsPanel.panel("listBottomMenuPanel");
+		listBasicOperationsPanel.list("listBasicOperations").selectItem(0);
+		listBottomMenuPanel.button("btnModify").click();
+
+		JPanelFixture formOperationPanel = frameFixture.panel("newBasicOperationPanel")
+				.panel("formBasicOperationPanel");
+		JPanelFixture buttonsFormBasicOperationPanel = frameFixture.panel("newBasicOperationPanel")
+				.panel("buttonsFormBasicOperationPanel");
+
+		formOperationPanel.textBox("textFieldName").doubleClick().deleteText().enterText(basicOperationUpdated.getName());
+		formOperationPanel.textBox("textAreaDescription").doubleClick().deleteText().enterText(basicOperationUpdated.getDescription());
+		buttonsFormBasicOperationPanel.button("btnUpdateOperation").click();
+
+		// Verify
+		JListFixture listBasicOperations = frameFixture.panel("listBasicOperationsPanel").list("listBasicOperations");
+		assertThat(listBasicOperations.contents()).containsExactly(basicOperationUpdated.toString());
+
+		listBottomMenuPanel.label("lblMessageStatus").requireText(BASICOPERATION + basicOperationOld.getId() + " has been updated.");
+	}
+	
+	@Test
+	@GUITest
+	public void testUpdateButtonError() {
+		// Setup
+		BasicOperation basicOperationOld = new BasicOperation(new ObjectId().toString(), "nameOld", "descriptionOld");
+		BasicOperation basicOperationUpdated = new BasicOperation(basicOperationOld.getId(), "nameUpdated",
+				"descriptionUpdated");
+
+		// Exercise
+		GuiActionRunner.execute(() -> {
+			basicOperationPanel.getListBasicOpeationModel().addElement(basicOperationOld);
+		});
+
+		JPanelFixture listBasicOperationsPanel = frameFixture.panel("listBasicOperationsPanel");
+		JPanelFixture listBottomMenuPanel = listBasicOperationsPanel.panel("listBottomMenuPanel");
+		listBasicOperationsPanel.list("listBasicOperations").selectItem(0);
+		listBottomMenuPanel.button("btnModify").click();
+
+		JPanelFixture formOperationPanel = frameFixture.panel("newBasicOperationPanel")
+				.panel("formBasicOperationPanel");
+		JPanelFixture buttonsFormBasicOperationPanel = frameFixture.panel("newBasicOperationPanel")
+				.panel("buttonsFormBasicOperationPanel");
+
+		formOperationPanel.textBox("textFieldName").doubleClick().deleteText().enterText(basicOperationUpdated.getName());
+		formOperationPanel.textBox("textAreaDescription").doubleClick().deleteText().enterText(basicOperationUpdated.getDescription());
+		buttonsFormBasicOperationPanel.button("btnUpdateOperation").click();
+
+		// Verify
+		JListFixture listBasicOperations = frameFixture.panel("listBasicOperationsPanel").list("listBasicOperations");
+		assertThat(listBasicOperations.contents()).isEmpty();
+
+		listBottomMenuPanel.label("lblMessageStatus").requireText(BASICOPERATION + basicOperationOld.getId() + NOTEXIST);
+	}
+
 
 }
