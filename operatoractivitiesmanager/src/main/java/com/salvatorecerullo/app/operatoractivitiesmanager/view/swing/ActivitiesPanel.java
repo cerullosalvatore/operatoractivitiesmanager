@@ -257,13 +257,13 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	@Override
 	public void showOperators(List<Operator> operators) {
-		comboBoxOperatorsModel.removeAllElements();;
+		comboBoxOperatorsModel.removeAllElements();
 		operators.stream().forEach(comboBoxOperatorsModel::addElement);		
 	}
 
 	@Override
 	public void showBasicOperation(List<BasicOperation> basicOperations) {
-		comboBoxOperationsModel.removeAllElements();;
+		comboBoxOperationsModel.removeAllElements();
 		basicOperations.stream().forEach(comboBoxOperationsModel::addElement);				
 	}
 	

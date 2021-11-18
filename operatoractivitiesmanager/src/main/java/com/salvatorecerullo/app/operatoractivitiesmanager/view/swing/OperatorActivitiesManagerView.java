@@ -3,9 +3,17 @@ package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import com.salvatorecerullo.app.operatoractivitiesmanager.controller.ActivityController;
+import com.salvatorecerullo.app.operatoractivitiesmanager.controller.BasicOperationController;
+import com.salvatorecerullo.app.operatoractivitiesmanager.controller.OperatorController;
+
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+
 import javax.swing.BoxLayout;
 
 public class OperatorActivitiesManagerView extends JFrame {
@@ -17,6 +25,11 @@ public class OperatorActivitiesManagerView extends JFrame {
 	private ActivitiesPanel activitiesPanel;
 	private OperatorsPanel operatorsPanel;
 	private BasicOperationPanel basicOperationPanel;
+	private ActivityController activitiesController;
+	private OperatorController operatorController;
+	private BasicOperationController basicOperationController;
+	
+	private JTabbedPane tabbedPane;
 
 	/**
 	 * Launch the application.
@@ -39,7 +52,7 @@ public class OperatorActivitiesManagerView extends JFrame {
 		contentPane.setName("contentPane");
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 
-		JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
+		tabbedPane = new JTabbedPane(SwingConstants.TOP);
 		contentPane.add(tabbedPane);
 		tabbedPane.setName("tabbedPane");
 
@@ -50,12 +63,55 @@ public class OperatorActivitiesManagerView extends JFrame {
 		basicOperationPanel = new BasicOperationPanel();
 		tabbedPane.addTab("Basic Operations", null, basicOperationPanel, null);
 
+		tabbedPane.addChangeListener(getChangeListenerTabbedPane());
+
 		setNames();
 	}
 
+	
+	// GETTERS AND SETTERs
+	public void setActivitiesController(ActivityController activitiesController) {
+		this.activitiesController = activitiesController;
+	}
+
+	public void setOperatorController(OperatorController operatorController) {
+		this.operatorController = operatorController;
+	}
+
+	public void setBasicOperationController(BasicOperationController basicOperationController) {
+		this.basicOperationController = basicOperationController;
+	}
+	
+	// LISTENER
+	private ChangeListener getChangeListenerTabbedPane() {
+		return new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				switch (tabbedPane.getSelectedIndex()) {
+				default:
+					activitiesControllerInvocation();
+					break;
+				case 1:
+					operatorController.allOperators();
+					break;
+				case 2:
+					basicOperationController.allBasicOperations();
+					break;
+				}
+			}
+		};
+	}
+	
+	//UTILS	
 	private void setNames() {
 		activitiesPanel.setName("activitiesPanel");
 		operatorsPanel.setName("operatorsPanel");
 		basicOperationPanel.setName("basicOperationPanel");
 	}
+
+	private void activitiesControllerInvocation() {
+		activitiesController.allActivities();
+		activitiesController.allOperators();
+		activitiesController.allBasicOperation();
+	}
+	
 }
