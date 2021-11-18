@@ -1,6 +1,7 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.Robot;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JTabbedPaneFixture;
@@ -25,7 +26,9 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 		});
 		// FrameFixture will then be used to interact with our view’s controls (labels,
 		// text fields, buttons, etc.).
-		frameFixture = new FrameFixture(robot(), operatorActivitiesManagerView);
+		Robot robot = robot();
+		robot.settings().delayBetweenEvents(100);
+		frameFixture = new FrameFixture(robot, operatorActivitiesManagerView);
 		frameFixture.show(); // shows the frame to test
 	}
 
