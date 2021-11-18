@@ -72,6 +72,7 @@ public class OperatorActivitiesManagerView extends JFrame {
 	// GETTERS AND SETTERs
 	public void setActivitiesController(ActivityController activitiesController) {
 		this.activitiesController = activitiesController;
+		activitiesControllerInvocation();
 	}
 
 	public void setOperatorController(OperatorController operatorController) {

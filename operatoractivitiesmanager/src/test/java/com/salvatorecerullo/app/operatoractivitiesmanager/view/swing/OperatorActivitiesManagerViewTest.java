@@ -1,5 +1,6 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.assertj.swing.annotation.GUITest;
@@ -82,7 +83,10 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 	@GUITest
 	public void testActivitiesTabInitialStates() {
 		// Verify
-		frameFixture.panel("contentPane").panel("activitiesPanel").requireEnabled().requireVisible();		
+		frameFixture.panel("contentPane").panel("activitiesPanel").requireEnabled().requireVisible();
+		verify(activityController).allActivities();
+		verify(activityController).allOperators();
+		verify(activityController).allBasicOperation();
 	}
 
 	@Test
@@ -94,9 +98,9 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 		tabbedPaneFixture.focus().selectTab("Activities").requireVisible().requireEnabled();
 		frameFixture.panel("contentPane").panel("activitiesPanel").requireVisible().requireEnabled();
 
-		verify(activityController).allActivities();
-		verify(activityController).allOperators();
-		verify(activityController).allBasicOperation();
+		verify(activityController, times(2)).allActivities();
+		verify(activityController, times(2)).allOperators();
+		verify(activityController, times(2)).allBasicOperation();
 	}
 
 	@Test
