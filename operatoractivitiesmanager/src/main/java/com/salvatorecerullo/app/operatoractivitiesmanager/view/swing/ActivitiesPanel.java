@@ -255,6 +255,18 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		lblMessageStatus.setForeground(Color.RED);
 	}
 
+	@Override
+	public void showOperators(List<Operator> operators) {
+		comboBoxOperatorsModel.removeAllElements();;
+		operators.stream().forEach(comboBoxOperatorsModel::addElement);		
+	}
+
+	@Override
+	public void showBasicOperation(List<BasicOperation> basicOperations) {
+		comboBoxOperationsModel.removeAllElements();;
+		basicOperations.stream().forEach(comboBoxOperationsModel::addElement);				
+	}
+	
 	// GETTERS AND SETTERS
 
 	public DefaultComboBoxModel<Operator> getComboBoxOperatorsModel() {
@@ -518,4 +530,5 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		calFinal.set(Calendar.SECOND, calTempHour.get(Calendar.SECOND));
 		return calFinal.getTime();
 	}
+
 }

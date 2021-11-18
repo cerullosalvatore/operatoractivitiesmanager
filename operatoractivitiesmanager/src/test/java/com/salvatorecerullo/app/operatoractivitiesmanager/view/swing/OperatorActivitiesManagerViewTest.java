@@ -55,4 +55,5 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 		tabbedPaneFixture.focus().selectTab("Basic Operations").requireVisible().requireEnabled();
 		frameFixture.panel("contentPane").panel("basicOperationPanel");
 	}
+	
 }

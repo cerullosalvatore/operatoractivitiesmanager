@@ -42,7 +42,6 @@ public class OperatorActivitiesManagerView extends JFrame {
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 
 		JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
-		contentPane.add(tabbedPane);
 		tabbedPane.setName("tabbedPane");
 
 		activitiesPanel = new ActivitiesPanel();
@@ -61,5 +60,5 @@ public class OperatorActivitiesManagerView extends JFrame {
 		activitiesPanel.setName("activitiesPanel");
 		operatorsPanel.setName("operatorsPanel");
 		basicOperationPanel.setName("basicOperationPanel");
-	}
+	}	
 }

@@ -72,6 +72,32 @@ public class ActivityControllerTest {
 	}
 
 	@Test
+	public void testAllOperators() {
+		// Setup
+		List<Operator> operators = new ArrayList<Operator>();
+		operators.add(new Operator("MatricolaTest1", "NameTest1", "SurnameTest1"));
+		operators.add(new Operator("MatricolaTest2", "NameTest2", "SurnameTest2"));
+		when(operatorRepository.findAll()).thenReturn(operators);
+		// Exercise
+		activityController.allOperators();
+		// Verify
+		verify(activityView).showOperators(operators);
+	}
+	
+	@Test
+	public void testAllBasicOperations() {
+		// Setup
+		List<BasicOperation> basicOperations = new ArrayList<BasicOperation>();
+		basicOperations.add(new BasicOperation("IdTest1", "NameTest1", "DescriptionTest1"));
+		basicOperations.add(new BasicOperation("IdTest2", "NameTest2", "DescriptionTest2"));
+		when(basicOperationRepository.findAll()).thenReturn(basicOperations);
+		// Exercise
+		activityController.allBasicOperation();
+		// Verify
+		verify(activityView).showBasicOperation(basicOperations);
+	}
+	
+	@Test
 	public void testAddActivitySuccessfull() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");

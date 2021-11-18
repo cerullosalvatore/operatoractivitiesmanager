@@ -63,7 +63,6 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 	@Override
 	protected void onSetUp() {
-		MockitoAnnotations.initMocks(this);
 		MongoClient mongoClient = new MongoClient(new ServerAddress("localhost", mongoPort));
 		activityRepository = new ActivityMongoRepository(mongoClient, DB_NAME, COLLECTION_NAME_ACTIVITY);
 		operatorRepository = new OperatorMongoRepository(mongoClient, DB_NAME, COLLECTION_NAME_OPERATOR);
@@ -118,6 +117,46 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 		// Verify
 		JListFixture listActivities = frameFixture.panel("listActivitiesPanel").list("listActivities");
 		assertThat(listActivities.contents()).containsExactly(activity1.toString(), activity2.toString());
+	}
+
+	@Test
+	@GUITest
+	public void testAllOperators() {
+		// Setup
+		Operator operator1 = new Operator("MatricolaTest1", "NameTest1", "SurnameTest1");
+		Operator operator2 = new Operator("MatricolaTest2", "NameTest2", "SurnameTest2");
+		operatorRepository.save(operator1);
+		operatorRepository.save(operator2);
+
+		// Exercise
+		GuiActionRunner.execute(() -> {
+			activityController.allOperators();
+		});
+
+		// Verify
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		String[] operatorComboContents = formActivityPanel.comboBox("comboBoxOperatorActivity").contents();
+		assertThat(operatorComboContents).containsExactly(operator1.toString(), operator2.toString());
+	}
+
+	@Test
+	@GUITest
+	public void testAllBasicOperations() {
+		// Setup
+		BasicOperation basicOperation1 = new BasicOperation("IdTest1", "NameTest1", "DescriptionTest1");
+		BasicOperation basicOperation2 = new BasicOperation("IdTest2", "NameTest2", "DescriptionTest2");
+		basicOperationRepository.save(basicOperation1);
+		basicOperationRepository.save(basicOperation2);
+
+		// Exercise
+		GuiActionRunner.execute(() -> {
+			activityController.allBasicOperation();
+		});
+
+		// Verify
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		String[] basicOperationComboContents = formActivityPanel.comboBox("comboBoxBasicOperationActivity").contents();
+		assertThat(basicOperationComboContents).containsExactly(basicOperation1.toString(), basicOperation2.toString());
 	}
 
 	@Test
@@ -772,11 +811,10 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 		// Verify
 		assertThat(listActivities.contents()).containsExactly();
-		listBottomMenuPanel.label("lblMessageStatus")
-				.requireText(THEACTIVITY + activityOld.getId() + NOTEXIST);
+		listBottomMenuPanel.label("lblMessageStatus").requireText(THEACTIVITY + activityOld.getId() + NOTEXIST);
 
 	}
-	
+
 	@Test
 	@GUITest
 	public void testUpdateActivitiesButtonNewOperatorDoesNotExistError() {
@@ -838,7 +876,7 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 				.requireText(THEOPERATOR + activityUpdate.getOperatorMatricola() + NOTEXIST);
 		assertThat(listActivities.contents()).containsExactly(activityOld.toString());
 	}
-	
+
 	@Test
 	@GUITest
 	public void testUpdateActivitiesButtonNewBasicOperationDoesNotExistError() {
@@ -902,7 +940,6 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 	}
 
-	
 	@Test
 	@GUITest
 	public void testUpdateActivitiesButtonStartDateFollowEndDateError() {
@@ -962,11 +999,7 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 		// Verify
 		assertThat(listActivities.contents()).containsExactly(activityOld.toString());
-		listBottomMenuPanel.label("lblMessageStatus")
-				.requireText("The Start Date: " + activityUpdate.getStartTime()
+		listBottomMenuPanel.label("lblMessageStatus").requireText("The Start Date: " + activityUpdate.getStartTime()
 				+ "follow the End Date: " + activityUpdate.getEndTime());
-
 	}
-	
-
 }
