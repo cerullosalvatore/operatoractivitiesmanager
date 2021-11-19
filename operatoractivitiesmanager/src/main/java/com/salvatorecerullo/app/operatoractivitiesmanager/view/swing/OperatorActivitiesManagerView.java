@@ -6,10 +6,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.salvatorecerullo.app.operatoractivitiesmanager.controller.ActivityController;
-import com.salvatorecerullo.app.operatoractivitiesmanager.controller.BasicOperationController;
-import com.salvatorecerullo.app.operatoractivitiesmanager.controller.OperatorController;
-
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
@@ -25,9 +21,6 @@ public class OperatorActivitiesManagerView extends JFrame {
 	private ActivitiesPanel activitiesPanel;
 	private OperatorsPanel operatorsPanel;
 	private BasicOperationPanel basicOperationPanel;
-	private ActivityController activitiesController;
-	private OperatorController operatorController;
-	private BasicOperationController basicOperationController;
 	
 	private JTabbedPane tabbedPane;
 
@@ -64,25 +57,27 @@ public class OperatorActivitiesManagerView extends JFrame {
 		tabbedPane.addTab("Basic Operations", null, basicOperationPanel, null);
 
 		tabbedPane.addChangeListener(getChangeListenerTabbedPane());
-
+		
 		setNames();
 	}
 
 	
 	// GETTERS AND SETTERs
-	public void setActivitiesController(ActivityController activitiesController) {
-		this.activitiesController = activitiesController;
-		activitiesControllerInvocation();
+	public ActivitiesPanel getActivitiesPanel() {
+		return activitiesPanel;
 	}
 
-	public void setOperatorController(OperatorController operatorController) {
-		this.operatorController = operatorController;
+
+	public OperatorsPanel getOperatorsPanel() {
+		return operatorsPanel;
 	}
 
-	public void setBasicOperationController(BasicOperationController basicOperationController) {
-		this.basicOperationController = basicOperationController;
+
+	public BasicOperationPanel getBasicOperationPanel() {
+		return basicOperationPanel;
 	}
-	
+
+
 	// LISTENER
 	private ChangeListener getChangeListenerTabbedPane() {
 		return new ChangeListener() {
@@ -92,10 +87,10 @@ public class OperatorActivitiesManagerView extends JFrame {
 					activitiesControllerInvocation();
 					break;
 				case 1:
-					operatorController.allOperators();
+					operatorsPanel.getOperatorController().allOperators();
 					break;
 				case 2:
-					basicOperationController.allBasicOperations();
+					basicOperationPanel.getBasicOperationController().allBasicOperations();
 					break;
 				}
 			}
@@ -110,9 +105,9 @@ public class OperatorActivitiesManagerView extends JFrame {
 	}
 
 	private void activitiesControllerInvocation() {
-		activitiesController.allActivities();
-		activitiesController.allOperators();
-		activitiesController.allBasicOperation();
+		activitiesPanel.getActivityController().allActivities();;
+		activitiesPanel.getActivityController().allOperators();
+		activitiesPanel.getActivityController().allBasicOperation();
 	}
 	
 }

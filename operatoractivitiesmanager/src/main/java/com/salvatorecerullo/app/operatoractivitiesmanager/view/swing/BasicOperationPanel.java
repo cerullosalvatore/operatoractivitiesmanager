@@ -180,6 +180,10 @@ public class BasicOperationPanel extends JPanel implements BasicOperationView {
 	public String getBasicOperationIdTemp() {
 		return basicOperationIdTemp;
 	}
+	
+	public BasicOperationController getBasicOperationController() {
+		return basicOperationController;
+	}
 
 	public DefaultListModel<BasicOperation> getListBasicOpeationModel() {
 		return listBasicOpeationModel;

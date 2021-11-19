@@ -16,6 +16,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 
@@ -288,10 +289,14 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 	public String getActivityIdTemp() {
 		return activityIdTemp;
 	}
+	
+	public ActivityController getActivityController() {
+		return activityController;
+	}
 
 	// KEY LISTENERS
 
-	private KeyAdapter getKeyListenerDataTextField() {
+		private KeyAdapter getKeyListenerDataTextField() {
 		return new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -374,6 +379,8 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	private void actionListenerShowAllButton() {
 		activityController.allActivities();
+		activityController.allOperators();
+		activityController.allBasicOperation();
 	}
 
 	private void actionListenerFindByOperatorButton() {

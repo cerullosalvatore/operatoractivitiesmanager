@@ -1,6 +1,5 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.assertj.swing.annotation.GUITest;
@@ -41,9 +40,9 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 		// always start with a fresh user interface.
 		GuiActionRunner.execute(() -> {
 			operatorActivitiesManagerView = new OperatorActivitiesManagerView();
-			operatorActivitiesManagerView.setActivitiesController(activityController);
-			operatorActivitiesManagerView.setOperatorController(operatorController);
-			operatorActivitiesManagerView.setBasicOperationController(basicOperationController);
+			operatorActivitiesManagerView.getActivitiesPanel().setActivityController(activityController);
+			operatorActivitiesManagerView.getOperatorsPanel().setOperatorController(operatorController);
+			operatorActivitiesManagerView.getBasicOperationPanel().setBasicOperationController(basicOperationController);
 
 			return operatorActivitiesManagerView;
 		});
@@ -81,16 +80,6 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 
 	@Test
 	@GUITest
-	public void testActivitiesTabInitialStates() {
-		// Verify
-		frameFixture.panel("contentPane").panel("activitiesPanel").requireEnabled().requireVisible();
-		verify(activityController).allActivities();
-		verify(activityController).allOperators();
-		verify(activityController).allBasicOperation();
-	}
-
-	@Test
-	@GUITest
 	public void testTabChangeToActivities() {
 		// Verify
 		JTabbedPaneFixture tabbedPaneFixture = frameFixture.panel("contentPane").tabbedPane("tabbedPane");
@@ -98,9 +87,9 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 		tabbedPaneFixture.focus().selectTab("Activities").requireVisible().requireEnabled();
 		frameFixture.panel("contentPane").panel("activitiesPanel").requireVisible().requireEnabled();
 
-		verify(activityController, times(2)).allActivities();
-		verify(activityController, times(2)).allOperators();
-		verify(activityController, times(2)).allBasicOperation();
+		verify(activityController).allActivities();
+		verify(activityController).allOperators();
+		verify(activityController).allBasicOperation();
 	}
 
 	@Test

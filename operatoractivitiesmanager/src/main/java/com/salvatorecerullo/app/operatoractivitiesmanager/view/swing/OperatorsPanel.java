@@ -167,8 +167,14 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 	public void setOperatorController(OperatorController operatorController) {
 		this.operatorController = operatorController;
 	}
+	
+	
 
 	// ACTION KEY LISTENERS
+
+	public OperatorController getOperatorController() {
+		return operatorController;
+	}
 
 	private KeyAdapter getKeyListenerTextField() {
 		return new KeyAdapter() {
