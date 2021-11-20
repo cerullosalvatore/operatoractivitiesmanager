@@ -3,8 +3,6 @@ package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
@@ -21,7 +19,7 @@ public class OperatorActivitiesManagerView extends JFrame {
 	private ActivitiesPanel activitiesPanel;
 	private OperatorsPanel operatorsPanel;
 	private BasicOperationPanel basicOperationPanel;
-	
+
 	private JTabbedPane tabbedPane;
 
 	/**
@@ -56,48 +54,41 @@ public class OperatorActivitiesManagerView extends JFrame {
 		basicOperationPanel = new BasicOperationPanel();
 		tabbedPane.addTab("Basic Operations", null, basicOperationPanel, null);
 
-		tabbedPane.addChangeListener(getChangeListenerTabbedPane());
-		
+		tabbedPane.addChangeListener(e -> changeListenerTabbedPane());
+
 		setNames();
 	}
 
-	
 	// GETTERS AND SETTERs
 	public ActivitiesPanel getActivitiesPanel() {
 		return activitiesPanel;
 	}
 
-
 	public OperatorsPanel getOperatorsPanel() {
 		return operatorsPanel;
 	}
-
 
 	public BasicOperationPanel getBasicOperationPanel() {
 		return basicOperationPanel;
 	}
 
-
 	// LISTENER
-	private ChangeListener getChangeListenerTabbedPane() {
-		return new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				switch (tabbedPane.getSelectedIndex()) {
-				default:
-					activitiesControllerInvocation();
-					break;
-				case 1:
-					operatorsPanel.getOperatorController().allOperators();
-					break;
-				case 2:
-					basicOperationPanel.getBasicOperationController().allBasicOperations();
-					break;
-				}
-			}
-		};
+	private void changeListenerTabbedPane() {
+		switch (tabbedPane.getSelectedIndex()) {
+		case 1:
+			operatorsPanel.getOperatorController().allOperators();
+			break;
+		case 2:
+			basicOperationPanel.getBasicOperationController().allBasicOperations();
+			break;
+		default:
+			activitiesControllerInvocation();
+			break;
+		}
+
 	}
-	
-	//UTILS	
+
+	// UTILS
 	private void setNames() {
 		activitiesPanel.setName("activitiesPanel");
 		operatorsPanel.setName("operatorsPanel");
@@ -105,9 +96,9 @@ public class OperatorActivitiesManagerView extends JFrame {
 	}
 
 	private void activitiesControllerInvocation() {
-		activitiesPanel.getActivityController().allActivities();;
+		activitiesPanel.getActivityController().allActivities();
 		activitiesPanel.getActivityController().allOperators();
 		activitiesPanel.getActivityController().allBasicOperation();
 	}
-	
+
 }
