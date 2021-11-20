@@ -314,7 +314,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		// Verify
 		formTopMenuPanel.button("btnFindByOperator").requireEnabled();
 
-		// Setup
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			activitiesPanel.getComboBoxOperatorsModel().removeAllElements();
 		});
@@ -341,7 +341,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		// Verify
 		formTopMenuPanel.button("btnFindByBasicOperation").requireEnabled();
 
-		// Setup
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			activitiesPanel.getComboBoxOperationsModel().removeAllElements();
 		});
@@ -955,7 +955,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		verify(activityController, atMost(2)).allActivities();
 		listActivitiesPanel.label("lblMessageStatus").requireText("Error Message.");
 	}
-	
+
 	@Test
 	@GUITest
 	public void testShowOperatorsShouldUpdateOperatorsComboBox() {
@@ -975,7 +975,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		String[] operatorsComboContents = formActivityPanel.comboBox("comboBoxOperatorActivity").contents();
 		assertThat(operatorsComboContents).containsExactly(operator1.toString(), operator2.toString());
 	}
-	
+
 	@Test
 	@GUITest
 	public void testShowOperatorsShouldUpdateBasicOperationsComboBox() {
@@ -993,6 +993,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 		String[] basicoOperationComboContents = formActivityPanel.comboBox("comboBoxBasicOperationActivity").contents();
-		assertThat(basicoOperationComboContents).containsExactly(basicOperation1.toString(), basicOperation2.toString());
+		assertThat(basicoOperationComboContents).containsExactly(basicOperation1.toString(),
+				basicOperation2.toString());
 	}
 }

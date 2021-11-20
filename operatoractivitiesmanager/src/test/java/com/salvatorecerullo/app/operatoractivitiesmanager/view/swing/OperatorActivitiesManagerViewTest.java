@@ -42,7 +42,8 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 			operatorActivitiesManagerView = new OperatorActivitiesManagerView();
 			operatorActivitiesManagerView.getActivitiesPanel().setActivityController(activityController);
 			operatorActivitiesManagerView.getOperatorsPanel().setOperatorController(operatorController);
-			operatorActivitiesManagerView.getBasicOperationPanel().setBasicOperationController(basicOperationController);
+			operatorActivitiesManagerView.getBasicOperationPanel()
+					.setBasicOperationController(basicOperationController);
 
 			return operatorActivitiesManagerView;
 		});
@@ -66,27 +67,34 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 	@Test
 	@GUITest
 	public void testAllTabsInitialStates() {
-		// Verify
 		JTabbedPaneFixture tabbedPaneFixture = frameFixture.panel("contentPane").tabbedPane("tabbedPane");
+		// Exercise
 		tabbedPaneFixture.focus().selectTab("Activities").requireVisible().requireEnabled();
+		// Verify
 		frameFixture.panel("contentPane").panel("activitiesPanel");
 
+		// Exercise
 		tabbedPaneFixture.focus().selectTab("Operators").requireVisible().requireEnabled();
+		// Verify
 		frameFixture.panel("contentPane").panel("operatorsPanel");
 
+		// Exercise
 		tabbedPaneFixture.focus().selectTab("Basic Operations").requireVisible().requireEnabled();
+		// Verify
 		frameFixture.panel("contentPane").panel("basicOperationPanel");
 	}
 
 	@Test
 	@GUITest
 	public void testTabChangeToActivities() {
-		// Verify
 		JTabbedPaneFixture tabbedPaneFixture = frameFixture.panel("contentPane").tabbedPane("tabbedPane");
+
+		// Exercise
 		tabbedPaneFixture.focus().selectTab("Operators").requireVisible().requireEnabled();
 		tabbedPaneFixture.focus().selectTab("Activities").requireVisible().requireEnabled();
 		frameFixture.panel("contentPane").panel("activitiesPanel").requireVisible().requireEnabled();
 
+		// Verify
 		verify(activityController).allActivities();
 		verify(activityController).allOperators();
 		verify(activityController).allBasicOperation();
@@ -95,9 +103,10 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 	@Test
 	@GUITest
 	public void testTabChangeToOperators() {
-		// Verify
 		JTabbedPaneFixture tabbedPaneFixture = frameFixture.panel("contentPane").tabbedPane("tabbedPane");
+		// Exercise
 		tabbedPaneFixture.focus().selectTab("Operators").requireVisible().requireEnabled();
+		// Verify
 		frameFixture.panel("contentPane").panel("operatorsPanel").requireVisible().requireEnabled();
 		verify(operatorController).allOperators();
 	}
@@ -105,9 +114,10 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 	@Test
 	@GUITest
 	public void testTabChangeToBasicOperation() {
-		// Verify
 		JTabbedPaneFixture tabbedPaneFixture = frameFixture.panel("contentPane").tabbedPane("tabbedPane");
+		// Exercise
 		tabbedPaneFixture.focus().selectTab("Basic Operations").requireVisible().requireEnabled();
+		// Verify
 		frameFixture.panel("contentPane").panel("basicOperationPanel");
 		verify(basicOperationController).allBasicOperations();
 	}

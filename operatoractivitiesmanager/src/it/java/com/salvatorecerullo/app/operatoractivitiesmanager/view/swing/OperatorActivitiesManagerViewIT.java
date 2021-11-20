@@ -1,4 +1,4 @@
-package com.salvatorecerullo.app.operatoractivitiesmanager.controller;
+package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +23,9 @@ import org.mockito.MockitoAnnotations;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
+import com.salvatorecerullo.app.operatoractivitiesmanager.controller.ActivityController;
+import com.salvatorecerullo.app.operatoractivitiesmanager.controller.BasicOperationController;
+import com.salvatorecerullo.app.operatoractivitiesmanager.controller.OperatorController;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Activity;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.BasicOperation;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
@@ -32,7 +35,6 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.OperatorRep
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.ActivityMongoRepository;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.BasicOperationMongoRepository;
 import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.OperatorMongoRepository;
-import com.salvatorecerullo.app.operatoractivitiesmanager.view.swing.OperatorActivitiesManagerView;
 
 @RunWith(GUITestRunner.class)
 public class OperatorActivitiesManagerViewIT extends AssertJSwingJUnitTestCase {
@@ -109,7 +111,7 @@ public class OperatorActivitiesManagerViewIT extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testOperatorsSelectionTab() {
-		// Verify
+		// Setup
 		Operator operator1 = new Operator("Matricola1", "Name1", "Surname1");
 		Operator operator2 = new Operator("Matricola2", "Name2", "Surname2");
 		operatorRepository.save(operator1);
@@ -128,7 +130,7 @@ public class OperatorActivitiesManagerViewIT extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testBasicOperationSelectionTab() {
-		// Verify
+		// Setup
 		BasicOperation basicOperation1 = new BasicOperation("BasicOperationId1", "Name1", "Description1");
 		BasicOperation basicOperation2 = new BasicOperation("BasicOperationId2", "Name2", "Description2");
 		basicOperationRepository.save(basicOperation1);
@@ -149,7 +151,7 @@ public class OperatorActivitiesManagerViewIT extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testActivitiesSelectionTab() {
-		// Verify
+		// Setup
 		Activity activity1 = new Activity("activityId1", "operatorID1", "basicOperationID1", startTime, endTime);
 		Activity activity2 = new Activity("activityId2", "operatorID2", "basicOperationID2", startTime, endTime);
 		activityRepository.save(activity1);
