@@ -24,10 +24,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
 public class BasicOperationPanel extends JPanel implements BasicOperationView {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
 	private JTextField textFieldId;
 	private JTextField textFieldName;
 	private JPanel newBasicOperationPanel;
@@ -48,19 +46,19 @@ public class BasicOperationPanel extends JPanel implements BasicOperationView {
 	private JButton btnModify;
 	private JButton btnDelete;
 	private JLabel lblMessageStatus;
+
 	private Boolean updateInProgress;
 	private String basicOperationIdTemp;
 	private BasicOperationController basicOperationController;
 
-	/**
-	 * Create the panel.
-	 */
 	public BasicOperationPanel() {
+		// INIZIALIZING VARIABLE
 		basicOperationIdTemp = new ObjectId().toString();
 		updateInProgress = false;
 
 		setLayout(new GridLayout(0, 1, 0, 0));
 
+		// PANEL BASIC OPERATION
 		newBasicOperationPanel = new JPanel();
 		add(newBasicOperationPanel);
 		newBasicOperationPanel.setLayout(new BorderLayout(0, 0));
@@ -69,6 +67,7 @@ public class BasicOperationPanel extends JPanel implements BasicOperationView {
 		lblOperationDetails = new JLabel("BasicOperationDetails");
 		newBasicOperationPanel.add(lblOperationDetails, BorderLayout.NORTH);
 
+		// PANEL FORM BASIC OPERATION
 		formBasicOperationPanel = new JPanel();
 		newBasicOperationPanel.add(formBasicOperationPanel);
 		formBasicOperationPanel.setLayout(new GridLayout(3, 2, 0, 0));
@@ -103,6 +102,7 @@ public class BasicOperationPanel extends JPanel implements BasicOperationView {
 		formBasicOperationPanel.add(textAreaDescription);
 		textAreaDescription.addKeyListener(getKeyListenerTextField());
 
+		// PANEL BUTTONS FORM
 		buttonsFormBasicOperationPanel = new JPanel();
 		newBasicOperationPanel.add(buttonsFormBasicOperationPanel, BorderLayout.SOUTH);
 
@@ -118,6 +118,7 @@ public class BasicOperationPanel extends JPanel implements BasicOperationView {
 		btnUpdateOperation.setEnabled(false);
 		btnUpdateOperation.addActionListener(e -> actionListenerUpdateButton());
 
+		// PANEL LIST BASIC OPERATION
 		listBasicOperationsPanel = new JPanel();
 		add(listBasicOperationsPanel);
 		listBasicOperationsPanel.setLayout(new BorderLayout(0, 0));
@@ -129,10 +130,12 @@ public class BasicOperationPanel extends JPanel implements BasicOperationView {
 		listBasicOperations.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listBasicOperations.addListSelectionListener(e -> actionListenerListOperators());
 
+		// PANEL BOTOM MENU
 		listBottomMenuPanel = new JPanel();
 		listBasicOperationsPanel.add(listBottomMenuPanel, BorderLayout.SOUTH);
 		listBottomMenuPanel.setLayout(new GridLayout(2, 0, 0, 0));
 
+		// PANEL BOTTOM MENU BUTTON
 		listBottomMenuPanelButton = new JPanel();
 		listBottomMenuPanel.add(listBottomMenuPanelButton);
 
@@ -148,6 +151,7 @@ public class BasicOperationPanel extends JPanel implements BasicOperationView {
 		btnDelete.setEnabled(false);
 		btnDelete.addActionListener(e -> actionListenerDeleteButton());
 
+		// LABEL MESSAGE STATUS
 		lblMessageStatus = new JLabel("");
 		listBottomMenuPanel.add(lblMessageStatus);
 
@@ -179,6 +183,10 @@ public class BasicOperationPanel extends JPanel implements BasicOperationView {
 	// GETTERS AND SETTERS
 	public String getBasicOperationIdTemp() {
 		return basicOperationIdTemp;
+	}
+
+	public BasicOperationController getBasicOperationController() {
+		return basicOperationController;
 	}
 
 	public DefaultListModel<BasicOperation> getListBasicOpeationModel() {

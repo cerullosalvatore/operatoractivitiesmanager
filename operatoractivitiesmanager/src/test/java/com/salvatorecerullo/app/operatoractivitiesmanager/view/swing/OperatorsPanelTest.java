@@ -236,7 +236,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testModifyButtonIsPressedFieldWasCompiledCorrectly() {
 		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");
-		
+
 		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
 		JPanelFixture listBottomMenuPanel = listOperatorsPanel.panel("listBottomMenuPanel");
 
@@ -281,7 +281,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		listBottomMenuPanel.button("btnModifyOperator").click();
 
 		formOperatorPanel.textBox("textFieldMatricola").requireNotEditable();
-		
+
 		// Exercise
 		buttonsFormOperatorPanel.button("btnUpdateOperator").click();
 
@@ -293,6 +293,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testShowAllOperatorsShouldAddOperatorsToTheList() {
+		// Setup
 		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
 
 		Operator operator1 = new Operator("MatricolaTest1", "NameTest1", "SurnameTest1");
@@ -303,10 +304,12 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 		operators.add(operator1);
 		operators.add(operator2);
 
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			operatorsPanel.showAllOperators(operators);
 		});
 
+		// Verify
 		String[] listContents = listOperatorsPanel.list("listOperators").contents();
 		assertThat(listContents).containsExactly(operator1.toString(), operator2.toString());
 		listOperatorsPanel.label("lblMessageStatus").requireText("");
@@ -315,14 +318,16 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testShowSuccessfullShouldAddOperatorsToTheListAndShowSuccessMessage() {
-		// SETUP
+		// Setup
 		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
 		listOperatorsPanel.list("listOperators").requireVisible().requireEnabled().requireNoSelection();
 
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			operatorsPanel.showSuccessfull("Successfull Message.");
 		});
 
+		// Verify
 		verify(operatorController).allOperators();
 		listOperatorsPanel.label("lblMessageStatus").requireText("Successfull Message.");
 	}
@@ -330,14 +335,16 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testShowErrorShouldAddOperatorsToTheListAndShowErrorMessage() {
-		// SETUP
+		// Setup
 		JPanelFixture listOperatorsPanel = frameFixture.panel("listOperatorsPanel");
 		listOperatorsPanel.list("listOperators").requireVisible().requireEnabled().requireNoSelection();
 
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			operatorsPanel.showError("Error Message.");
 		});
 
+		// Verify
 		verify(operatorController).allOperators();
 		listOperatorsPanel.label("lblMessageStatus").requireText("Error Message.");
 	}
@@ -346,6 +353,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testAddButtonShouldDelegateToOperatorControllerNewOperator() throws ParseException {
+		// Setup
 		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");
 		JPanelFixture buttonsFormOperatorPanel = frameFixture.panel("newOperatorPanel")
 				.panel("buttonsFormOperatorPanel");
@@ -395,6 +403,7 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testUpdateButtonShouldDelegateToOperatorControllerUpdateOperator() throws ParseException {
+		// Setup
 		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");
 		JPanelFixture buttonsFormOperatorPanel = frameFixture.panel("newOperatorPanel")
 				.panel("buttonsFormOperatorPanel");

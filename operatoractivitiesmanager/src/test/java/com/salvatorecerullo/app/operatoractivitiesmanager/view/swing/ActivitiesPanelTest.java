@@ -1,6 +1,8 @@
 package com.salvatorecerullo.app.operatoractivitiesmanager.view.swing;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.verify;
 
 import java.text.ParseException;
@@ -312,7 +314,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		// Verify
 		formTopMenuPanel.button("btnFindByOperator").requireEnabled();
 
-		// Setup
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			activitiesPanel.getComboBoxOperatorsModel().removeAllElements();
 		});
@@ -339,7 +341,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		// Verify
 		formTopMenuPanel.button("btnFindByBasicOperation").requireEnabled();
 
-		// Setup
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			activitiesPanel.getComboBoxOperationsModel().removeAllElements();
 		});
@@ -781,7 +783,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testShowAllButtonShouldDelegateToActivityControllerAllActivities() {
+	public void testShowAllButtonShouldDelegateToActivityControllers() {
 		// Setup
 		JPanelFixture listTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 
@@ -790,6 +792,8 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Verify
 		verify(activityController).allActivities();
+		verify(activityController).allOperators();
+		verify(activityController).allBasicOperation();
 	}
 
 	@Test
@@ -932,7 +936,8 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 			activitiesPanel.showSuccessfull("Successfull Message.");
 		});
 
-		verify(activityController).allActivities();
+		verify(activityController, atLeast(1)).allActivities();
+		verify(activityController, atMost(2)).allActivities();
 		listActivitiesPanel.label("lblMessageStatus").requireText("Successfull Message.");
 	}
 
@@ -946,7 +951,49 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 			activitiesPanel.showError("Error Message.");
 		});
 
-		verify(activityController).allActivities();
+		verify(activityController, atLeast(1)).allActivities();
+		verify(activityController, atMost(2)).allActivities();
 		listActivitiesPanel.label("lblMessageStatus").requireText("Error Message.");
+	}
+
+	@Test
+	@GUITest
+	public void testShowOperatorsShouldUpdateOperatorsComboBox() {
+		Operator operator1 = new Operator("MatricolaTest1", "NameTest1", "SurnameTest1");
+		Operator operator2 = new Operator("MatricolaTest2", "NameTest2", "SurnameTest2");
+
+		List<Operator> operators = new ArrayList<Operator>();
+
+		operators.add(operator1);
+		operators.add(operator2);
+
+		GuiActionRunner.execute(() -> {
+			activitiesPanel.showOperators(operators);
+		});
+
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		String[] operatorsComboContents = formActivityPanel.comboBox("comboBoxOperatorActivity").contents();
+		assertThat(operatorsComboContents).containsExactly(operator1.toString(), operator2.toString());
+	}
+
+	@Test
+	@GUITest
+	public void testShowOperatorsShouldUpdateBasicOperationsComboBox() {
+		BasicOperation basicOperation1 = new BasicOperation("IdTest1", "NameTest1", "DescriptionTest1");
+		BasicOperation basicOperation2 = new BasicOperation("IdTest2", "NameTest2", "DescriptionTest2");
+
+		List<BasicOperation> operations = new ArrayList<BasicOperation>();
+
+		operations.add(basicOperation1);
+		operations.add(basicOperation2);
+
+		GuiActionRunner.execute(() -> {
+			activitiesPanel.showBasicOperation(operations);
+		});
+
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		String[] basicoOperationComboContents = formActivityPanel.comboBox("comboBoxBasicOperationActivity").contents();
+		assertThat(basicoOperationComboContents).containsExactly(basicOperation1.toString(),
+				basicOperation2.toString());
 	}
 }

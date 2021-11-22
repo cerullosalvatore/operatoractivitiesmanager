@@ -16,6 +16,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 
@@ -33,12 +34,8 @@ import java.awt.Dimension;
 import javax.swing.ListSelectionModel;
 
 public class ActivitiesPanel extends JPanel implements ActivityView {
-
-	/**
-	 * 
-	 */
-
 	private static final long serialVersionUID = -6391077047327115858L;
+
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
 	private static final String HOUR_FORMAT = "HH:mm";
 
@@ -73,34 +70,37 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 	private JButton btnFindByOperator;
 	private JButton btnFindByBasicOperation;
 	private JButton btnFindByData;
+	private JLabel lblMessageStatus;
+	private JPanel listBottomMenuPanelButton;
+
 	private boolean updateInProgress;
 	private String activityIdTemp;
 
 	private ActivityController activityController;
-	private JLabel lblMessageStatus;
-	private JPanel listBottomMenuPanelButton;
-
-	/**
-	 * Create the panel.
-	 */
 
 	public ActivitiesPanel() {
+		// INITIALIZING VARIABLE
 		activityIdTemp = new ObjectId().toString();
 		updateInProgress = false;
+
 		setMinimumSize(new Dimension(0, 0));
 		setLayout(new GridLayout(0, 1, 0, 0));
 
+		// ACTIVITY PANEL
 		newActivityPanel = new JPanel();
 		add(newActivityPanel);
 		newActivityPanel.setLayout(new BorderLayout(0, 0));
 
+		// LABEL NEW ACTIVITY
 		labelNewActivity = new JLabel("Activity");
 		newActivityPanel.add(labelNewActivity, BorderLayout.NORTH);
 
+		// LABEL FORM ACTIVITY PANEL
 		formActivityPanel = new JPanel();
 		newActivityPanel.add(formActivityPanel, BorderLayout.CENTER);
 		formActivityPanel.setLayout(new GridLayout(0, 2, 0, 0));
 
+		// LABEL OPERATOR
 		labelOperatorActivity = new JLabel("Operator:");
 		formActivityPanel.add(labelOperatorActivity);
 
@@ -110,6 +110,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		formActivityPanel.add(comboBoxOperatorActivity);
 		comboBoxOperatorActivity.addActionListener(e -> actionListenerComboBoxOperatorsModel());
 
+		// LABEL BASIC OPERATION
 		labelBasicOperationActivity = new JLabel("Basic Operation:");
 		formActivityPanel.add(labelBasicOperationActivity);
 
@@ -117,9 +118,9 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		comboBoxOperationsModel = new DefaultComboBoxModel<>();
 		comboBoxBasicOperationActivity = new JComboBox<>(comboBoxOperationsModel);
 		formActivityPanel.add(comboBoxBasicOperationActivity);
-
 		comboBoxBasicOperationActivity.addActionListener(e -> actionListenerComboBoxOperationsModel());
 
+		// LABEL START DATA
 		labelStartDataActivity = new JLabel("Start Data:");
 		formActivityPanel.add(labelStartDataActivity);
 
@@ -128,27 +129,34 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		formActivityPanel.add(textFieldStartDataActivity);
 		textFieldStartDataActivity.addKeyListener(getKeyListenerDataTextField());
 
+		// LABEL START HOUR
 		labelStartHourActivity = new JLabel("Start Hour:");
 		formActivityPanel.add(labelStartHourActivity);
 
+		// FIELD START DATA
 		textFieldStartHourActivity = new JFormattedTextField(new SimpleDateFormat(HOUR_FORMAT));
 		formActivityPanel.add(textFieldStartHourActivity);
 		textFieldStartHourActivity.addKeyListener(getKeyListenerInputTextField());
 
+		// LABEL END DATA
 		labelEndDataActivity = new JLabel("End Data:");
 		formActivityPanel.add(labelEndDataActivity);
 
+		// FIELD END DATA
 		textFieldEndDataActivity = new JFormattedTextField(new SimpleDateFormat(DATE_FORMAT));
 		formActivityPanel.add(textFieldEndDataActivity);
 		textFieldEndDataActivity.addKeyListener(getKeyListenerInputTextField());
 
+		// LABEL END HOUR
 		labelEndHourActivity = new JLabel("End Hour:");
 		formActivityPanel.add(labelEndHourActivity);
 
+		// FIELD END HOUR
 		textFieldEndHourActivity = new JFormattedTextField(new SimpleDateFormat(HOUR_FORMAT));
 		formActivityPanel.add(textFieldEndHourActivity);
 		textFieldEndHourActivity.addKeyListener(getKeyListenerInputTextField());
 
+		// PANEL BUTTONS FORM
 		buttonsFormActivityPanel = new JPanel();
 		newActivityPanel.add(buttonsFormActivityPanel, BorderLayout.SOUTH);
 
@@ -174,6 +182,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		listActivitiesPanel.add(listBottomMenuPanel, BorderLayout.SOUTH);
 		listBottomMenuPanel.setLayout(new GridLayout(2, 1, 0, 0));
 
+		// PANEL BOTTOM MENU
 		listBottomMenuPanelButton = new JPanel();
 		listBottomMenuPanel.add(listBottomMenuPanelButton);
 
@@ -227,7 +236,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		listActivitiesPanel.add(listActivities, BorderLayout.CENTER);
 		listActivities.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listActivities.addListSelectionListener(e -> actionListenerListActivities());
-		
+
 		// Call Set Names
 		setNames();
 
@@ -255,6 +264,18 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		lblMessageStatus.setForeground(Color.RED);
 	}
 
+	@Override
+	public void showOperators(List<Operator> operators) {
+		comboBoxOperatorsModel.removeAllElements();
+		operators.stream().forEach(comboBoxOperatorsModel::addElement);
+	}
+
+	@Override
+	public void showBasicOperation(List<BasicOperation> basicOperations) {
+		comboBoxOperationsModel.removeAllElements();
+		basicOperations.stream().forEach(comboBoxOperationsModel::addElement);
+	}
+
 	// GETTERS AND SETTERS
 
 	public DefaultComboBoxModel<Operator> getComboBoxOperatorsModel() {
@@ -275,6 +296,10 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	public String getActivityIdTemp() {
 		return activityIdTemp;
+	}
+
+	public ActivityController getActivityController() {
+		return activityController;
 	}
 
 	// KEY LISTENERS
@@ -362,6 +387,8 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	private void actionListenerShowAllButton() {
 		activityController.allActivities();
+		activityController.allOperators();
+		activityController.allBasicOperation();
 	}
 
 	private void actionListenerFindByOperatorButton() {
@@ -430,7 +457,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		activityController.removeActivity(activitySelected);
 	}
 
-	// UTILITY
+	// UTILITIES
 
 	private void setNames() {
 		newActivityPanel.setName("newActivityPanel");
@@ -518,4 +545,5 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		calFinal.set(Calendar.SECOND, calTempHour.get(Calendar.SECOND));
 		return calFinal.getTime();
 	}
+
 }

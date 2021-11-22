@@ -21,8 +21,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
 public class OperatorsPanel extends JPanel implements OperatorView {
-
 	private static final long serialVersionUID = 1L;
+
 	private JTextField textFieldMatricola;
 	private JTextField textFieldName;
 	private JTextField textFieldSurname;
@@ -43,27 +43,32 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 	private JButton btnModifyOperator;
 	private JButton btnDeleteOperator;
 	private JLabel lblMessageStatus;
+
 	private boolean updateInProgress;
+
 	private OperatorController operatorController;
 
-	/**
-	 * Create the panel.
-	 */
 	public OperatorsPanel() {
 		setLayout(new GridLayout(2, 0, 0, 0));
+
+		// INIZIALIZING VARIABLE
 		updateInProgress = false;
 
+		// PANEL NEW OPERATOR
 		newOperatorPanel = new JPanel();
 		add(newOperatorPanel);
 		newOperatorPanel.setLayout(new BorderLayout(0, 0));
 
+		// LABEL OPERATOR DETAILS
 		lblOperatorDetails = new JLabel("Operator  Details");
 		newOperatorPanel.add(lblOperatorDetails, BorderLayout.NORTH);
 
+		// PANEL FORM OPERATOR
 		formOperatorPanel = new JPanel();
 		newOperatorPanel.add(formOperatorPanel, BorderLayout.CENTER);
 		formOperatorPanel.setLayout(new GridLayout(3, 2, 0, 0));
 
+		// LABEL MATRICOLA
 		lblMatricola = new JLabel("Matricola:");
 		formOperatorPanel.add(lblMatricola);
 
@@ -73,6 +78,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		textFieldMatricola.setColumns(10);
 		textFieldMatricola.addKeyListener(getKeyListenerTextField());
 
+		// LABEL NAME
 		lblName = new JLabel("Name:");
 		formOperatorPanel.add(lblName);
 
@@ -82,6 +88,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		textFieldName.setColumns(10);
 		textFieldName.addKeyListener(getKeyListenerTextField());
 
+		// LABEL SURNAME
 		lblSurname = new JLabel("Surname:");
 		formOperatorPanel.add(lblSurname);
 
@@ -91,6 +98,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		textFieldSurname.setColumns(10);
 		textFieldSurname.addKeyListener(getKeyListenerTextField());
 
+		// PANEL BUTTONS FORM OPERATOR
 		buttonsFormOperatorPanel = new JPanel();
 		newOperatorPanel.add(buttonsFormOperatorPanel, BorderLayout.SOUTH);
 
@@ -99,12 +107,14 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		buttonsFormOperatorPanel.add(btnAddOperator);
 		btnAddOperator.setEnabled(false);
 		btnAddOperator.addActionListener(e -> actionListenerAddButton());
+
 		// BUTTON UPATE OPERATOR
 		btnUpdateOperator = new JButton("Update Operator");
 		buttonsFormOperatorPanel.add(btnUpdateOperator);
 		btnUpdateOperator.setEnabled(false);
 		btnUpdateOperator.addActionListener(e -> actionListenerUpdateButton());
 
+		// PANEL LIST OPERATORS
 		listOperatorsPanel = new JPanel();
 		add(listOperatorsPanel);
 		listOperatorsPanel.setLayout(new BorderLayout(0, 0));
@@ -116,10 +126,12 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		listOperators.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listOperators.addListSelectionListener(e -> actionListenerListOperators());
 
+		// PANEL BOTTOM MENU
 		listBottomMenuPanel = new JPanel();
 		listOperatorsPanel.add(listBottomMenuPanel, BorderLayout.SOUTH);
 		listBottomMenuPanel.setLayout(new GridLayout(2, 1, 0, 0));
 
+		// PANEL BUTTON BOTTOM LIST
 		listBottomMenuPanelButton = new JPanel();
 		listBottomMenuPanel.add(listBottomMenuPanelButton);
 
@@ -135,6 +147,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		btnDeleteOperator.setEnabled(false);
 		btnDeleteOperator.addActionListener(e -> actionListenereDeleteButton());
 
+		// LABEL MESSAGE STATUS
 		lblMessageStatus = new JLabel("");
 		listBottomMenuPanel.add(lblMessageStatus);
 
@@ -170,6 +183,10 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 
 	// ACTION KEY LISTENERS
 
+	public OperatorController getOperatorController() {
+		return operatorController;
+	}
+
 	private KeyAdapter getKeyListenerTextField() {
 		return new KeyAdapter() {
 			@Override
@@ -196,8 +213,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		textFieldMatricola.setText(operatorSelected.getMatricola());
 		textFieldName.setText(operatorSelected.getName());
 		textFieldSurname.setText(operatorSelected.getSurname());
-		
-		
+
 		textFieldMatricola.setEditable(false);
 		btnUpdateOperator.setEnabled(setButtonUpdateEnabled());
 		btnAddOperator.setEnabled(setButtonAddEnabled());
@@ -233,7 +249,6 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 	}
 
 	// UTILITY
-
 	public DefaultListModel<Operator> getListOperatorsModel() {
 		return listOperatorsModel;
 	}

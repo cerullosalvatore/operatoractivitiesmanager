@@ -31,6 +31,14 @@ public class ActivityController {
 	public void allActivities() {
 		activityView.showActivities(activityRepository.findAll());
 	}
+	
+	public void allOperators() {
+		activityView.showOperators(operatorRepository.findAll());
+	}
+	
+	public void allBasicOperation() {
+		activityView.showBasicOperation(basicOperationRepository.findAll());
+	}
 
 	public void addActivity(Activity activity) {
 		if (activityRepository.findById(activity.getId()) != null) {
