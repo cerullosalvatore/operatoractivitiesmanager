@@ -111,7 +111,6 @@
 					<version>${org.pitest.version}</version>
 					<configuration>
 						<excludedClasses>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.OperatorActivitiesSwingApp</param>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
 							<param>*.swing.*</param>
 							<param>*IT</param>
