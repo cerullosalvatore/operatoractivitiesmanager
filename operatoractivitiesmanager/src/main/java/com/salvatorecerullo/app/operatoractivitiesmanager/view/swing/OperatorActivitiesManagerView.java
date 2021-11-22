@@ -20,15 +20,6 @@ public class OperatorActivitiesManagerView extends JFrame {
 	private OperatorsPanel operatorsPanel;
 	private BasicOperationPanel basicOperationPanel;
 
-	/**
-	 * Launch the application.
-	 * 
-	 * public static void main(String[] args) { EventQueue.invokeLater(new
-	 * Runnable() { public void run() { try { OperatorActivitiesManagerView frame =
-	 * new OperatorActivitiesManagerView(); frame.setVisible(true); } catch
-	 * (Exception e) { e.printStackTrace(); } } }); }
-	 */
-
 	public OperatorActivitiesManagerView() {
 		setTitle("Operator Activities Manager");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
