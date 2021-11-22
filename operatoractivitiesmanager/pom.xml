@@ -20,7 +20,7 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.projectKey>cerullosalvatore_operatoractivitiesmanager</sonar.projectKey>
 		<sonar.coverage.exclusions>
-			**/Main.*,
+			**/OperatorActivitiesSwingApp.*,
 			**/model/*.*
 		</sonar.coverage.exclusions>
 	</properties>
@@ -98,7 +98,7 @@
 								</descriptorRefs>
 								<archive>
 									<manifest>
-										<mainClass>com.salvatorecerullo.app.operatoractivitiesmanager.Main</mainClass>
+										<mainClass>com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.OperatorActivitiesSwingApp</mainClass>
 									</manifest>
 								</archive>
 							</configuration>
@@ -111,7 +111,7 @@
 					<version>${org.pitest.version}</version>
 					<configuration>
 						<excludedClasses>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.Main*</param>
+							<param>com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.OperatorActivitiesSwingApp</param>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
 							<param>*.swing.*</param>
 							<param>*IT</param>
@@ -140,7 +140,7 @@
 					<version>${org.jacoco.version}</version>
 					<configuration>
 						<excludes>
-							<exclude>**/Main.*</exclude>
+							<exclude>**/com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.OperatorActivitiesSwingApp.*</exclude>
 							<exclude>**/model/*.*</exclude>
 						</excludes>
 					</configuration>
