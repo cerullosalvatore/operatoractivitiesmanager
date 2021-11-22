@@ -140,7 +140,7 @@
 					<version>${org.jacoco.version}</version>
 					<configuration>
 						<excludes>
-							<exclude>**/com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.OperatorActivitiesSwingApp.*</exclude>
+							<exclude>**/app/swing/*.*</exclude>
 							<exclude>**/model/*.*</exclude>
 						</excludes>
 					</configuration>
