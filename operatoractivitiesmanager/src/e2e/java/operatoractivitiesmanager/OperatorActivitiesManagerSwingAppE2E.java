@@ -17,7 +17,6 @@ import org.junit.runner.RunWith;
 
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
-import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.swing.OperatorActivitiesManagerView;
 
 @RunWith(GUITestRunner.class)
@@ -30,13 +29,6 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 	private static final String COLLECTION_NAME_OPERATOR = "operator";
 	private static final String COLLECTION_NAME_BASICOPERATION = "basicoperation";
 
-	private static final String OPERATOR_1_ID = "matricolaTest1";
-	private static final String OPERATOR_1_NAME = "nameTest1";
-	private static final String OPERATOR_1_SURNAME = "surnameTest1";
-	private static final String OPERATOR_2_ID = "matricolaTest2";
-	private static final String OPERATOR_2_NAME = "nameTest2";
-	private static final String OPERATOR_2_SURNAME = "surnameTest2";
-	
 	private MongoClient mongoClient;
 
 	private FrameFixture frameFixture;
@@ -55,10 +47,10 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		mongoClient.getDatabase(DB_NAME).drop();
 
 		// Adding element to DB
-		addOperatorToDB("matricolaTest1", "nameTest1", "surnameTest1");
-		addOperatorToDB("matricolaTest2", "nameTest2", "surnameTest2");
-		addBasicOperationToDB("IDTest1", "nameTest1", "descriptionTest1");
-		addBasicOperationToDB("IDTest2", "nameTest2", "descriptionTest2");
+		addOperatorToDB("matricolaOperatorTest1", "nameTest1", "surnameTest1");
+		addOperatorToDB("matricolaOperatorTest2", "nameTest2", "surnameTest2");
+		addBasicOperationToDB("idBasicOperationTest1", "nameTest1", "descriptionTest1");
+		addBasicOperationToDB("idBasicOperationTest2", "nameTest2", "descriptionTest2");
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(2021, 1, 1, 8, 0, 00);
@@ -122,35 +114,69 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 	@GUITest
 	public void testOnStartAllOperatorsOnActivitiesTabAreShown() {
 		assertThat(frameFixture.comboBox("comboBoxOperatorActivity").contents())
-				.anySatisfy(e -> assertThat(e).contains("matricolaTest1", "nameTest1", "surnameTest1"))
-				.anySatisfy(e -> assertThat(e).contains("matricolaTest2", "nameTest2", "surnameTest2"));
+				.anySatisfy(e -> assertThat(e).contains("matricolaOperatorTest1", "nameTest1", "surnameTest1"))
+				.anySatisfy(e -> assertThat(e).contains("matricolaOperatorTest2", "nameTest2", "surnameTest2"));
 	}
-	
+
 	@Test
 	@GUITest
 	public void testOnStartAllBasicOperationsOnActivitiesTabAreShown() {
 		assertThat(frameFixture.comboBox("comboBoxBasicOperationActivity").contents())
-				.anySatisfy(e -> assertThat(e).contains("IDTest1", "nameTest1", "descriptionTest1"))
-				.anySatisfy(e -> assertThat(e).contains("IDTest2", "nameTest2", "descriptionTest2"));
+				.anySatisfy(e -> assertThat(e).contains("idBasicOperationTest1", "nameTest1", "descriptionTest1"))
+				.anySatisfy(e -> assertThat(e).contains("idBasicOperationTest2", "nameTest2", "descriptionTest2"));
 	}
-	
+
 	@Test
 	@GUITest
 	public void testOnStartAllOperatorsOnOperatorsTabAreShown() {
 		frameFixture.tabbedPane().focus().selectTab("Operators");
 		assertThat(frameFixture.list().contents())
-				.anySatisfy(e -> assertThat(e).contains("matricolaTest1", "nameTest1", "surnameTest1"))
-				.anySatisfy(e -> assertThat(e).contains("matricolaTest2", "nameTest2", "surnameTest2"));
+				.anySatisfy(e -> assertThat(e).contains("matricolaOperatorTest1", "nameTest1", "surnameTest1"))
+				.anySatisfy(e -> assertThat(e).contains("matricolaOperatorTest2", "nameTest2", "surnameTest2"));
 
 	}
-	
+
 	@Test
 	@GUITest
 	public void testOnStartAllBasicOperationOnBasicOperationTabAreShown() {
 		frameFixture.tabbedPane().focus().selectTab("Basic Operations");
 		assertThat(frameFixture.list().contents())
-				.anySatisfy(e -> assertThat(e).contains("IDTest1", "nameTest1", "descriptionTest1"))
-				.anySatisfy(e -> assertThat(e).contains("IDTest2", "nameTest2", "descriptionTest2"));
+				.anySatisfy(e -> assertThat(e).contains("idBasicOperationTest1", "nameTest1", "descriptionTest1"))
+				.anySatisfy(e -> assertThat(e).contains("idBasicOperationTest2", "nameTest2", "descriptionTest2"));
 
+	}
+
+	@Test
+	@GUITest
+	public void testAddButtonSuccess() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(2020, 0, 21);
+		Date startTime = settingDate(cal.getTime(), 12, 11);
+		cal.set(2021, 1, 11);
+		Date endTime = settingDate(cal.getTime(), 11, 12);
+
+		String tempId = frameFixture.textBox("textFieldIdActivity").text();
+		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
+		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
+		frameFixture.textBox("textFieldStartDataActivity").enterText("21/01/2020");
+		frameFixture.textBox("textFieldStartHourActivity").enterText("12:11");
+		frameFixture.textBox("textFieldEndDataActivity").enterText("11/02/2021");
+		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
+		
+		frameFixture.button("btnAddActivity").click();
+
+		
+		assertThat(frameFixture.list().contents())
+				.anySatisfy(e -> assertThat(e).contains(tempId, "matricolaOperatorTest1", "idBasicOperationTest2",
+						startTime.toString(), endTime.toString()));
+	}
+
+	private Date settingDate(Date date, int hour, int minute) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, hour);
+		cal.set(Calendar.MINUTE, minute);
+		cal.set(Calendar.SECOND, 00);
+		return cal.getTime();
 	}
 }
