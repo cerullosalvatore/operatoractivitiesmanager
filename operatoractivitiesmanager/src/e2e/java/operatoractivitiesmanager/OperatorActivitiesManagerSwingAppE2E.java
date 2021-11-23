@@ -103,11 +103,47 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 
 	@Test
 	@GUITest
-	public void testOnStartAllActivitiesAreShown() {
+	public void testOnStartAllActivitiesOnActivitiesTabAreShown() {
 		assertThat(frameFixture.list().contents())
 				.anySatisfy(e -> assertThat(e).contains("IDTest1", "matricolaOperatorTest1", "idBasicOperationTest1",
 						startTime1.toString(), endTime1.toString()))
 				.anySatisfy(e -> assertThat(e).contains("IDTest2", "matricolaOperatorTest2", "idBasicOperationTest2",
 						startTime2.toString(), endTime2.toString()));
+	}
+
+	@Test
+	@GUITest
+	public void testOnStartAllOperatorsOnActivitiesTabAreShown() {
+		assertThat(frameFixture.comboBox("comboBoxOperatorActivity").contents())
+				.anySatisfy(e -> assertThat(e).contains("matricolaTest1", "nameTest1", "surnameTest1"))
+				.anySatisfy(e -> assertThat(e).contains("matricolaTest2", "nameTest2", "surnameTest2"));
+	}
+	
+	@Test
+	@GUITest
+	public void testOnStartAllBasicOperationsOnActivitiesTabAreShown() {
+		assertThat(frameFixture.comboBox("comboBoxBasicOperationActivity").contents())
+				.anySatisfy(e -> assertThat(e).contains("IDTest1", "nameTest1", "descriptionTest1"))
+				.anySatisfy(e -> assertThat(e).contains("IDTest2", "nameTest2", "descriptionTest2"));
+	}
+	
+	@Test
+	@GUITest
+	public void testOnStartAllOperatorsOnOperatorsTabAreShown() {
+		frameFixture.tabbedPane().focus().selectTab("Operators");
+		assertThat(frameFixture.list().contents())
+				.anySatisfy(e -> assertThat(e).contains("matricolaTest1", "nameTest1", "surnameTest1"))
+				.anySatisfy(e -> assertThat(e).contains("matricolaTest2", "nameTest2", "surnameTest2"));
+
+	}
+	
+	@Test
+	@GUITest
+	public void testOnStartAllBasicOperationOnBasicOperationTabAreShown() {
+		frameFixture.tabbedPane().focus().selectTab("Basic Operations");
+		assertThat(frameFixture.list().contents())
+				.anySatisfy(e -> assertThat(e).contains("IDTest1", "nameTest1", "descriptionTest1"))
+				.anySatisfy(e -> assertThat(e).contains("IDTest2", "nameTest2", "descriptionTest2"));
+
 	}
 }
