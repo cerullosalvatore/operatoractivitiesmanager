@@ -30,6 +30,13 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 	private static final String COLLECTION_NAME_OPERATOR = "operator";
 	private static final String COLLECTION_NAME_BASICOPERATION = "basicoperation";
 
+	private static final String OPERATOR_1_ID = "matricolaTest1";
+	private static final String OPERATOR_1_NAME = "nameTest1";
+	private static final String OPERATOR_1_SURNAME = "surnameTest1";
+	private static final String OPERATOR_2_ID = "matricolaTest2";
+	private static final String OPERATOR_2_NAME = "nameTest2";
+	private static final String OPERATOR_2_SURNAME = "surnameTest2";
+	
 	private MongoClient mongoClient;
 
 	private FrameFixture frameFixture;
