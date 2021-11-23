@@ -21,7 +21,7 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.Opera
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.swing.OperatorActivitiesManagerView;
 
 @Command(mixinStandardHelpOptions = true)
-public class OperatorActivitiesSwingApp implements Callable<Void> {
+public class OperatorActivitiesManagerSwingApp implements Callable<Void> {
 
 	@Option(names = { "--mongo-host" }, description = "MongoDB host address")
 	private String mongoHost = "localhost";
@@ -42,7 +42,7 @@ public class OperatorActivitiesSwingApp implements Callable<Void> {
 	private String collectionActiovitiesName = "activity";
 
 	public static void main(String[] args) {
-		new CommandLine(new OperatorActivitiesSwingApp()).execute(args);
+		new CommandLine(new OperatorActivitiesManagerSwingApp()).execute(args);
 	}
 	
 	@Override
