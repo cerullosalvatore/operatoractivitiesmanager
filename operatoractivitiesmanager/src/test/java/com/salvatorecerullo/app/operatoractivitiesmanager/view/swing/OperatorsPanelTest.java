@@ -198,6 +198,29 @@ public class OperatorsPanelTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
+	public void testAddButtonIsPressedInputReset() {
+		// Setup
+		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");
+		JPanelFixture buttonsFormOperatorPanel = frameFixture.panel("newOperatorPanel")
+				.panel("buttonsFormOperatorPanel");
+
+		// Exercise
+		formOperatorPanel.textBox("textFieldMatricola").enterText("MatricolaTest");
+		formOperatorPanel.textBox("textFieldName").enterText("NameTest");
+		formOperatorPanel.textBox("textFieldSurname").enterText("SurnameTest");
+
+		buttonsFormOperatorPanel.button("btnAddOperator").click();
+
+		// Verify
+		formOperatorPanel.textBox("textFieldMatricola").requireEmpty();
+		formOperatorPanel.textBox("textFieldName").requireEmpty();
+		formOperatorPanel.textBox("textFieldSurname").requireEmpty();
+
+		buttonsFormOperatorPanel.button("btnAddOperator").requireDisabled();
+	}
+
+	@Test
+	@GUITest
 	public void testUpdateOperatorIsPressedListEnabledAndInputReset() {
 		// Setup
 		JPanelFixture formOperatorPanel = frameFixture.panel("newOperatorPanel").panel("formOperatorPanel");

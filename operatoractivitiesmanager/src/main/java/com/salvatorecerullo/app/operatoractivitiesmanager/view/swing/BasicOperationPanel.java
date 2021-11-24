@@ -252,7 +252,11 @@ public class BasicOperationPanel extends JPanel implements BasicOperationView {
 				textAreaDescription.getText());
 		basicOperationController.addBasicOperation(basicOperation);
 		basicOperationIdTemp = new ObjectId().toString();
+
 		textFieldId.setText(basicOperationIdTemp);
+		textFieldName.setText("");
+		textAreaDescription.setText("");
+		btnAddOperation.setEnabled(false);
 	}
 
 	private void actionListenerDeleteButton() {
