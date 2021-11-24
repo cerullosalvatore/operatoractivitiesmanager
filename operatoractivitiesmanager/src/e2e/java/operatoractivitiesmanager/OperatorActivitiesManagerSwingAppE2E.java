@@ -4,9 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.swing.launcher.ApplicationLauncher.*;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.GenericTypeMatcher;
+import org.assertj.swing.core.Robot;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
@@ -17,6 +19,7 @@ import org.junit.runner.RunWith;
 
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.model.Filters;
 import com.salvatorecerullo.app.operatoractivitiesmanager.view.swing.OperatorActivitiesManagerView;
 
 @RunWith(GUITestRunner.class)
@@ -70,13 +73,15 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 						"--db-collection-activities=" + COLLECTION_NAME_ACTIVITY)
 				.start();
 
+		Robot robot = robot();
+		robot.settings().eventPostingDelay(500);
 		frameFixture = WindowFinder
 				.findFrame(new GenericTypeMatcher<OperatorActivitiesManagerView>(OperatorActivitiesManagerView.class) {
 					@Override
 					protected boolean isMatching(OperatorActivitiesManagerView frame) {
 						return "Operator Activities Manager".equals(frame.getTitle()) && frame.isShowing();
 					}
-				}).using(robot());
+				}).using(robot);
 
 	}
 
@@ -86,6 +91,11 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_OPERATOR).insertOne(documentOperator);
 	}
 
+	private void removeOperatorFromDB(String matricola) {
+		mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_OPERATOR)
+				.deleteOne(Filters.eq("_id", matricola));
+	}
+
 	private void addBasicOperationToDB(String id, String name, String description) {
 		Document documentBasicOperation = new Document().append("_id", id).append("name", name).append("description",
 				description);
@@ -93,11 +103,19 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 				.insertOne(documentBasicOperation);
 	}
 
+	private void removeBasicOperationFromDB(String id) {
+		mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_BASICOPERATION).deleteOne(Filters.eq("_id", id));
+	}
+
 	private void addActivityToDB(String id, String matricolaOperator, String idBasicOperation, Date startTime,
 			Date endTime) {
 		Document documentActivity = new Document().append("_id", id).append("operatorMatricola", matricolaOperator)
 				.append("operationID", idBasicOperation).append("startTime", startTime).append("endTime", endTime);
 		mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_ACTIVITY).insertOne(documentActivity);
+	}
+
+	private void removeActivityFromDB(String id) {
+		mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_ACTIVITY).deleteOne(Filters.eq("_id", id));
 	}
 
 	@Test
@@ -146,9 +164,10 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 
 	}
 
+	// Activity Panel Test
 	@Test
 	@GUITest
-	public void testAddButtonSuccess() {
+	public void testAddActivityButtonSuccess() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(2020, 0, 21);
 		Date startTime = settingDate(cal.getTime(), 12, 11);
@@ -162,13 +181,181 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		frameFixture.textBox("textFieldStartHourActivity").enterText("12:11");
 		frameFixture.textBox("textFieldEndDataActivity").enterText("11/02/2021");
 		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
-		
+
+		frameFixture.button("btnAddActivity").click();
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains(tempId);
+		assertThat(frameFixture.list().contents()).anySatisfy(e -> assertThat(e).contains(tempId,
+				"matricolaOperatorTest1", "idBasicOperationTest2", startTime.toString(), endTime.toString()));
+	}
+
+	@Test
+	@GUITest
+	public void testAddActivityButtonErrorActivityAlreadyExist() {
+		// Setup
+
+		// Insert into db activity with the actual tempId
+		String tempId = frameFixture.textBox("textFieldIdActivity").text();
+		addActivityToDB(tempId, "matricolaOperatorTest1", "idBasicOperationTest1", startTime1, endTime1);
+
+		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
+		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
+		frameFixture.textBox("textFieldStartDataActivity").enterText("21/01/2020");
+		frameFixture.textBox("textFieldStartHourActivity").enterText("12:11");
+		frameFixture.textBox("textFieldEndDataActivity").enterText("11/02/2021");
+		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
+
 		frameFixture.button("btnAddActivity").click();
 
-		
-		assertThat(frameFixture.list().contents())
-				.anySatisfy(e -> assertThat(e).contains(tempId, "matricolaOperatorTest1", "idBasicOperationTest2",
-						startTime.toString(), endTime.toString()));
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains(tempId);
+	}
+
+	@Test
+	@GUITest
+	public void testAddActivityButtonErrorOperatorNotExist() {
+		// Setup
+		// Remove from db the operator
+		removeOperatorFromDB("matricolaOperatorTest1");
+
+		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
+		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
+		frameFixture.textBox("textFieldStartDataActivity").enterText("21/01/2020");
+		frameFixture.textBox("textFieldStartHourActivity").enterText("12:11");
+		frameFixture.textBox("textFieldEndDataActivity").enterText("11/02/2021");
+		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
+
+		frameFixture.button("btnAddActivity").click();
+
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1");
+	}
+
+	@Test
+	@GUITest
+	public void testAddActivityButtonErrorBasicOperationNotExist() {
+		// Setup
+		// Remove from db the basic operation
+		removeBasicOperationFromDB("idBasicOperationTest2");
+
+		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
+		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
+		frameFixture.textBox("textFieldStartDataActivity").enterText("21/01/2020");
+		frameFixture.textBox("textFieldStartHourActivity").enterText("12:11");
+		frameFixture.textBox("textFieldEndDataActivity").enterText("11/02/2021");
+		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
+
+		frameFixture.button("btnAddActivity").click();
+
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest2");
+	}
+
+	@Test
+	@GUITest
+	public void testAddActivityButtonErrorEndDateBeforeStartDate() {
+		// Setup
+		Calendar cal = Calendar.getInstance();
+		cal.set(2020, 0, 21);
+		Date startTime = settingDate(cal.getTime(), 12, 11);
+		cal.set(2020, 0, 11);
+		Date endTime = settingDate(cal.getTime(), 11, 12);
+
+		// Insert into db activity with the actual tempId
+		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
+		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
+		frameFixture.textBox("textFieldStartDataActivity").enterText("21/01/2020");
+		frameFixture.textBox("textFieldStartHourActivity").enterText("12:11");
+		frameFixture.textBox("textFieldEndDataActivity").enterText("11/01/2020");
+		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
+
+		frameFixture.button("btnAddActivity").click();
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains(startTime.toString(), endTime.toString());
+	}
+
+	@Test
+	@GUITest
+	public void testDeleteActivityButtonSuccess() {
+		frameFixture.list().selectItem(Pattern.compile(".*" + "IDTest1" + ".*"));
+		frameFixture.button("btnDeleteActivity").click();
+		assertThat(frameFixture.list().contents()).noneMatch(e -> e.contains("IDTest1"));
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("IDTest1");
+	}
+
+	@Test
+	@GUITest
+	public void testDeleteActivityButtonError() {
+		frameFixture.list().selectItem(Pattern.compile(".*" + "IDTest1" + ".*"));
+
+		// remove the activity from the DB
+		removeActivityFromDB("IDTest1");
+
+		frameFixture.button("btnDeleteActivity").click();
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("IDTest1");
+	}
+
+	@Test
+	@GUITest
+	public void testShowAllActivityButton() {
+		// remove the activity from the DB
+		removeActivityFromDB("IDTest1");
+		frameFixture.button("btnShowAll").click();
+		assertThat(frameFixture.list().contents()).noneMatch(e -> e.contains("IDTest1"));
+	}
+
+	@Test
+	@GUITest
+	public void testFindActivitiesByOperatorButtonSuccess() {
+		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(1);
+
+		frameFixture.button("btnFindByOperator").click();
+		assertThat(frameFixture.list().contents()).noneMatch(e -> e.contains("IDTest1"))
+				.anySatisfy(e -> assertThat(e).contains("IDTest2", "matricolaOperatorTest2", "idBasicOperationTest2",
+						startTime2.toString(), endTime2.toString()));
+	}
+
+	@Test
+	@GUITest
+	public void testFindActivitiesByOperatorButtonError() {
+		// remove the activity from the DB
+		removeActivityFromDB("IDTest1");
+
+		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
+
+		frameFixture.button("btnFindByOperator").click();
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1");
+	}
+
+	@Test
+	@GUITest
+	public void testFindActivitiesByBasicOperationButtonSuccess() {
+		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(0);
+
+		frameFixture.button("btnFindByBasicOperation").click();
+		assertThat(frameFixture.list().contents()).noneMatch(e -> e.contains("IDTest2"))
+				.anySatisfy(e -> assertThat(e).contains("IDTest1", "matricolaOperatorTest1", "idBasicOperationTest1",
+						startTime1.toString(), endTime1.toString()));
+	}
+
+	@Test
+	@GUITest
+	public void testFindActivitiesByBasicOperationButtonError() {
+		// remove the activity from the DB
+		frameFixture.list().selectItem(Pattern.compile(".*" + "IDTest2" + ".*"));
+		frameFixture.button("btnDeleteActivity").click();
+
+		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
+
+		frameFixture.button("btnFindByBasicOperation").click();
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest2");
+	}
+
+	@Test
+	@GUITest
+	public void testFindActivitiesByDayButton() {
+		frameFixture.textBox("textFieldStartDataActivity").enterText("01/02/2021");
+
+		frameFixture.button("btnFindByData").click();
+		assertThat(frameFixture.list().contents()).noneMatch(e -> e.contains("IDTest2"))
+				.anySatisfy(e -> assertThat(e).contains("IDTest1", "matricolaOperatorTest1", "idBasicOperationTest1",
+						startTime1.toString(), endTime1.toString()));
+
 	}
 
 	private Date settingDate(Date date, int hour, int minute) {
