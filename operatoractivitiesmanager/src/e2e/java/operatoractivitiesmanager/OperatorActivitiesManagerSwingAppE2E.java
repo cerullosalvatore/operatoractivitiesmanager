@@ -358,6 +358,91 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 
 	}
 
+	@Test
+	@GUITest
+	public void testUpdateActivityButtonSuccess() {
+		frameFixture.list().selectItem(Pattern.compile(".*" + "IDTest1" + ".*"));
+		frameFixture.button("btnModifyActivity").click();
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(2020, 0, 21);
+		Date startTime = settingDate(cal.getTime(), 12, 11);
+		cal.set(2021, 1, 11);
+		Date endTime = settingDate(cal.getTime(), 11, 12);
+
+		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(1);
+		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
+		frameFixture.textBox("textFieldStartDataActivity").doubleClick().deleteText().enterText("21/01/2020");
+		frameFixture.textBox("textFieldStartHourActivity").doubleClick().deleteText().enterText("12:11");
+		frameFixture.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText("11/02/2021");
+		frameFixture.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText("11:12");
+
+		frameFixture.button("btnUpdateActivity").click();
+		assertThat(frameFixture.list().contents())
+				.anySatisfy(e -> assertThat(e).contains("IDTest1", "matricolaOperatorTest2", "idBasicOperationTest2",
+						startTime.toString(), endTime.toString()))
+				.anySatisfy(e -> assertThat(e).contains("IDTest2", "matricolaOperatorTest2", "idBasicOperationTest2",
+						startTime2.toString(), endTime2.toString()));
+	}
+
+	@Test
+	@GUITest
+	public void testUpdateActivityButtonErrorActivityNotExist() {
+		removeActivityFromDB("IDTest1");
+
+		frameFixture.list().selectItem(Pattern.compile(".*" + "IDTest1" + ".*"));
+		frameFixture.button("btnModifyActivity").click();
+
+		frameFixture.button("btnUpdateActivity").click();
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("IDTest1");
+	}
+
+	@Test
+	@GUITest
+	public void testUpdateActivityButtonErrorOperatorNotExist() {
+		removeOperatorFromDB("matricolaOperatorTest1");
+
+		frameFixture.list().selectItem(Pattern.compile(".*" + "IDTest2" + ".*"));
+		frameFixture.button("btnModifyActivity").click();
+		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
+
+		frameFixture.button("btnUpdateActivity").click();
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1");
+	}
+
+	@Test
+	@GUITest
+	public void testUpdateActivityButtonErrorBasicOperationNotExist() {
+		removeBasicOperationFromDB("idBasicOperationTest1");
+
+		frameFixture.list().selectItem(Pattern.compile(".*" + "IDTest2" + ".*"));
+		frameFixture.button("btnModifyActivity").click();
+		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(0);
+
+		frameFixture.button("btnUpdateActivity").click();
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest1");
+	}
+
+	@Test
+	@GUITest
+	public void testUpdateActivityButtonErrorEndDateBeforeStartDate() {
+		// Setup
+		Calendar cal = Calendar.getInstance();
+		cal.set(2020, 0, 21);
+		Date startTime = settingDate(cal.getTime(), 8, 00);
+		cal.set(2020, 0, 11);
+		Date endTime = settingDate(cal.getTime(), 16, 00);
+
+		frameFixture.list().selectItem(Pattern.compile(".*" + "IDTest1" + ".*"));
+		frameFixture.button("btnModifyActivity").click();
+
+		frameFixture.textBox("textFieldStartDataActivity").doubleClick().deleteText().enterText("21/01/2020");
+		frameFixture.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText("11/01/2020");
+
+		frameFixture.button("btnUpdateActivity").click();
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains(startTime.toString(), endTime.toString());
+	}
+
 	private Date settingDate(Date date, int hour, int minute) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
