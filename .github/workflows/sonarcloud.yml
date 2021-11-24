@@ -31,6 +31,6 @@ jobs:
           COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
 
         run: >
-          xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" -a mvn -B clean verify org.pitest:pitest-maven:mutationCoverage org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cerullosalvatore_operatoractivitiesmanager 
+          xvfb-run --auto-servernum --server-args="-screen 0, 1920x1080x24" -a mvn -B clean verify org.pitest:pitest-maven:mutationCoverage org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cerullosalvatore_operatoractivitiesmanager 
           coveralls:report -DrepoToken=$COVERALLS_TOKEN -Pjacoco
         working-directory: operatoractivitiesmanager
