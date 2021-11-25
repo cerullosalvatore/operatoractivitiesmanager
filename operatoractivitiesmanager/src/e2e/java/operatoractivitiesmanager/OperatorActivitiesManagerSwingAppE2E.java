@@ -2,8 +2,11 @@ package operatoractivitiesmanager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.swing.launcher.ApplicationLauncher.*;
+import static org.awaitility.Awaitility.*;
+
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.assertj.swing.annotation.GUITest;
@@ -85,6 +88,8 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 
 	}
 
+	// Utility
+	
 	private void addOperatorToDB(String matricola, String name, String surname) {
 		Document documentOperator = new Document().append("_id", matricola).append("name", name).append("surname",
 				surname);
@@ -115,8 +120,27 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 	}
 
 	private void removeActivityFromDB(String id) {
-		mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_ACTIVITY).deleteOne(Filters.eq("_id", id));
+		await().atMost(2, TimeUnit.SECONDS).until(() -> {
+			try {
+				mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_ACTIVITY)
+						.deleteOne(Filters.eq("_id", id));
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		});
 	}
+
+	private Date settingDate(Date date, int hour, int minute) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, hour);
+		cal.set(Calendar.MINUTE, minute);
+		cal.set(Calendar.SECOND, 00);
+		return cal.getTime();
+	}
+	
+	// TEST INITIAL STATES TAB
 
 	@Test
 	@GUITest
@@ -183,7 +207,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
 
 		frameFixture.button("btnAddActivity").click();
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains(tempId);
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains(tempId, " has been added.");
 		assertThat(frameFixture.list().contents()).anySatisfy(e -> assertThat(e).contains(tempId,
 				"matricolaOperatorTest1", "idBasicOperationTest2", startTime.toString(), endTime.toString()));
 	}
@@ -206,7 +230,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 
 		frameFixture.button("btnAddActivity").click();
 
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains(tempId);
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains(tempId, " already exist.");
 	}
 
 	@Test
@@ -225,7 +249,8 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 
 		frameFixture.button("btnAddActivity").click();
 
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1");
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1",
+				" does not exist.");
 	}
 
 	@Test
@@ -244,7 +269,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 
 		frameFixture.button("btnAddActivity").click();
 
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest2");
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest2", " does not exist.");
 	}
 
 	@Test
@@ -275,7 +300,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		frameFixture.list().selectItem(Pattern.compile(".*" + "IDTest1" + ".*"));
 		frameFixture.button("btnDeleteActivity").click();
 		assertThat(frameFixture.list().contents()).noneMatch(e -> e.contains("IDTest1"));
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains("IDTest1");
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("IDTest1", " has been removed.");
 	}
 
 	@Test
@@ -287,7 +312,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		removeActivityFromDB("IDTest1");
 
 		frameFixture.button("btnDeleteActivity").click();
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains("IDTest1");
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("IDTest1", " does not exist.");
 	}
 
 	@Test
@@ -319,7 +344,8 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
 
 		frameFixture.button("btnFindByOperator").click();
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1");
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1",
+				" does not exist.");
 	}
 
 	@Test
@@ -343,7 +369,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
 
 		frameFixture.button("btnFindByBasicOperation").click();
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest2");
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest2", " does not exist.");
 	}
 
 	@Test
@@ -383,6 +409,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 						startTime.toString(), endTime.toString()))
 				.anySatisfy(e -> assertThat(e).contains("IDTest2", "matricolaOperatorTest2", "idBasicOperationTest2",
 						startTime2.toString(), endTime2.toString()));
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("IDTest1", " has been updated.");
 	}
 
 	@Test
@@ -394,7 +421,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		frameFixture.button("btnModifyActivity").click();
 
 		frameFixture.button("btnUpdateActivity").click();
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains("IDTest1");
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("IDTest1", " does not exist.");
 	}
 
 	@Test
@@ -407,7 +434,8 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
 
 		frameFixture.button("btnUpdateActivity").click();
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1");
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1",
+				" does not exist.");
 	}
 
 	@Test
@@ -420,7 +448,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 
 		frameFixture.button("btnUpdateActivity").click();
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest1");
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest1", " does not exist.");
 	}
 
 	@Test
@@ -443,12 +471,97 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		assertThat(frameFixture.label("lblMessageStatus").text()).contains(startTime.toString(), endTime.toString());
 	}
 
-	private Date settingDate(Date date, int hour, int minute) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.set(Calendar.HOUR_OF_DAY, hour);
-		cal.set(Calendar.MINUTE, minute);
-		cal.set(Calendar.SECOND, 00);
-		return cal.getTime();
+	// OPERATORS PANEL
+
+	@Test
+	@GUITest
+	public void testAddOperatorButtonSuccess() {
+		frameFixture.tabbedPane().focus().selectTab("Operators");
+
+		frameFixture.textBox("textFieldMatricola").enterText("testMatricolaNew");
+		frameFixture.textBox("textFieldName").enterText("testNameNew");
+		frameFixture.textBox("textFieldSurname").enterText("testSurnameNew");
+
+		frameFixture.button("btnAddOperator").click();
+
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("testMatricolaNew");
+		assertThat(frameFixture.list().contents())
+				.anySatisfy(e -> assertThat(e).contains("testMatricolaNew", "testNameNew", "testSurnameNew"));
 	}
+
+	@Test
+	@GUITest
+	public void testAddOperatorButtonErrorAlreadyExist() {
+		addOperatorToDB("testMatricolaNew", "testNameNew", "testSurnameNew");
+
+		frameFixture.tabbedPane().focus().selectTab("Operators");
+
+		frameFixture.textBox("textFieldMatricola").enterText("testMatricolaNew");
+		frameFixture.textBox("textFieldName").enterText("testNameNew");
+		frameFixture.textBox("textFieldSurname").enterText("testSurnameNew");
+
+		frameFixture.button("btnAddOperator").click();
+
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("testMatricolaNew", " already exist.");
+	}
+
+	@Test
+	@GUITest
+	public void testRemoveOperatorButtonSuccess() {
+		frameFixture.tabbedPane().focus().selectTab("Operators");
+		frameFixture.list().selectItem(Pattern.compile(".*" + "matricolaOperatorTest1" + ".*"));
+		frameFixture.button("btnDeleteOperator").click();
+		assertThat(frameFixture.list().contents()).noneMatch(e -> e.contains("matricolaOperatorTest1"));
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1",
+				" has been removed.");
+	}
+
+	@Test
+	@GUITest
+	public void testRemoveOperatorButtonError() {
+		frameFixture.tabbedPane().focus().selectTab("Operators");
+		removeOperatorFromDB("matricolaOperatorTest1");
+		frameFixture.list().selectItem(Pattern.compile(".*" + "matricolaOperatorTest1" + ".*"));
+		frameFixture.button("btnDeleteOperator").click();
+		assertThat(frameFixture.list().contents()).noneMatch(e -> e.contains("matricolaOperatorTest1"));
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1",
+				" does not exist.");
+	}
+
+	@Test
+	@GUITest
+	public void testUpdateOperatorButtonSuccess() {
+		frameFixture.tabbedPane().focus().selectTab("Operators");
+		frameFixture.list().selectItem(Pattern.compile(".*" + "matricolaOperatorTest1" + ".*"));
+		frameFixture.button("btnModifyOperator").click();
+
+		frameFixture.textBox("textFieldMatricola").requireNotEditable();
+		frameFixture.textBox("textFieldName").doubleClick().deleteText().enterText("nameUpdated");
+		frameFixture.textBox("textFieldSurname").doubleClick().deleteText().enterText("surnameUpdated");
+
+		frameFixture.button("btnUpdateOperator").click();
+		assertThat(frameFixture.list().contents())
+				.anySatisfy(e -> assertThat(e).contains("matricolaOperatorTest1", "nameUpdated", "surnameUpdated"))
+				.anySatisfy(e -> assertThat(e).contains("matricolaOperatorTest2", "nameTest2", "surnameTest2"));
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1",
+				" has been updated.");
+	}
+
+	@Test
+	@GUITest
+	public void testUpdateOperatorButtonError() {
+		frameFixture.tabbedPane().focus().selectTab("Operators");
+
+		removeOperatorFromDB("matricolaOperatorTest1");
+
+		frameFixture.list().selectItem(Pattern.compile(".*" + "matricolaOperatorTest1" + ".*"));
+		frameFixture.button("btnModifyOperator").click();
+
+		frameFixture.button("btnUpdateOperator").click();
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("matricolaOperatorTest1",
+				" does not exist.");
+	}
+
+	// BASIC OPERATION PANEL
+
 }
