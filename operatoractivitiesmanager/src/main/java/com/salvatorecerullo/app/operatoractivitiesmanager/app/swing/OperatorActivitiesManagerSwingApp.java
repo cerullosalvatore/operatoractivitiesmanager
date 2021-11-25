@@ -2,6 +2,8 @@ package com.salvatorecerullo.app.operatoractivitiesmanager.app.swing;
 
 import java.awt.EventQueue;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -44,7 +46,7 @@ public class OperatorActivitiesManagerSwingApp implements Callable<Void> {
 	public static void main(String[] args) {
 		new CommandLine(new OperatorActivitiesManagerSwingApp()).execute(args);
 	}
-	
+
 	@Override
 	public Void call() throws Exception {
 		EventQueue.invokeLater(() -> {
@@ -73,12 +75,12 @@ public class OperatorActivitiesManagerSwingApp implements Callable<Void> {
 						.setBasicOperationController(basicOperationController);
 
 				operatorActivitiesManagerView.setVisible(true);
-				
+
 				activityController.allActivities();
 				activityController.allOperators();
 				activityController.allBasicOperation();
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Exception", e);
 			}
 		});
 		return null;
