@@ -191,6 +191,29 @@ public class BasicOperationPanelTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
+	public void testAddOperationButtonIsPressedInputReset() {
+		// Setup
+		JPanelFixture formOperationPanel = frameFixture.panel("newBasicOperationPanel")
+				.panel("formBasicOperationPanel");
+		JPanelFixture buttonsFormBasicOperationPanel = frameFixture.panel("newBasicOperationPanel")
+				.panel("buttonsFormBasicOperationPanel");
+
+		// Exercise
+		formOperationPanel.textBox("textFieldName").enterText("TestName");
+		formOperationPanel.textBox("textAreaDescription").enterText("TestDescription");
+
+		buttonsFormBasicOperationPanel.button("btnAddOperation").click();
+
+		// Verify
+		formOperationPanel.textBox("textFieldId").requireText(basicOperationPanel.getBasicOperationIdTemp());
+		formOperationPanel.textBox("textFieldName").requireEmpty();
+		formOperationPanel.textBox("textAreaDescription").requireEmpty();
+
+		buttonsFormBasicOperationPanel.button("btnAddOperation").requireDisabled();
+	}
+
+	@Test
+	@GUITest
 	public void testUpdateOperationIsPressedListEnabledAndInputReset() {
 		// Setup
 		JPanelFixture formOperationPanel = frameFixture.panel("newBasicOperationPanel")

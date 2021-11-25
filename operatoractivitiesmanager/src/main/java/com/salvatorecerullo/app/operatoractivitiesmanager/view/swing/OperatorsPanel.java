@@ -241,6 +241,10 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 		Operator newOperator = new Operator(textFieldMatricola.getText(), textFieldName.getText(),
 				textFieldSurname.getText());
 		operatorController.addOperator(newOperator);
+		textFieldMatricola.setText("");
+		textFieldName.setText("");
+		textFieldSurname.setText("");
+		btnAddOperator.setEnabled(false);
 	}
 
 	private void actionListenereDeleteButton() {

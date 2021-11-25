@@ -32,6 +32,7 @@ import com.salvatorecerullo.app.operatoractivitiesmanager.view.ActivityView;
 
 import java.awt.Dimension;
 import javax.swing.ListSelectionModel;
+import javax.swing.JTextField;
 
 public class ActivitiesPanel extends JPanel implements ActivityView {
 	private static final long serialVersionUID = -6391077047327115858L;
@@ -77,6 +78,8 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 	private String activityIdTemp;
 
 	private ActivityController activityController;
+	private JLabel labelId;
+	private JTextField textFieldIdActivity;
 
 	public ActivitiesPanel() {
 		// INITIALIZING VARIABLE
@@ -99,6 +102,17 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		formActivityPanel = new JPanel();
 		newActivityPanel.add(formActivityPanel, BorderLayout.CENTER);
 		formActivityPanel.setLayout(new GridLayout(0, 2, 0, 0));
+
+		// LABEL ID
+		labelId = new JLabel("New label");
+		formActivityPanel.add(labelId);
+
+		// FIELD ID
+		textFieldIdActivity = new JTextField();
+		formActivityPanel.add(textFieldIdActivity);
+		textFieldIdActivity.setText(activityIdTemp);
+		textFieldIdActivity.setColumns(10);
+		textFieldIdActivity.setEditable(false);
 
 		// LABEL OPERATOR
 		labelOperatorActivity = new JLabel("Operator:");
@@ -355,6 +369,14 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 		activityController.addActivity(newActivity);
 		activityIdTemp = new ObjectId().toString();
+		
+		textFieldIdActivity.setText(activityIdTemp);
+		textFieldStartDataActivity.setText("");
+		textFieldStartHourActivity.setText("");
+		textFieldEndDataActivity.setText("");
+		textFieldEndHourActivity.setText("");
+		comboBoxOperatorActivity.setSelectedIndex(0);
+		comboBoxBasicOperationActivity.setSelectedIndex(0);
 	}
 
 	private void actionListenerUpdateButton() {
@@ -375,6 +397,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		updateInProgress = false;
 		listActivities.setEnabled(true);
 		btnDeleteActivity.setEnabled(true);
+		textFieldIdActivity.setText(activityIdTemp);
 		comboBoxOperatorActivity.setSelectedIndex(0);
 		comboBoxBasicOperationActivity.setSelectedIndex(0);
 		textFieldStartDataActivity.setText("");
@@ -426,6 +449,8 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 			indexBasicOperation = 0;
 		}
 
+		textFieldIdActivity.setText(activitySelected.getId());
+
 		comboBoxOperatorActivity.setSelectedIndex(indexOperator);
 		comboBoxBasicOperationActivity.setSelectedIndex(indexBasicOperation);
 
@@ -464,6 +489,8 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		labelNewActivity.setName("labelNewActivity");
 
 		formActivityPanel.setName("formActivityPanel");
+		labelId.setName("labelId");
+		textFieldIdActivity.setName("textFieldIdActivity");
 		labelOperatorActivity.setName("labelOperatorActivity");
 		comboBoxOperatorActivity.setName("comboBoxOperatorActivity");
 		labelBasicOperationActivity.setName("labelBasicOperationActivity");

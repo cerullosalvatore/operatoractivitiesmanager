@@ -64,10 +64,13 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testActivitiesControlsArePrestentAndInitialStates() {
+	public void testActivitiesControlsArePresentAndInitialStates() {
 		// Verify
 		frameFixture.panel("newActivityPanel").label("labelNewActivity").requireVisible();
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		formActivityPanel.label("labelId").requireVisible();
+		formActivityPanel.textBox("textFieldIdActivity").requireVisible().requireNotEditable()
+				.requireText(activitiesPanel.getActivityIdTemp());
 		formActivityPanel.label("labelOperatorActivity").requireVisible();
 		formActivityPanel.comboBox("comboBoxOperatorActivity").requireVisible().requireEnabled().requireNoSelection();
 		formActivityPanel.label("labelBasicOperationActivity").requireVisible();
@@ -406,6 +409,42 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
+	public void testActivitiesAddButtonWhasPressedAndFieldWasCompiledCorrectly() throws ParseException {
+		// Setup
+		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
+		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
+				.panel("buttonsFormActivityPanel");
+
+		Operator operator = new Operator("MatricolaTest", "Name Test", "Surname Test");
+		BasicOperation basicOperation = new BasicOperation("OperationId", "Name Operation", "Description Operation");
+		
+		GuiActionRunner.execute(() -> {
+			activitiesPanel.getComboBoxOperatorsModel().addElement(operator);
+			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperation);
+		});
+
+		// Exercise
+		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
+		formActivityPanel.textBox("textFieldStartHourActivity").enterText("10:02");
+		formActivityPanel.textBox("textFieldEndDataActivity").enterText("02/01/2001");
+		formActivityPanel.textBox("textFieldEndHourActivity").enterText("09:00");
+		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
+
+		buttonsFormActivityPanel.button("btnAddActivity").click();
+
+		// Verify
+		formActivityPanel.textBox("textFieldStartDataActivity").requireText("");
+		formActivityPanel.textBox("textFieldStartHourActivity").requireText("");
+		formActivityPanel.textBox("textFieldEndDataActivity").requireText("");
+		formActivityPanel.textBox("textFieldEndHourActivity").requireText("");
+		formActivityPanel.textBox("textFieldIdActivity").requireText(activitiesPanel.getActivityIdTemp());
+		formActivityPanel.comboBox("comboBoxOperatorActivity").requireSelection(0);
+		formActivityPanel.comboBox("comboBoxBasicOperationActivity").requireSelection(0);
+	}
+
+	@Test
+	@GUITest
 	public void testModifyButtonIsPressedListDisabledAndUpdateButtonIsEnabled() {
 		// Setup
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
@@ -525,6 +564,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		String formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime1);
 
 		// Verify
+		formActivityPanel.textBox("textFieldIdActivity").requireText(activity1.getId());
 		formActivityPanel.textBox("textFieldStartDataActivity").requireText(formattedStartDate);
 		formActivityPanel.textBox("textFieldStartHourActivity").requireText(formattedStartHour);
 		formActivityPanel.textBox("textFieldEndDataActivity").requireText(formattedEndDate);
@@ -543,6 +583,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formattedEndHour = new SimpleDateFormat("HH:mm").format(endTime2);
 
 		// Verify
+		formActivityPanel.textBox("textFieldIdActivity").requireText(activity2.getId());
 		formActivityPanel.textBox("textFieldStartDataActivity").requireText(formattedStartDate);
 		formActivityPanel.textBox("textFieldStartHourActivity").requireText(formattedStartHour);
 		formActivityPanel.textBox("textFieldEndDataActivity").requireText(formattedEndDate);
@@ -609,6 +650,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Verify
 		listActivitiesPanel.list("listActivities").isEnabled();
+		formActivityPanel.textBox("textFieldIdActivity").requireText(activitiesPanel.getActivityIdTemp());
 		formActivityPanel.comboBox("comboBoxOperatorActivity").requireSelection(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").requireSelection(0);
 		formActivityPanel.textBox("textFieldStartDataActivity").requireEmpty();
