@@ -89,34 +89,74 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 	}
 
 	// Utility
-	
+
 	private void addOperatorToDB(String matricola, String name, String surname) {
-		Document documentOperator = new Document().append("_id", matricola).append("name", name).append("surname",
-				surname);
-		mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_OPERATOR).insertOne(documentOperator);
+		await().atMost(2, TimeUnit.SECONDS).until(() -> {
+			try {
+				Document documentOperator = new Document().append("_id", matricola).append("name", name)
+						.append("surname", surname);
+				mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_OPERATOR).insertOne(documentOperator);
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		});
+
 	}
 
 	private void removeOperatorFromDB(String matricola) {
-		mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_OPERATOR)
-				.deleteOne(Filters.eq("_id", matricola));
+		await().atMost(2, TimeUnit.SECONDS).until(() -> {
+			try {
+				mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_OPERATOR)
+						.deleteOne(Filters.eq("_id", matricola));
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		});
+
 	}
 
 	private void addBasicOperationToDB(String id, String name, String description) {
-		Document documentBasicOperation = new Document().append("_id", id).append("name", name).append("description",
-				description);
-		mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_BASICOPERATION)
-				.insertOne(documentBasicOperation);
+		await().atMost(2, TimeUnit.SECONDS).until(() -> {
+			try {
+				Document documentBasicOperation = new Document().append("_id", id).append("name", name)
+						.append("description", description);
+				mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_BASICOPERATION)
+						.insertOne(documentBasicOperation);
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		});
+
 	}
 
 	private void removeBasicOperationFromDB(String id) {
-		mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_BASICOPERATION).deleteOne(Filters.eq("_id", id));
+		await().atMost(2, TimeUnit.SECONDS).until(() -> {
+			try {
+				mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_BASICOPERATION)
+						.deleteOne(Filters.eq("_id", id));
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		});
 	}
 
 	private void addActivityToDB(String id, String matricolaOperator, String idBasicOperation, Date startTime,
 			Date endTime) {
-		Document documentActivity = new Document().append("_id", id).append("operatorMatricola", matricolaOperator)
-				.append("operationID", idBasicOperation).append("startTime", startTime).append("endTime", endTime);
-		mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_ACTIVITY).insertOne(documentActivity);
+		await().atMost(2, TimeUnit.SECONDS).until(() -> {
+			try {
+				Document documentActivity = new Document().append("_id", id)
+						.append("operatorMatricola", matricolaOperator).append("operationID", idBasicOperation)
+						.append("startTime", startTime).append("endTime", endTime);
+				mongoClient.getDatabase(DB_NAME).getCollection(COLLECTION_NAME_ACTIVITY).insertOne(documentActivity);
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		});
 	}
 
 	private void removeActivityFromDB(String id) {
@@ -139,7 +179,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		cal.set(Calendar.SECOND, 00);
 		return cal.getTime();
 	}
-	
+
 	// TEST INITIAL STATES TAB
 
 	@Test
@@ -484,7 +524,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 
 		frameFixture.button("btnAddOperator").click();
 
-		assertThat(frameFixture.label("lblMessageStatus").text()).contains("testMatricolaNew");
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("testMatricolaNew", " has been added.");
 		assertThat(frameFixture.list().contents())
 				.anySatisfy(e -> assertThat(e).contains("testMatricolaNew", "testNameNew", "testSurnameNew"));
 	}
@@ -563,5 +603,94 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 	}
 
 	// BASIC OPERATION PANEL
+
+	@Test
+	@GUITest
+	public void testAddBasicOperationButtonSuccess() {
+		frameFixture.tabbedPane().focus().selectTab("Basic Operations");
+
+		String tempId = frameFixture.textBox("textFieldId").text();
+
+		frameFixture.textBox("textFieldName").enterText("testNameNew");
+		frameFixture.textBox("textAreaDescription").enterText("testAreaNew");
+
+		frameFixture.button("btnAddOperation").click();
+
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains(tempId, " has been added.");
+		assertThat(frameFixture.list().contents())
+				.anySatisfy(e -> assertThat(e).contains(tempId, "testNameNew", "testAreaNew"));
+	}
+
+	@Test
+	@GUITest
+	public void testAddBasicOperationButtonErrorAlreadyExist() {
+		frameFixture.tabbedPane().focus().selectTab("Basic Operations");
+
+		String tempId = frameFixture.textBox("textFieldId").text();
+
+		addBasicOperationToDB(tempId, "testNameNew", "testSurnameNew");
+
+		frameFixture.textBox("textFieldName").enterText("testNameNew");
+		frameFixture.textBox("textAreaDescription").enterText("testAreaNew");
+
+		frameFixture.button("btnAddOperation").click();
+
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains(tempId, " already exist.");
+	}
+
+	@Test
+	@GUITest
+	public void testRemoveBasicOperationButtonSuccess() {
+		frameFixture.tabbedPane().focus().selectTab("Basic Operations");
+		frameFixture.list().selectItem(Pattern.compile(".*" + "idBasicOperationTest2" + ".*"));
+		frameFixture.button("btnDelete").click();
+		assertThat(frameFixture.list().contents()).noneMatch(e -> e.contains("idBasicOperationTest2"));
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest2",
+				" has been removed.");
+	}
+
+	@Test
+	@GUITest
+	public void testRemoveBasicOperationButtonError() {
+		frameFixture.tabbedPane().focus().selectTab("Basic Operations");
+		removeBasicOperationFromDB("idBasicOperationTest2");
+		frameFixture.list().selectItem(Pattern.compile(".*" + "idBasicOperationTest2" + ".*"));
+		frameFixture.button("btnDelete").click();
+		assertThat(frameFixture.list().contents()).noneMatch(e -> e.contains("idBasicOperationTest2"));
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest2", " does not exist.");
+	}
+
+	@Test
+	@GUITest
+	public void testUpdateBasicOperationButtonSuccess() {
+		frameFixture.tabbedPane().focus().selectTab("Basic Operations");
+		frameFixture.list().selectItem(Pattern.compile(".*" + "idBasicOperationTest2" + ".*"));
+		frameFixture.button("btnModify").click();
+
+		frameFixture.textBox("textFieldId").requireNotEditable();
+		frameFixture.textBox("textFieldName").doubleClick().deleteText().enterText("nameUpdated");
+		frameFixture.textBox("textAreaDescription").doubleClick().deleteText().enterText("descriptionUpdated");
+
+		frameFixture.button("btnUpdateOperation").click();
+		assertThat(frameFixture.list().contents())
+				.anySatisfy(e -> assertThat(e).contains("idBasicOperationTest1", "nameTest1", "descriptionTest1"))
+				.anySatisfy(e -> assertThat(e).contains("idBasicOperationTest2", "nameUpdated", "descriptionUpdated"));
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest2",
+				" has been updated.");
+	}
+
+	@Test
+	@GUITest
+	public void testUpdateBasicOperationButtonError() {
+		frameFixture.tabbedPane().focus().selectTab("Basic Operations");
+
+		removeBasicOperationFromDB("idBasicOperationTest1");
+
+		frameFixture.list().selectItem(Pattern.compile(".*" + "idBasicOperationTest1" + ".*"));
+		frameFixture.button("btnModify").click();
+
+		frameFixture.button("btnUpdateOperation").click();
+		assertThat(frameFixture.label("lblMessageStatus").text()).contains("idBasicOperationTest1", " does not exist.");
+	}
 
 }
