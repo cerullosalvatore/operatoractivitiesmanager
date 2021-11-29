@@ -35,8 +35,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JTextField;
 
 public class ActivitiesPanel extends JPanel implements ActivityView {
-	private static final long serialVersionUID = -6391077047327115858L;
-
+	private static final long serialVersionUID = 1L;
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
 	private static final String HOUR_FORMAT = "HH:mm";
 
