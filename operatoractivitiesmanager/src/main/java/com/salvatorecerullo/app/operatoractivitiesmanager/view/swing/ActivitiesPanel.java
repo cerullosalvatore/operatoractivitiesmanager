@@ -76,7 +76,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 	private boolean updateInProgress;
 	private String activityIdTemp;
 
-	private ActivityController activityController;
+	private transient ActivityController activityController;
 	private JLabel labelId;
 	private JTextField textFieldIdActivity;
 

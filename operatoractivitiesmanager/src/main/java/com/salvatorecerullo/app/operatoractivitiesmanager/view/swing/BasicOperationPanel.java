@@ -49,7 +49,7 @@ public class BasicOperationPanel extends JPanel implements BasicOperationView {
 
 	private Boolean updateInProgress;
 	private String basicOperationIdTemp;
-	private BasicOperationController basicOperationController;
+	private transient BasicOperationController basicOperationController;
 
 	public BasicOperationPanel() {
 		// INIZIALIZING VARIABLE

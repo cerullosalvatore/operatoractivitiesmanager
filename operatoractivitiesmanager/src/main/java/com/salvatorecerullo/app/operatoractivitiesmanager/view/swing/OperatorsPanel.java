@@ -46,7 +46,7 @@ public class OperatorsPanel extends JPanel implements OperatorView {
 
 	private boolean updateInProgress;
 
-	private OperatorController operatorController;
+	private transient OperatorController operatorController;
 
 	public OperatorsPanel() {
 		setLayout(new GridLayout(2, 0, 0, 0));
