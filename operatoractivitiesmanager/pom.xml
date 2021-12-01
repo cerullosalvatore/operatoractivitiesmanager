@@ -30,6 +30,16 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
@@ -46,16 +56,6 @@
 			<artifactId>mockito-core</artifactId>
 			<version>3.2.4</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.14.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.14.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
@@ -94,36 +94,13 @@
 					<version>3.0.0-M5</version>
 				</plugin>
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<executions>
-						<execution>
-							<phase>package</phase>
-							<goals>
-								<goal>single</goal>
-							</goals>
-							<configuration>
-								<descriptorRefs>
-									<descriptorRef>jar-with-dependencies</descriptorRef>
-								</descriptorRefs>
-								<archive>
-									<manifest>
-										<mainClass>com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.OperatorActivitiesManagerSwingApp</mainClass>
-									</manifest>
-								</archive>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
 					<groupId>org.pitest</groupId>
 					<artifactId>pitest-maven</artifactId>
 					<version>${org.pitest.version}</version>
 					<configuration>
 						<excludedClasses>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
-							<param>*.swing.*</param>
-							<param>*IT</param>
+							<param>com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.*</param>
 						</excludedClasses>
 						<targetClasses>
 							<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.*</param>
@@ -136,6 +113,8 @@
 						</targetTests>
 						<excludedTestClasses>
 							<param>*.swing.*</param>
+							<param>*IT</param>
+							<param>*E2E</param>
 						</excludedTestClasses>
 						<mutators>
 							<mutator>STRONGER</mutator>
@@ -274,7 +253,28 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<archive>
+								<manifest>
+									<mainClass>com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.OperatorActivitiesManagerSwingApp</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<!-- Maven profiles are a mechanism that allows you to activate a subset 
