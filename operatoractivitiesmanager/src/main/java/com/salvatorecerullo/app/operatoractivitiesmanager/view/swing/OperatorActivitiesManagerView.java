@@ -24,7 +24,7 @@ public class OperatorActivitiesManagerView extends JFrame {
 		setTitle("Operator Activities Manager");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 794, 734);
-		
+
 		// CONTENT PANE
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

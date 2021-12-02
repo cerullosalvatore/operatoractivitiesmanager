@@ -41,7 +41,7 @@ public class ActivityControllerIT {
 	private ActivityRepository activityRepository;
 	private OperatorRepository operatorRepository;
 	private BasicOperationRepository basicOperationRepository;
-	
+
 	@Mock
 	private ActivityView activityView;
 
@@ -55,15 +55,17 @@ public class ActivityControllerIT {
 		startTime = cal.getTime();
 		cal.set(2021, 1, 1, 16, 00, 00);
 		endTime = cal.getTime();
-		
+
 		MockitoAnnotations.initMocks(this);
 		MongoClient mongoClient = new MongoClient(new ServerAddress("localhost", mongoPort));
 		activityRepository = new ActivityMongoRepository(mongoClient, DB_NAME, COLLECTION_NAME_ACTIVITY);
 		operatorRepository = new OperatorMongoRepository(mongoClient, DB_NAME, COLLECTION_NAME_OPERATOR);
-		basicOperationRepository = new BasicOperationMongoRepository(mongoClient, DB_NAME, COLLECTION_NAME_BASICOPERATION);
+		basicOperationRepository = new BasicOperationMongoRepository(mongoClient, DB_NAME,
+				COLLECTION_NAME_BASICOPERATION);
 		MongoDatabase database = mongoClient.getDatabase(DB_NAME);
 		database.drop();
-		activityController = new ActivityController(activityRepository, operatorRepository, basicOperationRepository, activityView);
+		activityController = new ActivityController(activityRepository, operatorRepository, basicOperationRepository,
+				activityView);
 	}
 
 	@Test
@@ -71,80 +73,82 @@ public class ActivityControllerIT {
 		// Setup
 		Activity activity1 = new Activity(new ObjectId().toString(), "matricolaTest1", "0", startTime, endTime);
 		Activity activity2 = new Activity(new ObjectId().toString(), "matricolaTest2", "0", startTime, endTime);
-		activityRepository.save(activity1);		
-		activityRepository.save(activity2);		
+		activityRepository.save(activity1);
+		activityRepository.save(activity2);
 		// Exercise
 		activityController.allActivities();
 		// Verify
-		verify(activityView).showActivities(Arrays.asList(activity1,activity2));
+		verify(activityView).showActivities(Arrays.asList(activity1, activity2));
 	}
-	
+
 	@Test
 	public void testAllOperators() {
 		// Setup
 		Operator operator1 = new Operator("MatricolaTest1", "NameTest1", "SurnameTest1");
 		Operator operator2 = new Operator("MatricolaTest2", "NameTest2", "SurnameTest2");
-		operatorRepository.save(operator1);		
-		operatorRepository.save(operator2);		
+		operatorRepository.save(operator1);
+		operatorRepository.save(operator2);
 		// Exercise
 		activityController.allOperators();
 		// Verify
-		verify(activityView).showOperators(Arrays.asList(operator1,operator2));
+		verify(activityView).showOperators(Arrays.asList(operator1, operator2));
 	}
-	
+
 	@Test
 	public void testAllBasicOperations() {
 		// Setup
 		BasicOperation basicOperation1 = new BasicOperation("IdTest1", "NameTest1", "DescriptionTest1");
 		BasicOperation basicOperation2 = new BasicOperation("IdTest2", "NameTest2", "DescriptionTest2");
-		basicOperationRepository.save(basicOperation1);		
-		basicOperationRepository.save(basicOperation2);		
+		basicOperationRepository.save(basicOperation1);
+		basicOperationRepository.save(basicOperation2);
 		// Exercise
 		activityController.allBasicOperation();
 		// Verify
-		verify(activityView).showBasicOperation(Arrays.asList(basicOperation1,basicOperation2));
+		verify(activityView).showBasicOperation(Arrays.asList(basicOperation1, basicOperation2));
 	}
-	
+
 	@Test
 	public void testAddActivity() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
 		BasicOperation basicOperation = new BasicOperation(new ObjectId().toString(), "testName", "testDescription");
-		Activity newActivity = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity newActivity = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(),
+				startTime, endTime);
 		operatorRepository.save(operator);
 		basicOperationRepository.save(basicOperation);
 		// Exercise
 		activityController.addActivity(newActivity);
 		// Verify
-		verify(activityView)
-				.showSuccessfull("The Activity: " + newActivity.getId() + " has been added.");
+		verify(activityView).showSuccessfull("The Activity: " + newActivity.getId() + " has been added.");
 		verifyNoMoreInteractions(activityView);
 	}
-	
+
 	@Test
 	public void testRemoveActivity() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
 		BasicOperation basicOperation = new BasicOperation(new ObjectId().toString(), "testName", "testDescription");
-		Activity oldActivity = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity oldActivity = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(),
+				startTime, endTime);
 		operatorRepository.save(operator);
 		basicOperationRepository.save(basicOperation);
 		activityRepository.save(oldActivity);
 		// Exercise
 		activityController.removeActivity(oldActivity);
 		// Verify
-		verify(activityView)
-				.showSuccessfull("The Activity: " + oldActivity.getId() + " has been removed.");
+		verify(activityView).showSuccessfull("The Activity: " + oldActivity.getId() + " has been removed.");
 		verifyNoMoreInteractions(activityView);
 	}
-	
+
 	@Test
 	public void testFindActivityByOperator() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
 		BasicOperation basicOperation = new BasicOperation(new ObjectId().toString(), "testName", "testDescription");
-		Activity activity1 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(), startTime, endTime);
-		Activity activity2 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity activity1 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(),
+				startTime, endTime);
+		Activity activity2 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(),
+				startTime, endTime);
 		operatorRepository.save(operator);
 		basicOperationRepository.save(basicOperation);
 		activityRepository.save(activity1);
@@ -152,17 +156,19 @@ public class ActivityControllerIT {
 		// Exercise
 		activityController.findByOperator("testMatricola");
 		// Verify
-		verify(activityView).showActivities(Arrays.asList(activity1,activity2));
+		verify(activityView).showActivities(Arrays.asList(activity1, activity2));
 		verifyNoMoreInteractions(activityView);
 	}
-	
+
 	@Test
 	public void testFindActivityByBasicOperation() {
 		// Setup
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
 		BasicOperation basicOperation = new BasicOperation(new ObjectId().toString(), "testName", "testDescription");
-		Activity activity1 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(), startTime, endTime);
-		Activity activity2 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity activity1 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(),
+				startTime, endTime);
+		Activity activity2 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(),
+				startTime, endTime);
 		operatorRepository.save(operator);
 		basicOperationRepository.save(basicOperation);
 		activityRepository.save(activity1);
@@ -170,10 +176,10 @@ public class ActivityControllerIT {
 		// Exercise
 		activityController.findByBasicOperation(basicOperation.getId());
 		// Verify
-		verify(activityView).showActivities(Arrays.asList(activity1,activity2));
+		verify(activityView).showActivities(Arrays.asList(activity1, activity2));
 		verifyNoMoreInteractions(activityView);
 	}
-	
+
 	@Test
 	public void testFindActivityByDate() {
 		// Setup
@@ -182,8 +188,10 @@ public class ActivityControllerIT {
 		Date startTimeSearch = cal.getTime();
 		Operator operator = new Operator("testMatricola", "testName", "testSurname");
 		BasicOperation basicOperation = new BasicOperation(new ObjectId().toString(), "testName", "testDescription");
-		Activity activity1 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(), startTime, endTime);
-		Activity activity2 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(), startTime, endTime);
+		Activity activity1 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(),
+				startTime, endTime);
+		Activity activity2 = new Activity(new ObjectId().toString(), operator.getMatricola(), basicOperation.getId(),
+				startTime, endTime);
 		operatorRepository.save(operator);
 		basicOperationRepository.save(basicOperation);
 		activityRepository.save(activity1);
@@ -191,19 +199,22 @@ public class ActivityControllerIT {
 		// Exercise
 		activityController.findByDay(startTimeSearch);
 		// Verify
-		verify(activityView).showActivities(Arrays.asList(activity1,activity2));
+		verify(activityView).showActivities(Arrays.asList(activity1, activity2));
 		verifyNoMoreInteractions(activityView);
 	}
-	
+
 	@Test
 	public void testUpdateActivity() {
 		// Setup
 		Operator operatorOld = new Operator("testMatricolaOld", "testNameOld", "testSurnameOld");
-		BasicOperation basicOperationOld = new BasicOperation(new ObjectId().toString(), "testNameOld", "testDescriptionOld");
-		Activity activityOld = new Activity(new ObjectId().toString(), operatorOld.getMatricola(), basicOperationOld.getId(), startTime, endTime);
+		BasicOperation basicOperationOld = new BasicOperation(new ObjectId().toString(), "testNameOld",
+				"testDescriptionOld");
+		Activity activityOld = new Activity(new ObjectId().toString(), operatorOld.getMatricola(),
+				basicOperationOld.getId(), startTime, endTime);
 		Operator operatorNew = new Operator("testMatricolaNew", "testNameNew", "testSurnameNew");
 		BasicOperation basicOperationNew = new BasicOperation(new ObjectId().toString(), "testName", "testDescription");
-		Activity activityNew = new Activity(activityOld.getId(), operatorNew.getMatricola(), basicOperationNew.getId(), startTime, endTime);
+		Activity activityNew = new Activity(activityOld.getId(), operatorNew.getMatricola(), basicOperationNew.getId(),
+				startTime, endTime);
 		operatorRepository.save(operatorOld);
 		basicOperationRepository.save(basicOperationOld);
 		activityRepository.save(activityOld);
@@ -216,5 +227,5 @@ public class ActivityControllerIT {
 		verify(activityView).showSuccessfull("The Activity: " + activityNew.getId() + " has been updated.");
 		verifyNoMoreInteractions(activityView);
 	}
-	
+
 }

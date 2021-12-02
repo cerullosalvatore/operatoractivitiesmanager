@@ -689,7 +689,7 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 		BasicOperation basicOperation2 = new BasicOperation("BasicOperationId2", "Name2", "Description2");
 		basicOperationRepository.save(basicOperation1);
 		basicOperationRepository.save(basicOperation2);
-		
+
 		// Exercise
 		JPanelFixture listTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 		listTopMenuPanel.button("btnShowAll").click();
@@ -697,11 +697,11 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 		// Verify
 		JListFixture listActivities = frameFixture.panel("listActivitiesPanel").list("listActivities");
 		assertThat(listActivities.contents()).containsExactly(activity1.toString(), activity2.toString());
-		
+
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 		String[] operatorComboContents = formActivityPanel.comboBox("comboBoxOperatorActivity").contents();
 		assertThat(operatorComboContents).containsExactly(operator1.toString(), operator2.toString());
-		
+
 		String[] basicOperationComboContents = formActivityPanel.comboBox("comboBoxBasicOperationActivity").contents();
 		assertThat(basicOperationComboContents).containsExactly(basicOperation1.toString(), basicOperation2.toString());
 	}

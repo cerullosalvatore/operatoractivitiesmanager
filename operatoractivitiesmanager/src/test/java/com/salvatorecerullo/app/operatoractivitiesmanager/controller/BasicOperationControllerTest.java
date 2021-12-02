@@ -72,8 +72,7 @@ public class BasicOperationControllerTest {
 		// Exercise
 		basicOperationController.addBasicOperation(newBasicOperation);
 		// Verify
-		verify(basicOperationView)
-				.showError(BASICOPERATION + newBasicOperation.getId() + " already exist.");
+		verify(basicOperationView).showError(BASICOPERATION + newBasicOperation.getId() + " already exist.");
 	}
 
 	@Test
@@ -99,8 +98,7 @@ public class BasicOperationControllerTest {
 		// Exercise
 		basicOperationController.removeBasicOperation(newBasicOperation);
 		// Verify
-		verify(basicOperationView)
-				.showError(BASICOPERATION + newBasicOperation.getId() + NOTEXIST);
+		verify(basicOperationView).showError(BASICOPERATION + newBasicOperation.getId() + NOTEXIST);
 	}
 
 	@Test
@@ -127,8 +125,7 @@ public class BasicOperationControllerTest {
 		// Exercise
 		basicOperationController.updateBasicOperation(newBasicOperation);
 		// Verify
-		verify(basicOperationView)
-				.showError(BASICOPERATION + newBasicOperation.getId() + NOTEXIST);
+		verify(basicOperationView).showError(BASICOPERATION + newBasicOperation.getId() + NOTEXIST);
 	}
 
 }

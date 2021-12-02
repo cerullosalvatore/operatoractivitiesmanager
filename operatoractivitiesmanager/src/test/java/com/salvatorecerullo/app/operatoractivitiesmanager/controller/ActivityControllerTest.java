@@ -83,7 +83,7 @@ public class ActivityControllerTest {
 		// Verify
 		verify(activityView).showOperators(operators);
 	}
-	
+
 	@Test
 	public void testAllBasicOperations() {
 		// Setup
@@ -96,7 +96,7 @@ public class ActivityControllerTest {
 		// Verify
 		verify(activityView).showBasicOperation(basicOperations);
 	}
-	
+
 	@Test
 	public void testAddActivitySuccessfull() {
 		// Setup
@@ -111,8 +111,7 @@ public class ActivityControllerTest {
 		// verify
 		InOrder inOrder = Mockito.inOrder(activityRepository, activityView);
 		inOrder.verify(activityRepository).save(newActivity);
-		inOrder.verify(activityView)
-				.showSuccessfull(THEACTIVITY + newActivity.getId() + " has been added.");
+		inOrder.verify(activityView).showSuccessfull(THEACTIVITY + newActivity.getId() + " has been added.");
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -192,8 +191,7 @@ public class ActivityControllerTest {
 		// verify
 		InOrder inOrder = Mockito.inOrder(activityRepository, activityView);
 		inOrder.verify(activityRepository).delete(oldActivity.getId());
-		inOrder.verify(activityView)
-				.showSuccessfull(THEACTIVITY + oldActivity.getId() + " has been removed.");
+		inOrder.verify(activityView).showSuccessfull(THEACTIVITY + oldActivity.getId() + " has been removed.");
 	}
 
 	@Test

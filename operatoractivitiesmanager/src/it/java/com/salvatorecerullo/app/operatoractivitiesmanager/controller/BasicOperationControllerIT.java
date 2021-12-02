@@ -28,7 +28,7 @@ public class BasicOperationControllerIT {
 	private static final String COLLECTION_NAME = "basicoperation";
 	private static int mongoPort = Integer.parseInt(System.getProperty("mongo.port", "27017"));
 	private BasicOperationRepository basicOperationRepository;
-	
+
 	@Mock
 	private BasicOperationView basicOperationView;
 
@@ -52,26 +52,26 @@ public class BasicOperationControllerIT {
 		BasicOperation basicOperation2 = new BasicOperation(new ObjectId().toString(), "name2", "description2");
 		basicOperationRepository.save(basicOperation1);
 		basicOperationRepository.save(basicOperation2);
-		
+
 		// Exercise
 		basicOperationController.allBasicOperations();
 		// Verify
-		verify(basicOperationView).showAllBasicOperations(Arrays.asList(basicOperation1,basicOperation2));
+		verify(basicOperationView).showAllBasicOperations(Arrays.asList(basicOperation1, basicOperation2));
 	}
-	
+
 	@Test
 	public void testAddBasicOperation() {
 		// Setup
 		BasicOperation basicOperation = new BasicOperation(new ObjectId().toString(), "name", "description");
-		
+
 		// Exercise
 		basicOperationController.addBasicOperation(basicOperation);
-		
+
 		// Verify
 		verify(basicOperationView).showSuccessfull(BASICOPERATION + basicOperation.getId() + " has been added.");
 		verifyNoMoreInteractions(basicOperationView);
 	}
-	
+
 	@Test
 	public void testRemoveBasicOperation() {
 		// Setup
@@ -80,25 +80,27 @@ public class BasicOperationControllerIT {
 
 		// Exercise
 		basicOperationController.removeBasicOperation(basicOperation);
-		
+
 		// Verify
 		verify(basicOperationView).showSuccessfull(BASICOPERATION + basicOperation.getId() + " has been removed.");
 		verifyNoMoreInteractions(basicOperationView);
 	}
-	
+
 	@Test
 	public void testUpdateBasicOperation() {
 		// Setup
 		BasicOperation basicOperationOld = new BasicOperation(new ObjectId().toString(), "nameOld", "descriptionOld");
-		BasicOperation basicOperationUpdated = new BasicOperation(basicOperationOld.getId(), "nameUpdated", "descriptionUpdated");
+		BasicOperation basicOperationUpdated = new BasicOperation(basicOperationOld.getId(), "nameUpdated",
+				"descriptionUpdated");
 		basicOperationRepository.save(basicOperationOld);
-		
+
 		// Exercise
 		basicOperationController.updateBasicOperation(basicOperationUpdated);
-		
+
 		// Verify
-		verify(basicOperationView).showSuccessfull(BASICOPERATION + basicOperationUpdated.getId() + " has been updated.");
+		verify(basicOperationView)
+				.showSuccessfull(BASICOPERATION + basicOperationUpdated.getId() + " has been updated.");
 		verifyNoMoreInteractions(basicOperationView);
 	}
-	
+
 }

@@ -16,7 +16,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.salvatorecerullo.app.operatoractivitiesmanager.model.Operator;
 
-
 public class OperatorMongoRepostoryIT {
 	private static final String DB_NAME = "operatoractivities";
 	private static final String COLLECTION_NAME = "operator";
@@ -33,7 +32,7 @@ public class OperatorMongoRepostoryIT {
 		database.drop();
 		operatorCollection = database.getCollection(COLLECTION_NAME);
 	}
-	
+
 	@Test
 	public void testFindAll() {
 		// Setup
@@ -48,7 +47,7 @@ public class OperatorMongoRepostoryIT {
 		// Verify
 		assertThat(operators).containsExactly(operator1, operator2);
 	}
-	
+
 	@Test
 	public void testSaveOperator() {
 		// Setup
@@ -60,7 +59,7 @@ public class OperatorMongoRepostoryIT {
 		// Verify
 		assertThat(operatorMongoRepository.findAll().get(0)).isEqualTo(newOperator);
 	}
-	
+
 	@Test
 	public void testFindByMatricola() {
 		// Setup
@@ -77,7 +76,7 @@ public class OperatorMongoRepostoryIT {
 		// Verify
 		assertThat(operatorRetrivied).isEqualTo(operator2);
 	}
-	
+
 	@Test
 	public void testDeleteOperator() {
 		// Setup
@@ -106,17 +105,19 @@ public class OperatorMongoRepostoryIT {
 		// Verify
 		assertThat(readAllOperatorsFromDB()).containsExactly(operatorNew);
 	}
+
+	// Utility
 	
 	private void addOperatorToDB(Operator operator) {
 		operatorCollection.insertOne(new Document().append("_id", operator.getMatricola())
 				.append("name", operator.getName()).append("surname", operator.getSurname()));
 	}
-	
+
 	private List<Operator> readAllOperatorsFromDB() {
 		return StreamSupport.stream(operatorCollection.find().spliterator(), false).map(this::fromDocumentToOperator)
 				.collect(Collectors.toList());
 	}
-	
+
 	private Operator fromDocumentToOperator(Document document) {
 		return new Operator(document.getString("_id"), document.getString("name"), document.getString("surname"));
 	}

@@ -11,8 +11,8 @@
 	<url>http://www.example.com</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<junit.version>4.13</junit.version>
 		<org.pitest.version>1.5.2</org.pitest.version>
 		<org.jacoco.version>0.8.6</org.jacoco.version>
@@ -86,87 +86,82 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.0.0-M5</version>
-				</plugin>
-				<plugin>
-					<groupId>org.pitest</groupId>
-					<artifactId>pitest-maven</artifactId>
-					<version>${org.pitest.version}</version>
-					<configuration>
-						<excludedClasses>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.*</param>
-						</excludedClasses>
-						<targetClasses>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.*</param>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.controller.*</param>
-						</targetClasses>
-						<targetTests>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.controller.*Test</param>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.*Test</param>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.*Test</param>
-						</targetTests>
-						<excludedTestClasses>
-							<param>*.swing.*</param>
-							<param>*IT</param>
-							<param>*E2E</param>
-						</excludedTestClasses>
-						<mutators>
-							<mutator>STRONGER</mutator>
-						</mutators>
-						<mutationThreshold>100</mutationThreshold>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.jacoco</groupId>
-					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>${org.jacoco.version}</version>
-					<configuration>
-						<excludes>
-							<exclude>**/app/swing/*.*</exclude>
-							<exclude>**/model/*.*</exclude>
-						</excludes>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<!-- binds by default to the phase "initialize" -->
-								<goal>prepare-agent</goal>
-								<!-- binds by default to the phase "verify" -->
-								<goal>report</goal>
-							</goals>
-						</execution>
-						<!-- another execution possible is check with a configuration -->
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.eluder.coveralls</groupId>
-					<artifactId>coveralls-maven-plugin</artifactId>
-					<version>4.3.0</version>
-					<dependencies>
-						<!-- This is required when using JDK 9 or higher since javax.xml.bind 
-							has been removed from the JDK -->
-						<dependency>
-							<groupId>javax.xml.bind</groupId>
-							<artifactId>jaxb-api</artifactId>
-							<version>2.3.1</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-				<plugin>
-					<groupId>org.sonarsource.scanner.maven</groupId>
-					<artifactId>sonar-maven-plugin</artifactId>
-					<version>3.8.0.2131</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M5</version>
+			</plugin>
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>${org.pitest.version}</version>
+				<configuration>
+					<excludedClasses>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.*</param>
+					</excludedClasses>
+					<targetClasses>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.*</param>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.controller.*</param>
+					</targetClasses>
+					<targetTests>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.controller.*Test</param>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.*Test</param>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.*Test</param>
+					</targetTests>
+					<excludedTestClasses>
+						<param>*.swing.*</param>
+						<param>*IT</param>
+						<param>*E2E</param>
+					</excludedTestClasses>
+					<mutators>
+						<mutator>STRONGER</mutator>
+					</mutators>
+					<mutationThreshold>100</mutationThreshold>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${org.jacoco.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>**/app/swing/*.*</exclude>
+						<exclude>**/model/*.*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<!-- binds by default to the phase "initialize" -->
+							<goal>prepare-agent</goal>
+							<!-- binds by default to the phase "verify" -->
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<!-- another execution possible is check with a configuration -->
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>4.3.0</version>
+				<dependencies>
+					<!-- This is required when using JDK 9 or higher since javax.xml.bind 
+						has been removed from the JDK -->
+					<dependency>
+						<groupId>javax.xml.bind</groupId>
+						<artifactId>jaxb-api</artifactId>
+						<version>2.3.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.8.0.2131</version>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>

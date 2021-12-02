@@ -167,6 +167,8 @@ public class OperatorMongoRepositoryTest {
 		assertThat(readAllOperatorsFromDB().get(0)).isNotEqualTo(operatorNew);
 	}
 
+	// Utility
+
 	private void addOperatorToDB(Operator operator) {
 		operatorCollection.insertOne(new Document().append("_id", operator.getMatricola())
 				.append("name", operator.getName()).append("surname", operator.getSurname()));

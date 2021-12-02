@@ -368,7 +368,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 		activityController.addActivity(newActivity);
 		activityIdTemp = new ObjectId().toString();
-		
+
 		textFieldIdActivity.setText(activityIdTemp);
 		textFieldStartDataActivity.setText("");
 		textFieldStartHourActivity.setText("");

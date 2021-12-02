@@ -63,7 +63,6 @@ public class OperatorActivitiesManagerViewIT extends AssertJSwingJUnitTestCase {
 
 	@Override
 	protected void onSetUp() throws Exception {
-		// TODO Auto-generated method stub
 		MongoClient mongoClient = new MongoClient(new ServerAddress("localhost", mongoPort));
 		activityRepository = new ActivityMongoRepository(mongoClient, DB_NAME, COLLECTION_NAME_ACTIVITY);
 		operatorRepository = new OperatorMongoRepository(mongoClient, DB_NAME, COLLECTION_NAME_OPERATOR);

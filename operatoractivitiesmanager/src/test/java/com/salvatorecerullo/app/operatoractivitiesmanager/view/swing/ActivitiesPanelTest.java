@@ -154,14 +154,14 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 				.panel("buttonsFormActivityPanel");
 		buttonsFormActivityPanel.button("btnAddActivity").requireEnabled();
 
-		// Exercise and Verify
+		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").setText("");
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("errorInput");
 
 		// Verify
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
 
-		// Exercise and Verify
+		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").setText("");
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
 		formActivityPanel.textBox("textFieldStartHourActivity").setText("");
@@ -170,7 +170,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		// Verify
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
 
-		// Exercise and Verify
+		// Exercise
 		formActivityPanel.textBox("textFieldStartHourActivity").setText("");
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
 		formActivityPanel.textBox("textFieldEndDataActivity").setText("");
@@ -179,7 +179,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		// Verify
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
 
-		// Exercise and Verify
+		// Exercise
 		formActivityPanel.textBox("textFieldEndDataActivity").setText("");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
 		formActivityPanel.textBox("textFieldEndHourActivity").setText("");
@@ -417,7 +417,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		Operator operator = new Operator("MatricolaTest", "Name Test", "Surname Test");
 		BasicOperation basicOperation = new BasicOperation("OperationId", "Name Operation", "Description Operation");
-		
+
 		GuiActionRunner.execute(() -> {
 			activitiesPanel.getComboBoxOperatorsModel().addElement(operator);
 			activitiesPanel.getComboBoxOperationsModel().addElement(basicOperation);
@@ -958,10 +958,12 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		activities.add(activity1);
 		activities.add(activity2);
 
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			activitiesPanel.showActivities(activities);
 		});
 
+		// Very
 		String[] listContents = listActivitiesPanel.list("listActivities").contents();
 		assertThat(listContents).containsExactly(activity1.toString(), activity2.toString());
 		listActivitiesPanel.label("lblMessageStatus").requireText("");
@@ -974,10 +976,12 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
 		listActivitiesPanel.list("listActivities").requireVisible().requireEnabled().requireNoSelection();
 
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			activitiesPanel.showSuccessfull("Successfull Message.");
 		});
 
+		// Verify
 		verify(activityController, atLeast(1)).allActivities();
 		verify(activityController, atMost(2)).allActivities();
 		listActivitiesPanel.label("lblMessageStatus").requireText("Successfull Message.");
@@ -989,10 +993,12 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		// Setup
 		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
 
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			activitiesPanel.showError("Error Message.");
 		});
 
+		// Verify
 		verify(activityController, atLeast(1)).allActivities();
 		verify(activityController, atMost(2)).allActivities();
 		listActivitiesPanel.label("lblMessageStatus").requireText("Error Message.");
@@ -1001,6 +1007,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testShowOperatorsShouldUpdateOperatorsComboBox() {
+		// Setup
 		Operator operator1 = new Operator("MatricolaTest1", "NameTest1", "SurnameTest1");
 		Operator operator2 = new Operator("MatricolaTest2", "NameTest2", "SurnameTest2");
 
@@ -1009,10 +1016,12 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		operators.add(operator1);
 		operators.add(operator2);
 
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			activitiesPanel.showOperators(operators);
 		});
 
+		// Verify
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 		String[] operatorsComboContents = formActivityPanel.comboBox("comboBoxOperatorActivity").contents();
 		assertThat(operatorsComboContents).containsExactly(operator1.toString(), operator2.toString());
@@ -1021,6 +1030,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testShowOperatorsShouldUpdateBasicOperationsComboBox() {
+		// Setup
 		BasicOperation basicOperation1 = new BasicOperation("IdTest1", "NameTest1", "DescriptionTest1");
 		BasicOperation basicOperation2 = new BasicOperation("IdTest2", "NameTest2", "DescriptionTest2");
 
@@ -1029,10 +1039,12 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		operations.add(basicOperation1);
 		operations.add(basicOperation2);
 
+		// Exercise
 		GuiActionRunner.execute(() -> {
 			activitiesPanel.showBasicOperation(operations);
 		});
 
+		// Verify
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 		String[] basicoOperationComboContents = formActivityPanel.comboBox("comboBoxBasicOperationActivity").contents();
 		assertThat(basicoOperationComboContents).containsExactly(basicOperation1.toString(),

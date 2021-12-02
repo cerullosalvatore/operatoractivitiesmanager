@@ -78,7 +78,7 @@ public class BasicOperationMongoRepositoryIT {
 		// Verify
 		assertThat(readAllBasicOperatoinFromDB()).containsExactly(newBasicOperation1);
 	}
-	
+
 	@Test
 	public void testDeleteBasicOperation() {
 		// Setup
@@ -93,7 +93,7 @@ public class BasicOperationMongoRepositoryIT {
 		// Verify
 		assertThat(readAllBasicOperatoinFromDB()).containsExactly(basicOperation2);
 	}
-	
+
 	@Test
 	public void testUpdate() {
 		// Setup
@@ -108,6 +108,7 @@ public class BasicOperationMongoRepositoryIT {
 		assertThat(readAllBasicOperatoinFromDB()).containsExactly(basicOperationNew);
 	}
 
+	// Utility
 	private void addBasicOperationToDB(BasicOperation basicOperation) {
 		basicOperationCollection.insertOne(new Document().append("_id", basicOperation.getId())
 				.append("name", basicOperation.getName()).append("description", basicOperation.getDescription()));
