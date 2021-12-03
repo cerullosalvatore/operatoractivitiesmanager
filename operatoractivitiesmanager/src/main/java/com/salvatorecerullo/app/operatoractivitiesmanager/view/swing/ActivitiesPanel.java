@@ -138,7 +138,10 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		formActivityPanel.add(labelStartDataActivity);
 
 		// FIELD DATA START
-		textFieldStartDataActivity = new JFormattedTextField(new SimpleDateFormat(DATE_FORMAT));
+		SimpleDateFormat df = new SimpleDateFormat(DATE_FORMAT);
+		df.setLenient(false);
+		textFieldStartDataActivity = new JFormattedTextField(df);
+		textFieldStartDataActivity.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		formActivityPanel.add(textFieldStartDataActivity);
 		textFieldStartDataActivity.addKeyListener(getKeyListenerDataTextField());
 
@@ -147,7 +150,10 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		formActivityPanel.add(labelStartHourActivity);
 
 		// FIELD START DATA
-		textFieldStartHourActivity = new JFormattedTextField(new SimpleDateFormat(HOUR_FORMAT));
+		SimpleDateFormat hf = new SimpleDateFormat(HOUR_FORMAT);
+		textFieldEndHourActivity = new JFormattedTextField(hf);
+		textFieldStartHourActivity = new JFormattedTextField(hf);
+		textFieldStartHourActivity.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		formActivityPanel.add(textFieldStartHourActivity);
 		textFieldStartHourActivity.addKeyListener(getKeyListenerInputTextField());
 
@@ -156,7 +162,8 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		formActivityPanel.add(labelEndDataActivity);
 
 		// FIELD END DATA
-		textFieldEndDataActivity = new JFormattedTextField(new SimpleDateFormat(DATE_FORMAT));
+		textFieldEndDataActivity = new JFormattedTextField(df);
+		textFieldEndDataActivity.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		formActivityPanel.add(textFieldEndDataActivity);
 		textFieldEndDataActivity.addKeyListener(getKeyListenerInputTextField());
 
@@ -165,7 +172,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		formActivityPanel.add(labelEndHourActivity);
 
 		// FIELD END HOUR
-		textFieldEndHourActivity = new JFormattedTextField(new SimpleDateFormat(HOUR_FORMAT));
+		textFieldEndHourActivity.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		formActivityPanel.add(textFieldEndHourActivity);
 		textFieldEndHourActivity.addKeyListener(getKeyListenerInputTextField());
 
@@ -543,6 +550,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	private Date dateIsValid(String dateString) {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
+		dateFormatter.setLenient(false);
 		try {
 			return dateFormatter.parse(dateString);
 		} catch (ParseException e) {
@@ -553,6 +561,8 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 
 	private Date hourIsValid(String hourString) {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat(HOUR_FORMAT);
+		dateFormatter.setLenient(false);
+
 		try {
 			dateFormatter.parse(hourString);
 			return dateFormatter.parse(hourString);
