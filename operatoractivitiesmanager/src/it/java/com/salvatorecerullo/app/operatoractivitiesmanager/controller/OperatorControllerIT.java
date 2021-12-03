@@ -42,7 +42,7 @@ public class OperatorControllerIT {
 		database.drop();
 		operatorController = new OperatorController(operatorRepository, operatorView);
 	}
-	
+
 	@Test
 	public void testAllOperators() {
 		// Setup
@@ -53,9 +53,9 @@ public class OperatorControllerIT {
 		// Exercise
 		operatorController.allOperators();
 		// Verify
-		verify(operatorView).showAllOperators(Arrays.asList(operator1,operator2));
+		verify(operatorView).showAllOperators(Arrays.asList(operator1, operator2));
 	}
-	
+
 	@Test
 	public void testAddOperator() {
 		// Setup
@@ -66,7 +66,7 @@ public class OperatorControllerIT {
 		verify(operatorView).showSuccessfull(THEOPERATOR + newOperator.getMatricola() + " has been added.");
 		verifyNoMoreInteractions(operatorView);
 	}
-	
+
 	@Test
 	public void testRemoveOperator() {
 		// Setup
@@ -78,7 +78,7 @@ public class OperatorControllerIT {
 		verify(operatorView).showSuccessfull(THEOPERATOR + operatorToDelete.getMatricola() + " has been removed.");
 		verifyNoMoreInteractions(operatorView);
 	}
-	
+
 	@Test
 	public void testUpdateOperatorSuccessfull() {
 		// Setup

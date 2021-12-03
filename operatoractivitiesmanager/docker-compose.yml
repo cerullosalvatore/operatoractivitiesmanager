@@ -1,0 +1,10 @@
+version: '1'
+
+services:
+  mongoDB:
+    image: mongo:4.4.3
+    container_name: "mongoDB_Container"
+    environment:
+      - MONGO_INITDB_DATABASE=operatoractivities
+    ports:
+      - "27017:27017"

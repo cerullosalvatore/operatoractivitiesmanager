@@ -178,7 +178,7 @@ public class ActivityMongoRepositoryIT {
 		// Verify
 		assertThat(activitiesRetrieved.get(0)).isEqualTo(activity1);
 	}
-	
+
 	@Test
 	public void testUpdate() {
 		// Setup
@@ -199,6 +199,8 @@ public class ActivityMongoRepositoryIT {
 		// Verify
 		assertThat(readAllActivityFromDB()).containsExactly(activityNew);
 	}
+	
+	// Utility
 
 	private void addActivityToDB(Activity activity) {
 		activityCollection.insertOne(new Document().append("_id", activity.getId())

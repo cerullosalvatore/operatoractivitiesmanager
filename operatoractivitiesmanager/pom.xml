@@ -11,11 +11,31 @@
 	<url>http://www.example.com</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- Java version to compile -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+
+		<!-- All dependencies versions are listed below -->
+		<org.apache.logging.log4j.version>2.13.0</org.apache.logging.log4j.version>
 		<junit.version>4.13</junit.version>
+		<org.assertj.version>3.17.1</org.assertj.version>
+		<org.mockito.version>3.2.4</org.mockito.version>
+		<org.mongodb.version>3.12.7</org.mongodb.version>
+		<ch.qos.logback.version>1.2.3</ch.qos.logback.version>
+		<de.bwaldvogel.version>1.11.1</de.bwaldvogel.version>
+		<info.picocli.version>4.6.1</info.picocli.version>
+		<org.awaitility.version>4.1.1</org.awaitility.version>
+
+		<!-- All plugins versions are listed below -->
 		<org.pitest.version>1.5.2</org.pitest.version>
 		<org.jacoco.version>0.8.6</org.jacoco.version>
+		<org.eluder.coveralls.version>4.3.0</org.eluder.coveralls.version>
+		<org.sonarsource.scanner.maven.version>3.8.0.2131</org.sonarsource.scanner.maven.version>
+		<org.codehaus.mojo.version>3.2.0</org.codehaus.mojo.version>
+		<io.fabric8.version>0.34.1</io.fabric8.version>
+
+		<!-- SonarCloud Poreperties -->
 		<sonar.organization>cerullosalvatore</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.projectKey>cerullosalvatore_operatoractivitiesmanager</sonar.projectKey>
@@ -23,8 +43,25 @@
 			**/OperatorActivitiesManagerSwingApp.*,
 			**/model/*.*
 		</sonar.coverage.exclusions>
+		<sonar.coverage.jacoco.xmlReportPaths>
+			${project.build.directory}/surefire-reports,
+			${project.build.directory}/failsafe-reports
+		</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
+
+	<!-- Maven automatically downloads dependencies specified below, that is, 
+		the Java libraries that your project needs to compile and run the tests. -->
 	<dependencies>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${org.apache.logging.log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${org.apache.logging.log4j.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -34,175 +71,52 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-swing-junit</artifactId>
-			<version>3.17.1</version>
+			<version>${org.assertj.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>3.2.4</version>
+			<version>${org.mockito.version}</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.14.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.14.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
-			<version>3.12.7</version>
+			<version>${org.mongodb.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.2.3</version>
+			<version>${ch.qos.logback.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.bwaldvogel</groupId>
 			<artifactId>mongo-java-server</artifactId>
-			<version>1.11.1</version>
+			<version>${de.bwaldvogel.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>info.picocli</groupId>
 			<artifactId>picocli</artifactId>
-			<version>4.6.1</version>
+			<version>${info.picocli.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
-			<version>4.1.1</version>
+			<version>${org.awaitility.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.0.0-M5</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<executions>
-						<execution>
-							<phase>package</phase>
-							<goals>
-								<goal>single</goal>
-							</goals>
-							<configuration>
-								<descriptorRefs>
-									<descriptorRef>jar-with-dependencies</descriptorRef>
-								</descriptorRefs>
-								<archive>
-									<manifest>
-										<mainClass>com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.OperatorActivitiesManagerSwingApp</mainClass>
-									</manifest>
-								</archive>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.pitest</groupId>
-					<artifactId>pitest-maven</artifactId>
-					<version>${org.pitest.version}</version>
-					<configuration>
-						<excludedClasses>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
-							<param>*.swing.*</param>
-							<param>*IT</param>
-						</excludedClasses>
-						<targetClasses>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.*</param>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.controller.*</param>
-						</targetClasses>
-						<targetTests>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.controller.*Test</param>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.*Test</param>
-							<param>com.salvatorecerullo.app.operatoractivitiesmanager.*Test</param>
-						</targetTests>
-						<excludedTestClasses>
-							<param>*.swing.*</param>
-						</excludedTestClasses>
-						<mutators>
-							<mutator>STRONGER</mutator>
-						</mutators>
-						<mutationThreshold>100</mutationThreshold>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.jacoco</groupId>
-					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>${org.jacoco.version}</version>
-					<configuration>
-						<excludes>
-							<exclude>**/app/swing/*.*</exclude>
-							<exclude>**/model/*.*</exclude>
-						</excludes>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<!-- binds by default to the phase "initialize" -->
-								<goal>prepare-agent</goal>
-								<!-- binds by default to the phase "verify" -->
-								<goal>report</goal>
-							</goals>
-						</execution>
-						<!-- another execution possible is check with a configuration -->
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.eluder.coveralls</groupId>
-					<artifactId>coveralls-maven-plugin</artifactId>
-					<version>4.3.0</version>
-					<dependencies>
-						<!-- This is required when using JDK 9 or higher since javax.xml.bind 
-							has been removed from the JDK -->
-						<dependency>
-							<groupId>javax.xml.bind</groupId>
-							<artifactId>jaxb-api</artifactId>
-							<version>2.3.1</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-				<plugin>
-					<groupId>org.sonarsource.scanner.maven</groupId>
-					<artifactId>sonar-maven-plugin</artifactId>
-					<version>3.8.0.2131</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 
+	<build>
+		<!-- In this section we can configure each plugin specifyng its Maven Coordinates, 
+			optional configuration and the bindings of its goals to the lifecycle phases. -->
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.2.0</version>
-				<executions>
-					<execution>
-						<id>add-test-source</id>
-						<phase>generate-test-sources</phase>
-						<goals>
-							<goal>add-test-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>src/it/java</source>
-								<source>src/e2e/java</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M5</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -238,9 +152,100 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>${org.pitest.version}</version>
+				<configuration>
+					<excludedClasses>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.model.*</param>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.*</param>
+					</excludedClasses>
+					<targetClasses>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.*</param>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.controller.*</param>
+					</targetClasses>
+					<targetTests>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.controller.*Test</param>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.repository.mongo.*Test</param>
+						<param>com.salvatorecerullo.app.operatoractivitiesmanager.*Test</param>
+					</targetTests>
+					<excludedTestClasses>
+						<param>*.swing.*</param>
+						<param>*IT</param>
+						<param>*E2E</param>
+					</excludedTestClasses>
+					<mutators>
+						<mutator>STRONGER</mutator>
+					</mutators>
+					<mutationThreshold>100</mutationThreshold>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${org.jacoco.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>**/app/swing/*.*</exclude>
+						<exclude>**/model/*.*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<!-- binds by default to the phase "initialize" -->
+							<goal>prepare-agent</goal>
+							<!-- binds by default to the phase "verify" -->
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<!-- another execution possible is check with a configuration -->
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>${org.eluder.coveralls.version}</version>
+				<dependencies>
+					<!-- This is required when using JDK 9 or higher since javax.xml.bind 
+						has been removed from the JDK -->
+					<dependency>
+						<groupId>javax.xml.bind</groupId>
+						<artifactId>jaxb-api</artifactId>
+						<version>2.3.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>${org.sonarsource.scanner.maven.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>${org.codehaus.mojo.version}</version>
+				<executions>
+					<execution>
+						<id>add-test-source</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/it/java</source>
+								<source>src/e2e/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
-				<version>0.34.1</version>
+				<version>${io.fabric8.version}</version>
 				<configuration>
 					<images>
 						<image>
@@ -270,9 +275,31 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<archive>
+								<manifest>
+									<mainClass>com.salvatorecerullo.app.operatoractivitiesmanager.app.swing.OperatorActivitiesManagerSwingApp</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+
 	<!-- Maven profiles are a mechanism that allows you to activate a subset 
 		of configurations. Now in a standard Maven build, neither JaCoCo nor PIT 
 		will be used; they can be enabled on the command line with -P and their ids. 

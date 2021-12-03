@@ -355,6 +355,8 @@ public class ActivityMongoRepositoryTest {
 
 	}
 
+	// Utility
+
 	private void addActivityToDB(Activity activity) {
 		activityCollection.insertOne(new Document().append("_id", activity.getId())
 				.append("operatorMatricola", activity.getOperatorMatricola())
