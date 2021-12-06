@@ -123,13 +123,13 @@ Di seguito vengono presentati i comandi principali per poter sfruttare questi st
 
 - Per misurare la qualità del codice è stato utilizzato _SonarCloud_. Per eseguirla: 
 
-  `mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=<project_key>`. 
+  `mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=<project_key> -Dsonar.login=<sonar_token>`. 
 
   Come in precedenza è necessario, innanzitutto effettuare la build eseguendo `-Pjacoco` e successivamente eseguire il comando appena presentato. Per eseguire questo processo è richiesto java 11. E' inoltre fondamentale settare la variabile d'ambiente `SONAR_TOKEN` fornitaci da SonarCloud al fine di poter effettuare l'accesso al servizio durante l'esecuzione. `<project_key>` è la chiave unica del progetto che viene fornitaci dalla piattaforma SonarCloud.
 
 Per eseguire il tutto con un unico comando:
 
-` mvn clean verify -Pjacoco org.pitest:pitest-maven:mutationCoverage org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=<project_key> coveralls:report -DrepoToken=<drepo_token> surefire-report:report-only surefire-report:failsafe-report-only org.apache.maven.plugins:maven-site-plugin:3.7.1:site -DgenerateReports=false`
+` mvn clean verify -Pjacoco org.pitest:pitest-maven:mutationCoverage org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=<project_key> -Dsonar.login=<sonar_token> coveralls:report -DrepoToken=<drepo_token> surefire-report:report-only surefire-report:failsafe-report-only org.apache.maven.plugins:maven-site-plugin:3.7.1:site -DgenerateReports=false`
 
 #### 5.4 Integrazione Continua
 
