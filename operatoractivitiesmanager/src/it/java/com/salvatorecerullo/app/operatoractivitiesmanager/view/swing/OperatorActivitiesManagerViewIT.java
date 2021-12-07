@@ -62,7 +62,7 @@ public class OperatorActivitiesManagerViewIT extends AssertJSwingJUnitTestCase {
 	private Date endTime;
 
 	@Override
-	protected void onSetUp() throws Exception {
+	protected void onSetUp() {
 		MongoClient mongoClient = new MongoClient(new ServerAddress("localhost", mongoPort));
 		activityRepository = new ActivityMongoRepository(mongoClient, DB_NAME, COLLECTION_NAME_ACTIVITY);
 		operatorRepository = new OperatorMongoRepository(mongoClient, DB_NAME, COLLECTION_NAME_OPERATOR);

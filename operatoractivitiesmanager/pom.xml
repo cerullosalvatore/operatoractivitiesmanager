@@ -43,10 +43,6 @@
 			**/OperatorActivitiesManagerSwingApp.*,
 			**/model/*.*
 		</sonar.coverage.exclusions>
-		<sonar.coverage.jacoco.xmlReportPaths>
-			${project.build.directory}/surefire-reports,
-			${project.build.directory}/failsafe-reports
-		</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 
 	<!-- Maven automatically downloads dependencies specified below, that is, 
@@ -181,28 +177,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${org.jacoco.version}</version>
-				<configuration>
-					<excludes>
-						<exclude>**/app/swing/*.*</exclude>
-						<exclude>**/model/*.*</exclude>
-					</excludes>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<!-- binds by default to the phase "initialize" -->
-							<goal>prepare-agent</goal>
-							<!-- binds by default to the phase "verify" -->
-							<goal>report</goal>
-						</goals>
-					</execution>
-					<!-- another execution possible is check with a configuration -->
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.eluder.coveralls</groupId>
 				<artifactId>coveralls-maven-plugin</artifactId>
 				<version>${org.eluder.coveralls.version}</version>
@@ -241,7 +215,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
@@ -276,6 +249,28 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${org.jacoco.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>**/OperatorActivitiesManagerSwingApp.*</exclude>
+						<exclude>**/model/*.*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<!-- binds by default to the phase "initialize" -->
+							<goal>prepare-agent</goal>
+							<!-- binds by default to the phase "verify" -->
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<!-- another execution possible is check with a configuration -->
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
@@ -299,6 +294,16 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.3</version>
+			</plugin>
+		</plugins>
+	</reporting>
 
 	<!-- Maven profiles are a mechanism that allows you to activate a subset 
 		of configurations. Now in a standard Maven build, neither JaCoCo nor PIT 

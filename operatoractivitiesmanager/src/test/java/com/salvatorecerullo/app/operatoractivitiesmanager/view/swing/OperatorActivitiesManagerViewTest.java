@@ -34,7 +34,7 @@ public class OperatorActivitiesManagerViewTest extends AssertJSwingJUnitTestCase
 	private FrameFixture frameFixture;
 
 	@Override
-	protected void onSetUp() throws Exception {
+	protected void onSetUp(){
 		MockitoAnnotations.initMocks(this);
 		// Our frame and the fixture will be recreated for each test method so that we
 		// always start with a fresh user interface.

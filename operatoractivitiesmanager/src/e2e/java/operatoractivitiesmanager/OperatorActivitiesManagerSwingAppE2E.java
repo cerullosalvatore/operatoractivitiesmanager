@@ -1,8 +1,8 @@
 package operatoractivitiesmanager;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.swing.launcher.ApplicationLauncher.*;
 import static org.awaitility.Awaitility.*;
+import static org.assertj.swing.assertions.Assertions.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -45,7 +45,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 	private Date endTime2;
 
 	@Override
-	protected void onSetUp() throws Exception {
+	protected void onSetUp(){
 		int mongoPort = Integer.parseInt(System.getProperty("mongo.port", "27017"));
 		mongoClient = new MongoClient(new ServerAddress(MONGO_CLIENT_HOST, mongoPort));
 
