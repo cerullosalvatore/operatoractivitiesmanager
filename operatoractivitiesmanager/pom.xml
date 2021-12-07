@@ -43,10 +43,10 @@
 			**/OperatorActivitiesManagerSwingApp.*,
 			**/model/*.*
 		</sonar.coverage.exclusions>
-		<sonar.coverage.jacoco.xmlReportPaths>
+		<sonar.junit.reportPaths>
 			${project.build.directory}/surefire-reports,
 			${project.build.directory}/failsafe-reports
-		</sonar.coverage.jacoco.xmlReportPaths>
+		</sonar.junit.reportPaths>
 	</properties>
 
 	<!-- Maven automatically downloads dependencies specified below, that is, 
