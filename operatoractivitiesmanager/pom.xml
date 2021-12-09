@@ -13,8 +13,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Java version to compile -->
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<!-- All dependencies versions are listed below -->
 		<org.apache.logging.log4j.version>2.13.0</org.apache.logging.log4j.version>
@@ -106,11 +106,6 @@
 			<artifactId>awaitility</artifactId>
 			<version>${org.awaitility.version}</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>xml-apis</groupId>
-			<artifactId>xml-apis</artifactId>
-			<version>1.4.01</version>
 		</dependency>
 	</dependencies>
 
