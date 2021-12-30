@@ -383,6 +383,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		textFieldEndHourActivity.setText("");
 		comboBoxOperatorActivity.setSelectedIndex(0);
 		comboBoxBasicOperationActivity.setSelectedIndex(0);
+		btnFindByData.setEnabled(false);
 	}
 
 	private void actionListenerUpdateButton() {

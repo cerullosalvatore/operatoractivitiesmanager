@@ -409,11 +409,12 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testActivitiesAddButtonWhasPressedAndFieldWasCompiledCorrectly() throws ParseException {
+	public void testActivitiesAddButtonWasPressedAndFieldWasCompiledCorrectly() throws ParseException {
 		// Setup
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
 		JPanelFixture buttonsFormActivityPanel = frameFixture.panel("newActivityPanel")
 				.panel("buttonsFormActivityPanel");
+		JPanelFixture formTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 
 		Operator operator = new Operator("MatricolaTest", "Name Test", "Surname Test");
 		BasicOperation basicOperation = new BasicOperation("OperationId", "Name Operation", "Description Operation");
@@ -441,6 +442,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		formActivityPanel.textBox("textFieldIdActivity").requireText(activitiesPanel.getActivityIdTemp());
 		formActivityPanel.comboBox("comboBoxOperatorActivity").requireSelection(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").requireSelection(0);
+		formTopMenuPanel.button("btnFindByData").requireDisabled();
 	}
 
 	@Test
@@ -452,6 +454,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 				.panel("buttonsFormActivityPanel");
 		JPanelFixture listActivitiesPanel = frameFixture.panel("listActivitiesPanel");
 		JPanelFixture listBottomMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listBottomMenuPanel");
+		JPanelFixture formTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(2021, 1, 1, 8, 0, 00);
@@ -483,6 +486,8 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		listActivitiesPanel.list("listActivities").requireDisabled();
 		buttonsFormActivityPanel.button("btnUpdateActivity").requireEnabled();
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
+		formTopMenuPanel.button("btnFindByData").requireEnabled();
+
 
 		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText();
