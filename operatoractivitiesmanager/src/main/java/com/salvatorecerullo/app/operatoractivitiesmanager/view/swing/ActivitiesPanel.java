@@ -103,7 +103,7 @@ public class ActivitiesPanel extends JPanel implements ActivityView {
 		formActivityPanel.setLayout(new GridLayout(0, 2, 0, 0));
 
 		// LABEL ID
-		labelId = new JLabel("New label");
+		labelId = new JLabel("ID:");
 		formActivityPanel.add(labelId);
 
 		// FIELD ID
