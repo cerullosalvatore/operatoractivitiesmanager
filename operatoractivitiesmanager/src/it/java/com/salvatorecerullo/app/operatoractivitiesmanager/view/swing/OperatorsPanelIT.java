@@ -59,7 +59,6 @@ public class OperatorsPanelIT extends AssertJSwingJUnitTestCase {
 		// FrameFixture will then be used to interact with our view’s controls (labels,
 		// text fields, buttons, etc.).
 		Robot robot = robot();
-		robot.settings().eventPostingDelay(500);
 		frameFixture = new FrameFixture(robot, jFrame);
 		frameFixture.show(); // shows the frame to test
 	}

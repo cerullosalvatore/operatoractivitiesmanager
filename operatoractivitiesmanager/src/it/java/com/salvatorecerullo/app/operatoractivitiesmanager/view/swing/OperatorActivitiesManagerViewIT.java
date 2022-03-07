@@ -88,7 +88,6 @@ public class OperatorActivitiesManagerViewIT extends AssertJSwingJUnitTestCase {
 		});
 
 		Robot robot = robot();
-		robot.settings().eventPostingDelay(500);
 		frameFixture = new FrameFixture(robot, operatorActivitiesManagerView);
 		frameFixture.show(); // shows the frame to test
 

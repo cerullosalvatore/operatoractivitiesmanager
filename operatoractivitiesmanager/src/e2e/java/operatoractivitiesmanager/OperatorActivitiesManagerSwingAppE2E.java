@@ -77,7 +77,6 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 				.start();
 
 		Robot robot = robot();
-		robot.settings().eventPostingDelay(500);
 		frameFixture = WindowFinder
 				.findFrame(new GenericTypeMatcher<OperatorActivitiesManagerView>(OperatorActivitiesManagerView.class) {
 					@Override
