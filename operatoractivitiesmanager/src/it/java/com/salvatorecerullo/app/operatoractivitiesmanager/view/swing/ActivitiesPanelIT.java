@@ -187,11 +187,10 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText(formattedStartHour);
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText(formattedEndDate);
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText(formattedEndHour);
-
+		formActivityPanel.textBox("textFieldStartDataActivity").setText(formattedStartDate.substring(0, 6)).enterText(formattedStartDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldStartHourActivity").setText(formattedStartHour.substring(0, 3)).enterText(formattedStartHour.substring(3, 5));
+		formActivityPanel.textBox("textFieldEndDataActivity").setText(formattedEndDate.substring(0, 6)).enterText(formattedEndDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldEndHourActivity").setText(formattedEndHour.substring(0, 3)).enterText(formattedEndHour.substring(3, 5));
 		buttonsFormActivityPanel.button("btnAddActivity").click();
 
 		// Verify
@@ -234,11 +233,11 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText(formattedStartHour);
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText(formattedEndDate);
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText(formattedEndHour);
-
+		formActivityPanel.textBox("textFieldStartDataActivity").setText(formattedStartDate.substring(0, 6)).enterText(formattedStartDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldStartHourActivity").setText(formattedStartHour.substring(0, 3)).enterText(formattedStartHour.substring(3, 5));
+		formActivityPanel.textBox("textFieldEndDataActivity").setText(formattedEndDate.substring(0, 6)).enterText(formattedEndDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldEndHourActivity").setText(formattedEndHour.substring(0, 3)).enterText(formattedEndHour.substring(3, 5));
+		
 		buttonsFormActivityPanel.button("btnAddActivity").click();
 
 		// Verify
@@ -278,10 +277,11 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText(formattedStartHour);
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText(formattedEndDate);
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText(formattedEndHour);
+		formActivityPanel.textBox("textFieldStartDataActivity").setText(formattedStartDate.substring(0, 6)).enterText(formattedStartDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldStartHourActivity").setText(formattedStartHour.substring(0, 3)).enterText(formattedStartHour.substring(3, 5));
+		formActivityPanel.textBox("textFieldEndDataActivity").setText(formattedEndDate.substring(0, 6)).enterText(formattedEndDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldEndHourActivity").setText(formattedEndHour.substring(0, 3)).enterText(formattedEndHour.substring(3, 5));
+		
 
 		buttonsFormActivityPanel.button("btnAddActivity").click();
 
@@ -322,11 +322,11 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText(formattedStartHour);
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText(formattedEndDate);
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText(formattedEndHour);
-
+		formActivityPanel.textBox("textFieldStartDataActivity").setText(formattedStartDate.substring(0, 6)).enterText(formattedStartDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldStartHourActivity").setText(formattedStartHour.substring(0, 3)).enterText(formattedStartHour.substring(3, 5));
+		formActivityPanel.textBox("textFieldEndDataActivity").setText(formattedEndDate.substring(0, 6)).enterText(formattedEndDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldEndHourActivity").setText(formattedEndHour.substring(0, 3)).enterText(formattedEndHour.substring(3, 5));
+		
 		buttonsFormActivityPanel.button("btnAddActivity").click();
 
 		// Verify
@@ -368,11 +368,11 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText(formattedEndDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText(formattedEndHour);
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText(formattedStartHour);
-
+		formActivityPanel.textBox("textFieldStartDataActivity").setText(formattedEndDate.substring(0, 6)).enterText(formattedEndDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldStartHourActivity").setText(formattedEndHour.substring(0, 3)).enterText(formattedEndHour.substring(3, 5));
+		formActivityPanel.textBox("textFieldEndDataActivity").setText(formattedStartDate.substring(0, 6)).enterText(formattedStartDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldEndHourActivity").setText(formattedStartHour.substring(0, 3)).enterText(formattedStartHour.substring(3, 5));
+		
 		buttonsFormActivityPanel.button("btnAddActivity").click();
 
 		// Verify
@@ -651,7 +651,7 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 		});
 
 		JPanelFixture formActivityPanel = frameFixture.panel("newActivityPanel").panel("formActivityPanel");
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/02/2021");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/02/").enterText("2021");
 
 		JPanelFixture listTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 		listTopMenuPanel.button("btnFindByData").click();
@@ -662,7 +662,7 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 
 		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText();
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("10/10/2021");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("10/10/").enterText("2021");
 
 		listTopMenuPanel.button("btnFindByData").click();
 
@@ -753,13 +753,11 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 				.panel("buttonsFormActivityPanel");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(1);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText()
-				.enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText()
-				.enterText(formattedStartHour);
-		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText(formattedEndDate);
-		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText(formattedEndHour);
-
+		formActivityPanel.textBox("textFieldStartDataActivity").setText(formattedStartDate.substring(0, 6)).enterText(formattedStartDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldStartHourActivity").setText(formattedStartHour.substring(0, 3)).enterText(formattedStartHour.substring(3, 5));
+		formActivityPanel.textBox("textFieldEndDataActivity").setText(formattedEndDate.substring(0, 6)).enterText(formattedEndDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldEndHourActivity").setText(formattedEndHour.substring(0, 3)).enterText(formattedEndHour.substring(3, 5));
+		
 		buttonsFormActivityPanel.button("btnUpdateActivity").click();
 
 		// Verify
@@ -816,15 +814,14 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 				.panel("buttonsFormActivityPanel");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(1);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText()
-				.enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText()
-				.enterText(formattedStartHour);
-		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText(formattedEndDate);
-		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText(formattedEndHour);
-
+		formActivityPanel.textBox("textFieldStartDataActivity").setText(formattedStartDate.substring(0, 6)).enterText(formattedStartDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldStartHourActivity").setText(formattedStartHour.substring(0, 3)).enterText(formattedStartHour.substring(3, 5));
+		formActivityPanel.textBox("textFieldEndDataActivity").setText(formattedEndDate.substring(0, 6)).enterText(formattedEndDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldEndHourActivity").setText(formattedEndHour.substring(0, 3)).enterText(formattedEndHour.substring(3, 5));
+		
 		buttonsFormActivityPanel.button("btnUpdateActivity").click();
 
+		
 		// Verify
 		assertThat(listActivities.contents()).containsExactly();
 		listBottomMenuPanel.label("lblMessageStatus").requireText(THEACTIVITY + activityOld.getId() + NOTEXIST);
@@ -878,13 +875,11 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 				.panel("buttonsFormActivityPanel");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(1);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText()
-				.enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText()
-				.enterText(formattedStartHour);
-		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText(formattedEndDate);
-		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText(formattedEndHour);
-
+		formActivityPanel.textBox("textFieldStartDataActivity").setText(formattedStartDate.substring(0, 6)).enterText(formattedStartDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldStartHourActivity").setText(formattedStartHour.substring(0, 3)).enterText(formattedStartHour.substring(3, 5));
+		formActivityPanel.textBox("textFieldEndDataActivity").setText(formattedEndDate.substring(0, 6)).enterText(formattedEndDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldEndHourActivity").setText(formattedEndHour.substring(0, 3)).enterText(formattedEndHour.substring(3, 5));
+		
 		buttonsFormActivityPanel.button("btnUpdateActivity").click();
 
 		// Verify
@@ -940,13 +935,11 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 				.panel("buttonsFormActivityPanel");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(1);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText()
-				.enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText()
-				.enterText(formattedStartHour);
-		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText(formattedEndDate);
-		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText(formattedEndHour);
-
+		formActivityPanel.textBox("textFieldStartDataActivity").setText(formattedStartDate.substring(0, 6)).enterText(formattedStartDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldStartHourActivity").setText(formattedStartHour.substring(0, 3)).enterText(formattedStartHour.substring(3, 5));
+		formActivityPanel.textBox("textFieldEndDataActivity").setText(formattedEndDate.substring(0, 6)).enterText(formattedEndDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldEndHourActivity").setText(formattedEndHour.substring(0, 3)).enterText(formattedEndHour.substring(3, 5));
+		
 		buttonsFormActivityPanel.button("btnUpdateActivity").click();
 
 		// Verify
@@ -1004,13 +997,11 @@ public class ActivitiesPanelIT extends AssertJSwingJUnitTestCase {
 				.panel("buttonsFormActivityPanel");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(1);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText()
-				.enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText()
-				.enterText(formattedStartHour);
-		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText(formattedEndDate);
-		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText(formattedEndHour);
-
+		formActivityPanel.textBox("textFieldStartDataActivity").setText(formattedStartDate.substring(0, 6)).enterText(formattedStartDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldStartHourActivity").setText(formattedStartHour.substring(0, 3)).enterText(formattedStartHour.substring(3, 5));
+		formActivityPanel.textBox("textFieldEndDataActivity").setText(formattedEndDate.substring(0, 6)).enterText(formattedEndDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldEndHourActivity").setText(formattedEndHour.substring(0, 3)).enterText(formattedEndHour.substring(3, 5));
+		
 		buttonsFormActivityPanel.button("btnUpdateActivity").click();
 
 		// Verify

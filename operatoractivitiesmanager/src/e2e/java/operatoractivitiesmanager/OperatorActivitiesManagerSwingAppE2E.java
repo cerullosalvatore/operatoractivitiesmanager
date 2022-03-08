@@ -246,10 +246,10 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 
 		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
 		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		frameFixture.textBox("textFieldStartDataActivity").enterText("21/01/2020");
-		frameFixture.textBox("textFieldStartHourActivity").enterText("12:11");
-		frameFixture.textBox("textFieldEndDataActivity").enterText("11/02/2021");
-		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
+		frameFixture.textBox("textFieldStartDataActivity").setText("21/01/").enterText("2020");
+		frameFixture.textBox("textFieldStartHourActivity").setText("12:").enterText("11");
+		frameFixture.textBox("textFieldEndDataActivity").setText("11/02/").enterText("2021");
+		frameFixture.textBox("textFieldEndHourActivity").setText("11:").enterText("12");
 
 		frameFixture.button("btnAddActivity").click();
 
@@ -270,10 +270,10 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		// Exercise
 		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
 		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		frameFixture.textBox("textFieldStartDataActivity").enterText("21/01/2020");
-		frameFixture.textBox("textFieldStartHourActivity").enterText("12:11");
-		frameFixture.textBox("textFieldEndDataActivity").enterText("11/02/2021");
-		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
+		frameFixture.textBox("textFieldStartDataActivity").setText("21/01/").enterText("2020");
+		frameFixture.textBox("textFieldStartHourActivity").setText("12:").enterText("11");
+		frameFixture.textBox("textFieldEndDataActivity").setText("11/02/").enterText("2021");
+		frameFixture.textBox("textFieldEndHourActivity").setText("11:").enterText("12");
 
 		frameFixture.button("btnAddActivity").click();
 
@@ -291,10 +291,10 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		// Exercise
 		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
 		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		frameFixture.textBox("textFieldStartDataActivity").enterText("21/01/2020");
-		frameFixture.textBox("textFieldStartHourActivity").enterText("12:11");
-		frameFixture.textBox("textFieldEndDataActivity").enterText("11/02/2021");
-		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
+		frameFixture.textBox("textFieldStartDataActivity").setText("21/01/").enterText("2020");
+		frameFixture.textBox("textFieldStartHourActivity").setText("12:").enterText("11");
+		frameFixture.textBox("textFieldEndDataActivity").setText("11/02/").enterText("2021");
+		frameFixture.textBox("textFieldEndHourActivity").setText("11:").enterText("12");
 
 		frameFixture.button("btnAddActivity").click();
 
@@ -313,10 +313,10 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		// Exercise
 		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
 		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		frameFixture.textBox("textFieldStartDataActivity").enterText("21/01/2020");
-		frameFixture.textBox("textFieldStartHourActivity").enterText("12:11");
-		frameFixture.textBox("textFieldEndDataActivity").enterText("11/02/2021");
-		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
+		frameFixture.textBox("textFieldStartDataActivity").setText("21/01/").enterText("2020");
+		frameFixture.textBox("textFieldStartHourActivity").setText("12:").enterText("11");
+		frameFixture.textBox("textFieldEndDataActivity").setText("11/02/").enterText("2021");
+		frameFixture.textBox("textFieldEndHourActivity").setText("11:").enterText("12");
 
 		frameFixture.button("btnAddActivity").click();
 
@@ -337,10 +337,10 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		// Exercise
 		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(0);
 		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		frameFixture.textBox("textFieldStartDataActivity").enterText("21/01/2020");
-		frameFixture.textBox("textFieldStartHourActivity").enterText("12:11");
-		frameFixture.textBox("textFieldEndDataActivity").enterText("11/01/2020");
-		frameFixture.textBox("textFieldEndHourActivity").enterText("11:12");
+		frameFixture.textBox("textFieldStartDataActivity").setText("21/01/").enterText("2020");
+		frameFixture.textBox("textFieldStartHourActivity").setText("12:").enterText("11");
+		frameFixture.textBox("textFieldEndDataActivity").setText("11/01/").enterText("2020");
+		frameFixture.textBox("textFieldEndHourActivity").setText("11:").enterText("12");
 
 		frameFixture.button("btnAddActivity").click();
 
@@ -448,7 +448,7 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 	@GUITest
 	public void testFindActivitiesByDayButton() {
 		// Exercise
-		frameFixture.textBox("textFieldStartDataActivity").enterText("01/02/2021");
+		frameFixture.textBox("textFieldStartDataActivity").setText("01/02/").enterText("2021");
 		frameFixture.button("btnFindByData").click();
 
 		// Verify
@@ -473,10 +473,10 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 
 		frameFixture.comboBox("comboBoxOperatorActivity").selectItem(1);
 		frameFixture.comboBox("comboBoxBasicOperationActivity").selectItem(1);
-		frameFixture.textBox("textFieldStartDataActivity").doubleClick().deleteText().enterText("21/01/2020");
-		frameFixture.textBox("textFieldStartHourActivity").doubleClick().deleteText().enterText("12:11");
-		frameFixture.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText("11/02/2021");
-		frameFixture.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText("11:12");
+		frameFixture.textBox("textFieldStartDataActivity").setText("21/01/").enterText("2020");
+		frameFixture.textBox("textFieldStartHourActivity").setText("12:").enterText("11");
+		frameFixture.textBox("textFieldEndDataActivity").setText("11/02/").enterText("2021");
+		frameFixture.textBox("textFieldEndHourActivity").setText("11:").enterText("12");
 
 		frameFixture.button("btnUpdateActivity").click();
 
@@ -553,8 +553,8 @@ public class OperatorActivitiesManagerSwingAppE2E extends AssertJSwingJUnitTestC
 		frameFixture.list().selectItem(Pattern.compile(".*" + "IDTest1" + ".*"));
 		frameFixture.button("btnModifyActivity").click();
 
-		frameFixture.textBox("textFieldStartDataActivity").doubleClick().deleteText().enterText("21/01/2020");
-		frameFixture.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText("11/01/2020");
+		frameFixture.textBox("textFieldStartDataActivity").setText("21/01/").enterText("2020");
+		frameFixture.textBox("textFieldEndDataActivity").setText("11/01/").enterText("2020");
 
 		frameFixture.button("btnUpdateActivity").click();
 

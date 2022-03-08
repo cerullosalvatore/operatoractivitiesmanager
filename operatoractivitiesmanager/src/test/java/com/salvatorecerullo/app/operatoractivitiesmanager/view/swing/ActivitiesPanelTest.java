@@ -114,10 +114,10 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		});
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText("10:10");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("00");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldEndHourActivity").setText("10:").enterText("10");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 
@@ -141,10 +141,10 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		});
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText("10:10");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("00");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldEndHourActivity").setText("10:").enterText("10");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 
@@ -162,7 +162,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").setText("");
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
 		formActivityPanel.textBox("textFieldStartHourActivity").setText("");
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("errorInput");
 
@@ -171,7 +171,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Exercise
 		formActivityPanel.textBox("textFieldStartHourActivity").setText("");
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("00");
 		formActivityPanel.textBox("textFieldEndDataActivity").setText("");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("errorInput");
 
@@ -180,7 +180,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Exercise
 		formActivityPanel.textBox("textFieldEndDataActivity").setText("");
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("01/01/").enterText("2001");
 		formActivityPanel.textBox("textFieldEndHourActivity").setText("");
 		formActivityPanel.textBox("textFieldEndHourActivity").enterText("errorInput");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
@@ -223,9 +223,9 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").enterText("");
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText("10:10");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("00");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldEndHourActivity").setText("10:").enterText("10");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 
@@ -235,21 +235,21 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
 		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText();
 
 		// Verify
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("00");
 		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText();
 
 		// Verify
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
 
 		// Exercise
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("01/01/").enterText("2001");
 		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText();
 
 		// Verify
@@ -269,10 +269,10 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		});
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText("10:00");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("00");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldEndHourActivity").setText("10:").enterText("10");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 
 		// Verify
@@ -360,7 +360,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture formTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 
 		// Execute
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
 
 		// Verify
 		formTopMenuPanel.button("btnFindByData").requireEnabled();
@@ -424,10 +424,10 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		});
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("10:02");
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("02/01/2001");
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText("09:00");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("02");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("02/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldEndHourActivity").setText("09:").enterText("00");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 
@@ -471,10 +471,10 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		});
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText("10:00");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("00");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldEndHourActivity").setText("10:").enterText("10");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 
@@ -487,7 +487,6 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		buttonsFormActivityPanel.button("btnAddActivity").requireDisabled();
 		formTopMenuPanel.button("btnFindByData").requireEnabled();
 
-
 		// Exercise
 		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText();
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
@@ -497,21 +496,21 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		buttonsFormActivityPanel.button("btnUpdateActivity").requireDisabled();
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
 		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText();
 
 		// Verify
 		buttonsFormActivityPanel.button("btnUpdateActivity").requireDisabled();
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("00");
 		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText();
 
 		// Verify
 		buttonsFormActivityPanel.button("btnUpdateActivity").requireDisabled();
 
 		// Exercise
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("01/01/").enterText("2001");
 		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText();
 
 		// Verify
@@ -641,10 +640,10 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		});
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText("10:00");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("00");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldEndHourActivity").setText("10:").enterText("10");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 		listActivitiesPanel.list("listActivities").selectItem(0);
@@ -691,10 +690,10 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		});
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText("10:00");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("00");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("01/01/").enterText("2001");
+		formActivityPanel.textBox("textFieldEndHourActivity").setText("10:").enterText("10");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 		listActivitiesPanel.list("listActivities").selectItem(0);
@@ -712,7 +711,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Exercise and Verify
 		formActivityPanel.textBox("textFieldStartDataActivity").setText("");
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2001");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2001");
 		formActivityPanel.textBox("textFieldStartHourActivity").setText("");
 		formActivityPanel.textBox("textFieldStartHourActivity").enterText("errorInput");
 
@@ -721,7 +720,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Exercise and Verify
 		formActivityPanel.textBox("textFieldStartHourActivity").setText("");
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText("00:00");
+		formActivityPanel.textBox("textFieldStartHourActivity").setText("00:").enterText("00");
 		formActivityPanel.textBox("textFieldEndDataActivity").setText("");
 		formActivityPanel.textBox("textFieldEndDataActivity").enterText("errorInput");
 
@@ -730,7 +729,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 
 		// Exercise and Verify
 		formActivityPanel.textBox("textFieldEndDataActivity").setText("");
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText("01/01/2001");
+		formActivityPanel.textBox("textFieldEndDataActivity").setText("01/01/").enterText("2001");
 		formActivityPanel.textBox("textFieldEndHourActivity").setText("");
 		formActivityPanel.textBox("textFieldEndHourActivity").enterText("errorInput");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
@@ -778,10 +777,10 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 				parsedStartDate, parsedEndDate);
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText(formattedStartDate);
-		formActivityPanel.textBox("textFieldStartHourActivity").enterText(formattedStartHour);
-		formActivityPanel.textBox("textFieldEndDataActivity").enterText(formattedEndDate);
-		formActivityPanel.textBox("textFieldEndHourActivity").enterText(formattedEndHour);
+		formActivityPanel.textBox("textFieldStartDataActivity").setText(formattedStartDate.substring(0, 6)).enterText(formattedStartDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldStartHourActivity").setText(formattedStartHour.substring(0, 3)).enterText(formattedStartHour.substring(3, 5));
+		formActivityPanel.textBox("textFieldEndDataActivity").setText(formattedEndDate.substring(0, 6)).enterText(formattedEndDate.substring(6, 10));
+		formActivityPanel.textBox("textFieldEndHourActivity").setText(formattedEndHour.substring(0, 3)).enterText(formattedEndHour.substring(3, 5));
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 
@@ -889,7 +888,7 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		JPanelFixture listTopMenuPanel = frameFixture.panel("listActivitiesPanel").panel("listTopMenuPanel");
 
 		// Exercise
-		formActivityPanel.textBox("textFieldStartDataActivity").enterText("01/01/2021");
+		formActivityPanel.textBox("textFieldStartDataActivity").setText("01/01/").enterText("2021");
 		Date startData = new SimpleDateFormat("dd/MM/yyyy")
 				.parse(formActivityPanel.textBox("textFieldStartDataActivity").text());
 		listTopMenuPanel.button("btnFindByData").click();
@@ -925,10 +924,10 @@ public class ActivitiesPanelTest extends AssertJSwingJUnitTestCase {
 		// Exercise
 		listActivitiesPanel.list("listActivities").selectItem(0);
 		listBottomMenuPanel.button("btnModifyActivity").click();
-		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText().enterText("02/02/2002");
-		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText().enterText("00:00");
-		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().enterText("02/02/2002");
-		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().enterText("10:00");
+		formActivityPanel.textBox("textFieldStartDataActivity").doubleClick().deleteText().setText("02/02/").enterText("2002");
+		formActivityPanel.textBox("textFieldStartHourActivity").doubleClick().deleteText().setText("00:").enterText("00");
+		formActivityPanel.textBox("textFieldEndDataActivity").doubleClick().deleteText().setText("02/02/").enterText("2002");
+		formActivityPanel.textBox("textFieldEndHourActivity").doubleClick().deleteText().setText("10:").enterText("00");
 		formActivityPanel.comboBox("comboBoxOperatorActivity").selectItem(0);
 		formActivityPanel.comboBox("comboBoxBasicOperationActivity").selectItem(0);
 		buttonsFormActivityPanel.button("btnUpdateActivity").click();
